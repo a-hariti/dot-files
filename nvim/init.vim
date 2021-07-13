@@ -1,0 +1,321 @@
+set nobackup
+set nowritebackup
+set updatetime=300
+set signcolumn=number
+set expandtab
+set softtabstop =4
+set shiftwidth  =4
+set shiftround
+set hidden
+set incsearch
+set ignorecase
+set smartcase
+set hlsearch
+set lazyredraw
+set shortmess+=c
+
+set splitbelow
+set splitright
+
+set cursorline
+set noshowmode "redundant with a status line
+
+set list " show white space
+set listchars=tab:\ \ ,trail:·,precedes:«,extends:»
+
+set number
+set relativenumber
+
+set smartcase
+
+set spelllang=en,fr
+
+call plug#begin(stdpath('data') . '/vimplug')
+
+Plug 'tpope/vim-fugitive'
+Plug 'itchyny/lightline.vim'
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'BurntSushi/ripgrep'
+Plug 'gennaro-tedesco/nvim-jqx'
+
+Plug 'windwp/nvim-ts-autotag'
+
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'kabouzeid/nvim-lspinstall'
+" Plug 'hrsh7th/nvim-compe'
+" Plug 'nvim-lua/completion-nvim'
+
+Plug 'rust-lang/rust.vim'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'alx741/vim-stylishask'
+
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+
+Plug 'godlygeek/tabular'
+
+Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-commentary'
+Plug 'wellle/targets.vim'
+Plug 'unblevable/quick-scope'
+Plug 'haya14busa/vim-asterisk'
+
+"colorschemes
+Plug 'phanviet/vim-monokai-pro'
+Plug 'morhetz/gruvbox'
+Plug 'haishanh/night-owl.vim'
+Plug 'ayu-theme/ayu-vim'
+Plug 'rakr/vim-one'
+Plug 'hzchirs/vim-material'
+Plug 'ghifarit53/tokyonight-vim'
+
+call plug#end()
+
+let mapleader=' '
+
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+
+let g:rustfmt_autosave = 2
+let g:gitgutter_diff_args = '-w'
+
+let g:user_emmet_leader_key='<C-e>'
+
+" nnoremap <C-]>      :lua vim.lsp.buf.definition()<CR>
+" nnoremap <leader>gi :lua vim.lsp.buf.implementation()<CR>
+" nnoremap <leader>sh :lua vim.lsp.buf.signature_help()<CR>
+" nnoremap <leader>gr :lua vim.lsp.buf.references()<CR>
+" nnoremap <leader>gn :lua vim.lsp.buf.rename()<CR>
+" nnoremap <leader>k  :lua vim.lsp.buf.hover()<CR>
+" nnoremap <leader>ca :lua vim.lsp.buf.code_action()<CR>
+" nnoremap <leader>gg :lua vim.lsp.util.show_line_diagnostics()<CR>
+" nnoremap ]g         :lua vim.lsp.diagnostic.goto_next()<CR>
+" nnoremap [g         :lua vim.lsp.diagnostic.goto_prev()<CR>
+
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+
+nnoremap ' `
+
+nnoremap <leader>v :e $MYVIMRC<CR>
+nnoremap <leader>ss :set spell!<CR>
+nnoremap <leader>w :update<CR>
+nnoremap <leader>q :q<CR>
+
+"go to  alternate buffer
+nnoremap <leader><leader> <C-^>
+
+" keep selection after indentation
+vnoremap > >gv
+vnoremap < <gv
+
+" use arrows to resize windows
+nnoremap <silent> <M-up>    :resize +1<CR>
+nnoremap <silent> <M-down>  :resize -1<CR>
+nnoremap <silent> <M-left>  :vertical resize -1<CR>
+nnoremap <silent> <M-right> :vertical resize +1<CR>
+
+"easy interaction with system clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>y "+y
+nnoremap <leader>Y gg"+yG
+vnoremap <leader>y "+y
+vnoremap <leader>p "+p
+
+command! Bd :bp | :sp | :bn | :bd "close buffer keeping layout
+
+for key in ['h', 'j', 'k', 'l']
+    " for terminal windows also
+    exe 'tnoremap <C-'.key.'> <c-\><c-n><C-w>'.key
+endfor
+
+nnoremap <silent> <leader>st :vsp term://zsh<CR>
+
+" get out of terminal mode easily
+tnoremap <esc><esc> <c-\><c-n>
+
+" toggle folds
+nnoremap <tab> za
+
+nnoremap <silent> <esc> :noh<CR>
+
+nnoremap <silent> [<space> :call append(line('.')-1, '')<CR>
+nnoremap <silent> ]<space> :call append(line('.'), '')<CR>
+
+"args
+nnoremap [a     :previous<CR>
+nnoremap ]a     :next<CR>
+nnoremap [A     :first<CR>
+nnoremap ]A     :last<CR>
+
+"buffes
+nnoremap [b     :bp<CR>
+nnoremap ]b     :bn<CR>
+nnoremap [B     :bf<CR>
+nnoremap ]B     :bl<CR>
+
+"location list
+nnoremap [l     :lp<CR>
+nnoremap ]l     :lne<CR>
+nnoremap [L     :lfirst<CR>
+nnoremap ]L     :llast<CR>
+
+"quickfix list
+nnoremap [q     :cp<CR>
+nnoremap ]q     :cn<CR>
+nnoremap [Q     :cfirst<CR>
+nnoremap ]Q     :clast<CR>
+
+"vim-asterisk stuff
+map *  <Plug>(asterisk-z*)
+map g* <Plug>(asterisk-gz*)
+map #  <Plug>(asterisk-z#)
+map g# <Plug>(asterisk-gz#)
+
+set termguicolors
+set background=dark
+
+"auy colorscheme variants
+let ayucolor='dark' "light, mirage, or dark
+
+let g:gruvbox_contrast_dark = 'hard'
+
+let g:material_style='dark' "dark|light|palenight|oceanic
+
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
+
+colorscheme tokyonight
+
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+"rmember cursor postion while iterating over matches
+let g:asterisk#keeppos = 1
+
+fun! TrimWhitespace ()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    cal winrestview(l:save)
+endfun
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+augroup vimrc
+    au!
+
+    "relative numbers for normal mode only
+    au InsertEnter * set norelativenumber
+    au InsertLeave * set relativenumber
+
+    au FileType *.go setlocal noexpandtab
+
+    " auto reload vimrc on save
+    au! BufWritePost $MYVIMRC so % | redraw
+
+    "delete trailing white space on save
+    au BufWritePre * :call TrimWhitespace() | Prettier
+augroup END
+
+augroup highlight_yank
+    autocmd!
+    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 50})
+augroup END
+
+let g:lightline = {
+    \ 'colorscheme': 'monokai_pro',
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ],
+    \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+    \ },
+    \ 'component_function': {
+        \   'gitbranch': 'FugitiveHead'
+        \ },
+  \ }
+
+"Telescope
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fc <cmd>lua require('telescope.builtin').git_commits()<cr>
+nnoremap <leader>ft <cmd>lua require('telescope.builtin').builtin()<cr>
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = {"javascript", "typescript",  "tsx", "html", "css", "c", "go", "rust", "lua"},
+  highlight = {
+    enable = true
+  },
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+      }
+    }
+  },
+  autotag = {
+    enable = true,
+  }
+}
+EOF
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <c-space> coc#refresh()
+
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+nmap <silent> [g         <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g         <Plug>(coc-diagnostic-next)
+nmap <silent> <C-]>      <Plug>(coc-definition)
+nmap <silent> gd         <Plug>(coc-definition)
+nmap <silent> <leader>gi <Plug>(coc-implementation)
+nmap <silent> <leader>gr <Plug>(coc-references)
+nmap <silent> <leader>rn <Plug>(coc-rename)
+nmap <silent> <leader>k  :call <SID>show_documentation()<CR>
+
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>ac <Plug>(coc-codeaction)
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+
+augroup coc
+  autocmd!
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end

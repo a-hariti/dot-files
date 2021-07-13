@@ -1,0 +1,10 @@
+[user]
+	name = Abdellah Hariti
+	email = haritiabdellah@gmail.com
+
+[alias]
+  co = checkout
+  c = commit
+  s = status
+  b = branch
+  p = push

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.local.KeyRemapping</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/hidutil</string>
+        <string>property</string>
+        <string>--set</string>
+        <!-- 1. right alt to right control
+             2. escape to caps lock
+             3. caps lock to escape
+            4. § to delete
+
+        -->
+        <string>{"UserKeyMapping":[
+            {
+              "HIDKeyboardModifierMappingSrc": 0x7000000E6,
+              "HIDKeyboardModifierMappingDst": 0x7000000E4
+            },
+            {
+              "HIDKeyboardModifierMappingSrc": 0x700000029,
+              "HIDKeyboardModifierMappingDst": 0x700000039
+            },
+            {
+              "HIDKeyboardModifierMappingSrc": 0x700000039,
+              "HIDKeyboardModifierMappingDst": 0x700000029
+            },
+            {
+              "HIDKeyboardModifierMappingSrc": 0x700000064,
+              "HIDKeyboardModifierMappingDst": 0x70000004C
+            }
+        ]}</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+</dict>
+</plist>
