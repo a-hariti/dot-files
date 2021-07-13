@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-# place keybord remapings to be ran on startup
-ln -sf ~/.dotfiles/keymapping.xml ~/Library/LaunchAgents/com.example.KeyRemapping.plist
+# remap keyboard keys on mac
+stow -Rv -t ~/LaunchAgents mac-mappings
 
 home_dot_files=(
     git
