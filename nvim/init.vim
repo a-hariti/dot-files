@@ -35,27 +35,24 @@ call plug#begin(stdpath('data') . '/vimplug')
 Plug 'tpope/vim-fugitive'
 Plug 'itchyny/lightline.vim'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'windwp/nvim-ts-autotag'
 
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'BurntSushi/ripgrep'
+
+Plug 'neovim/nvim-lspconfig'
+Plug 'kabouzeid/nvim-lspinstall'
+Plug 'hrsh7th/nvim-compe'
+Plug 'ray-x/lsp_signature.nvim'
+
 Plug 'gennaro-tedesco/nvim-jqx'
-
-Plug 'windwp/nvim-ts-autotag'
-
-" Plug 'neovim/nvim-lspconfig'
-" Plug 'kabouzeid/nvim-lspinstall'
-" Plug 'hrsh7th/nvim-compe'
-" Plug 'nvim-lua/completion-nvim'
 
 Plug 'rust-lang/rust.vim'
 Plug 'neovimhaskell/haskell-vim'
-Plug 'alx741/vim-stylishask'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -81,6 +78,7 @@ Plug 'ghifarit53/tokyonight-vim'
 call plug#end()
 
 let mapleader=' '
+let g:markdown_fenced_languages = ["javascript", "typescript", "sh"]
 
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
@@ -90,19 +88,19 @@ let g:gitgutter_diff_args = '-w'
 
 let g:user_emmet_leader_key='<C-e>'
 
-" nnoremap <C-]>      :lua vim.lsp.buf.definition()<CR>
-" nnoremap <leader>gi :lua vim.lsp.buf.implementation()<CR>
-" nnoremap <leader>sh :lua vim.lsp.buf.signature_help()<CR>
-" nnoremap <leader>gr :lua vim.lsp.buf.references()<CR>
-" nnoremap <leader>gn :lua vim.lsp.buf.rename()<CR>
-" nnoremap <leader>k  :lua vim.lsp.buf.hover()<CR>
-" nnoremap <leader>ca :lua vim.lsp.buf.code_action()<CR>
-" nnoremap <leader>gg :lua vim.lsp.util.show_line_diagnostics()<CR>
-" nnoremap ]g         :lua vim.lsp.diagnostic.goto_next()<CR>
-" nnoremap [g         :lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap gd         :lua vim.lsp.buf.definition()<CR>
+nnoremap <leader>gi :lua vim.lsp.buf.implementation()<CR>
+nnoremap <leader>sh :lua vim.lsp.buf.signature_help()<CR>
+nnoremap <leader>gr :lua vim.lsp.buf.references()<CR>
+nnoremap <leader>gn :lua vim.lsp.buf.rename()<CR>
+nnoremap <leader>k  :lua vim.lsp.buf.hover()<CR>
+nnoremap <leader>ca :lua vim.lsp.buf.code_action()<CR>
+nnoremap <leader>gg :lua vim.lsp.util.show_line_diagnostics()<CR>
+nnoremap ]g         :lua vim.lsp.diagnostic.goto_next()<CR>
+nnoremap [g         :lua vim.lsp.diagnostic.goto_prev()<CR>
 
 " Set completeopt to have a better completion experience
-set completeopt=menuone,noinsert,noselect
+set completeopt=menuone,noselect
 
 nnoremap ' `
 
@@ -206,8 +204,6 @@ fun! TrimWhitespace ()
     cal winrestview(l:save)
 endfun
 
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
-
 augroup vimrc
     au!
 
@@ -218,10 +214,10 @@ augroup vimrc
     au FileType *.go setlocal noexpandtab
 
     " auto reload vimrc on save
-    au! BufWritePost $MYVIMRC so % | redraw
+    au! BufWritePost init.vim so % | redraw
 
     "delete trailing white space on save
-    au BufWritePre * :call TrimWhitespace() | Prettier
+    au BufWritePre * :call TrimWhitespace()
 augroup END
 
 augroup highlight_yank
@@ -247,7 +243,25 @@ nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fc <cmd>lua require('telescope.builtin').git_commits()<cr>
 nnoremap <leader>ft <cmd>lua require('telescope.builtin').builtin()<cr>
 
+inoremap <silent><expr> <c-space> compe#complete()
+inoremap <silent><expr> <cr> compe#confirm('<cr>')
+inoremap <silent><expr> <c-e> compe#close('<c-e>')
+inoremap <silent><expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
+
 lua <<EOF
+
+-- lsp stuff
+require'lspinstall'.setup() -- important
+
+local servers = require'lspinstall'.installed_servers()
+local lsp_signature = require "lsp_signature"
+
+for _, server in pairs(servers) do
+  require'lspconfig'[server].setup{on_attach = lsp_signature.on_attach()}
+end
+
+-- treesitter stuff
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {"javascript", "typescript",  "tsx", "html", "css", "c", "go", "rust", "lua"},
   highlight = {
@@ -268,54 +282,38 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
   }
 }
+
+-- autocomplete
+require'compe'.setup {
+  enabled = true,
+  autocomplete = true,
+  debug = false,
+  min_length = 1,
+  preselect = 'enable',
+  throttle_time = 80,
+  source_timeout = 200,
+  resolve_timeout = 800,
+  incomplete_delay = 400,
+  max_abbr_width = 100,
+  max_kind_width = 100,
+  max_menu_width = 100,
+  documentation = {
+    border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
+    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+    max_width = 120,
+    min_width = 60,
+    max_height = math.floor(vim.o.lines * 0.3),
+    min_height = 1,
+  },
+
+  source = {
+    nvim_lsp = true,
+    nvim_lua = true,
+    path = true,
+    buffer = true,
+    -- vsnip = true,
+    -- ultisnips = true,
+    -- luasnip = true
+  }
+}
 EOF
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-inoremap <silent><expr> <c-space> coc#refresh()
-
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-nmap <silent> [g         <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g         <Plug>(coc-diagnostic-next)
-nmap <silent> <C-]>      <Plug>(coc-definition)
-nmap <silent> gd         <Plug>(coc-definition)
-nmap <silent> <leader>gi <Plug>(coc-implementation)
-nmap <silent> <leader>gr <Plug>(coc-references)
-nmap <silent> <leader>rn <Plug>(coc-rename)
-nmap <silent> <leader>k  :call <SID>show_documentation()<CR>
-
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>ac <Plug>(coc-codeaction)
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-
-augroup coc
-  autocmd!
-  " Highlight the symbol and its references when holding the cursor.
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
