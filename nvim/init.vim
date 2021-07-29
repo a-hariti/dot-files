@@ -39,6 +39,8 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'windwp/nvim-ts-autotag'
 
+Plug 'mhartington/formatter.nvim'
+
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -316,4 +318,24 @@ require'compe'.setup {
     -- luasnip = true
   }
 }
+
+-- formatting
+local prettier = function()
+  return {
+    exe = "prettier",
+    args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), '--single-quote'},
+    stdin = true
+  }
+end
+
+require('formatter').setup({
+  logging = false,
+  filetype = {
+    html = { prettier },
+    javascript = { prettier },
+    typescript = { prettier },
+    typescriptreact = { prettier },
+    css = { prettier }
+  }
+})
 EOF
