@@ -81,6 +81,7 @@ call plug#end()
 
 let mapleader=' '
 let g:markdown_fenced_languages = ["javascript", "typescript", "sh"]
+let g:filetype_pl="prolog"
 
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
