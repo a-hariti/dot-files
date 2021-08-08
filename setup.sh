@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # remap keyboard keys on mac
 stow -Rv -t ~/LaunchAgents mac-mappings
