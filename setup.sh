@@ -3,6 +3,9 @@
 # remap keyboard keys on mac
 stow -Rv -t ~/LaunchAgents mac-mappings
 
+# make sure the neovim directory is there
+mkdir -p ~/.config/nvim
+
 home_dot_files=(
     git
     zsh
