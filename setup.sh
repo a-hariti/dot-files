@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 # remap keyboard keys on mac
-stow -Rv -t ~/LaunchAgents mac-mappings
+# todo: skip on linux
+stow -Rv -t ~/Library/LaunchAgents mac-mappings
 
 # make sure the neovim directory is there
 mkdir -p ~/.config/nvim
