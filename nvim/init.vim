@@ -276,7 +276,7 @@ end
 
 -- treesitter stuff
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {"javascript", "typescript",  "tsx", "html", "css", "c", "go", "rust", "lua"},
+  ensure_installed = {"javascript", "typescript",  "tsx", "html", "css", "c", "go", "rust", "lua", "elm"},
   highlight = {
     enable = true
   },
