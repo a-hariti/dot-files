@@ -103,6 +103,7 @@ nnoremap <leader>ca :lua vim.lsp.buf.code_action()<CR>
 nnoremap <leader>gg :lua vim.lsp.util.show_line_diagnostics()<CR>
 nnoremap ]g         :lua vim.lsp.diagnostic.goto_next()<CR>
 nnoremap [g         :lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <leader>e  :lua vim.lsp.buf.formatting_sync(nil, 1000)<CR>
 
 " Set completeopt to have a better completion experience
 set completeopt=menuone,noselect
