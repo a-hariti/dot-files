@@ -217,7 +217,8 @@ augroup vimrc
     au InsertEnter * set norelativenumber
     au InsertLeave * set relativenumber
 
-    au FileType *.go setlocal noexpandtab
+    au FileType go setlocal noexpandtab
+    au FileType elm setlocal foldmethod=syntax
 
     " auto reload vimrc on save
     au! BufWritePost init.vim so % | redraw
