@@ -264,8 +264,14 @@ require'lspinstall'.setup() -- important
 local servers = require'lspinstall'.installed_servers()
 local lsp_signature = require "lsp_signature"
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
 for _, server in pairs(servers) do
-  require'lspconfig'[server].setup{on_attach = lsp_signature.on_attach()}
+  require'lspconfig'[server].setup{
+    on_attach = lsp_signature.on_attach(),
+    capabilities = capabilities
+    }
 end
 
 -- treesitter stuff
