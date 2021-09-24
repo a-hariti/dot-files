@@ -148,7 +148,7 @@ nnoremap <silent> <leader>st :vsp term://zsh<CR>
 tnoremap <esc><esc> <c-\><c-n>
 
 " toggle folds
-nnoremap <tab> za
+nnoremap <S-tab> za
 
 nnoremap <silent> <esc> :noh<CR>
 
