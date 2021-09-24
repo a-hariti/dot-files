@@ -87,7 +87,7 @@ let g:filetype_pl="prolog"
 
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
-
+set foldlevelstart=99
 let g:rustfmt_autosave = 2
 let g:gitgutter_diff_args = '-w'
 
