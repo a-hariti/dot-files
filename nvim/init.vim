@@ -336,7 +336,8 @@ require('formatter').setup({
     javascript = { prettier },
     typescript = { prettier },
     typescriptreact = { prettier },
-    css = { prettier }
+    css = { prettier },
+    json = { prettier },
   }
 })
 EOF
