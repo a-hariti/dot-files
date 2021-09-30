@@ -334,7 +334,7 @@ require'compe'.setup {
 local prettier = function()
   return {
     exe = "prettier",
-    args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), '--single-quote'},
+    args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), '--single-quote --print-width 120 --nosemi --tab-width 4'},
     stdin = true
   }
 end
