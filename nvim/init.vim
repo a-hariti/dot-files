@@ -93,7 +93,7 @@ let g:gitgutter_diff_args = '-w'
 
 let g:user_emmet_leader_key='<C-e>'
 
-nnoremap gd         :lua vim.lsp.buf.definition()<CR>
+nnoremap <C-]>      :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>gi :lua vim.lsp.buf.implementation()<CR>
 nnoremap <leader>sh :lua vim.lsp.buf.signature_help()<CR>
 nnoremap <leader>gr :lua vim.lsp.buf.references()<CR>
