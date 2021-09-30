@@ -362,7 +362,7 @@ local action_set = require('telescope.actions.set')
 require('telescope').setup {
   pickers = {
     find_files = {
-      find_command = {"rg", "--files"},
+      -- find_command = {"rg", "--files"},
       attach_mappings = function(prompt_bufnr)
         action_set.select:enhance({
           post = function()
