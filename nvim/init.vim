@@ -113,7 +113,6 @@ set completeopt=menuone,noselect
 nnoremap ' `
 
 nnoremap <leader>v :e $MYVIMRC<CR>
-nnoremap <leader>ss :set spell!<CR>
 nnoremap <leader>w :update<CR>
 nnoremap <leader>q :q<CR>
 
@@ -360,7 +359,6 @@ local action_set = require('telescope.actions.set')
 require('telescope').setup {
   pickers = {
     find_files = {
-      -- find_command = {"rg", "--files"},
       attach_mappings = function(prompt_bufnr)
         action_set.select:enhance({
           post = function()
