@@ -46,7 +46,7 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'BurntSushi/ripgrep'
 
-Plug 'lewis6991/gitsigns.nvim'
+Plug 'airblade/vim-gitgutter'
 
 Plug 'neovim/nvim-lspconfig'
 Plug 'kabouzeid/nvim-lspinstall'
@@ -91,7 +91,8 @@ set foldlevelstart=99
 let g:rustfmt_autosave = 2
 let g:gitgutter_diff_args = '-w'
 
-let g:user_emmet_leader_key='<C-e>'
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
 
 nnoremap <C-]>      :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>gi :lua vim.lsp.buf.implementation()<CR>
@@ -350,10 +351,6 @@ require('formatter').setup({
     json = { prettier },
   }
 })
-
--- gitsigns
-
-require('gitsigns').setup()
 
 -- telescope
 
