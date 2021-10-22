@@ -105,6 +105,7 @@ nnoremap <leader>gg :lua vim.lsp.util.show_line_diagnostics()<CR>
 nnoremap ]g         :lua vim.lsp.diagnostic.goto_next()<CR>
 nnoremap [g         :lua vim.lsp.diagnostic.goto_prev()<CR>
 nnoremap <leader>e  :lua vim.lsp.buf.formatting_sync(nil, 1000)<CR>
+nnoremap <leader>d  :Format<cr>
 
 " Set completeopt to have a better completion experience
 set completeopt=menuone,noselect
@@ -335,7 +336,7 @@ require'compe'.setup {
 local prettier = function()
   return {
     exe = "prettier",
-    args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), '--single-quote --print-width 120 --nosemi --tab-width 4'},
+    args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), '--single-quote --print-width 120 --tab-width 4'},
     stdin = true
   }
 end
