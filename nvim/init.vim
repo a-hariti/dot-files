@@ -35,10 +35,6 @@ call plug#begin(stdpath('data') . '/vimplug')
 Plug 'tpope/vim-fugitive'
 Plug 'itchyny/lightline.vim'
 
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-Plug 'windwp/nvim-ts-autotag'
-
 Plug 'mhartington/formatter.nvim'
 
 Plug 'nvim-lua/popup.nvim'
@@ -274,28 +270,6 @@ for _, server in pairs(servers) do
     capabilities = capabilities
     }
 end
-
--- treesitter stuff
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = {"javascript", "typescript",  "tsx", "html", "css", "c", "go", "rust", "lua", "elm"},
-  highlight = {
-    enable = true
-  },
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true,
-      keymaps = {
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ac"] = "@class.outer",
-      }
-    }
-  },
-  autotag = {
-    enable = true,
-  }
-}
 
 -- autocomplete
 require'compe'.setup {
