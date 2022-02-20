@@ -75,7 +75,6 @@ return require("packer").startup(
 
     use "jiangmiao/auto-pairs"
     use "tpope/vim-commentary"
-    use "wellle/targets.vim"
     use {
       "unblevable/quick-scope",
       config = function()
