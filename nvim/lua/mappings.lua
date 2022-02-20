@@ -70,10 +70,12 @@ map("n", "]q", ":cn<CR>")
 map("n", "[Q", ":cfirst<CR>")
 map("n", "]Q", ":clast<CR>")
 
-map("n", "*", "<Plug>(asterisk-z*)")
-map("n", "g*", "<Plug>(asterisk-gz*)")
-map("n", "#", "<Plug>(asterisk-z#)")
-map("n", "g#", "<Plug>(asterisk-gz#)")
+for _, mode in ipairs({"n", "v"}) do
+  map(mode, "*", "<Plug>(asterisk-z*)")
+  map(mode, "g*", "<Plug>(asterisk-gz*)")
+  map(mode, "#", "<Plug>(asterisk-z#)")
+  map(mode, "g#", "<Plug>(asterisk-gz#)")
+end
 
 map("n", "<leader>ff", ":lua require('telescope.builtin').find_files()<CR>")
 map("n", "<leader>fb", ":lua require('telescope.builtin').buffers()<CR>")
