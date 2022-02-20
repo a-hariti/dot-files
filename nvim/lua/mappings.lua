@@ -1,10 +1,22 @@
+local merge_tables = function(first, second)
+  local all = {}
+  for k, v in pairs(first) do
+    all[k] = v
+  end
+  for k, v in pairs(second) do
+    all[k] = v
+  end
+  return all
+end
+
+-- do global mappings
 local map = function(mode, lhs, rhs, opts)
-  vim.api.nvim_set_keymap(mode, lhs, rhs, opts or {})
+  vim.keymap.set(mode, lhs, rhs, opts or {})
 end
 
 -- do buffer local mappings
 local bmap = function(mode, lhs, rhs, opts)
-  vim.api.nvim_buf_set_keymap(0, mode, lhs, rhs, opts or {})
+  vim.keymap.set(mode, lhs, rhs, merge_tables(opts or {}, {buffer = 0}))
 end
 
 local M = {}
@@ -13,7 +25,13 @@ vim.g.mapleader = " "
 map("n", "'", "`", {noremap = true})
 map("n", "]h", "<Plug>(GitGutterNextHunk)")
 map("n", "[h", "<Plug>(GitGutterPrevHunk)")
-map("n", "<leader>e", ':lua require"nvim-tree".toggle(false, true)<cr>', {noremap = true})
+map(
+  "n",
+  "<leader>e",
+  function()
+    require("nvim-tree").toggle(false, true)
+  end
+)
 
 map("n", "Q", ":q<cr>")
 
@@ -67,31 +85,36 @@ map("n", "]q", ":cn<CR>")
 map("n", "[Q", ":cfirst<CR>")
 map("n", "]Q", ":clast<CR>")
 
-for _, mode in ipairs({"n", "v"}) do
-  map(mode, "*", "<Plug>(asterisk-z*)")
-  map(mode, "g*", "<Plug>(asterisk-gz*)")
-  map(mode, "#", "<Plug>(asterisk-z#)")
-  map(mode, "g#", "<Plug>(asterisk-gz#)")
-end
+map({"n", "v"}, "*", "<Plug>(asterisk-z*)")
+map({"n", "v"}, "g*", "<Plug>(asterisk-gz*)")
+map({"n", "v"}, "#", "<Plug>(asterisk-z#)")
+map({"n", "v"}, "g#", "<Plug>(asterisk-gz#)")
 
-map("n", "<leader>ff", ":lua require('telescope.builtin').find_files()<CR>")
-map("n", "<leader>fb", ":lua require('telescope.builtin').buffers()<CR>")
-map("n", "<leader>fg", ":lua require('telescope.builtin').live_grep()<CR>")
-map("n", "<leader>fc", ":lua require('telescope.builtin').git_commits()<CR>")
-map("n", "<leader>ft", ":lua require('telescope.builtin').builtin()<CR>")
+local telescope = require("telescope.builtin")
+map("n", "<leader>ff", telescope.find_files)
+map("n", "<leader>fb", telescope.buffers)
+map("n", "<leader>fg", telescope.live_grep)
+map("n", "<leader>fc", telescope.git_commits)
+map("n", "<leader>ft", telescope.builtin)
 
 function M.lsp_mappings()
-  bmap("n", "<C-]>", ":lua vim.lsp.buf.definition()<CR>")
-  bmap("n", "<leader>gi", ":lua vim.lsp.buf.implementation()<CR>")
-  bmap("n", "<leader>sh", ":lua vim.lsp.buf.signature_help()<CR>")
-  bmap("n", "<leader>gr", ":lua vim.lsp.buf.references()<CR>")
-  bmap("n", "<leader>gn", ":lua vim.lsp.buf.rename()<CR>")
-  bmap("n", "<leader>k", ":lua vim.lsp.buf.hover()<CR>")
-  bmap("n", "<leader>ca", ":lua vim.lsp.buf.code_action()<CR>")
-  bmap("n", "<leader>gg", ":lua vim.lsp.util.show_line_diagnostics()<CR>")
-  bmap("n", "]g", ":lua vim.lsp.diagnostic.goto_next()<CR>")
-  bmap("n", "[g", ":lua vim.lsp.diagnostic.goto_prev()<CR>")
-  bmap("n", "<leader>a", ":lua vim.lsp.buf.formatting_sync(nil, 1000)<CR>", {silent = true})
+  local lsp = vim.lsp
+  bmap("n", "<C-]>", lsp.buf.definition)
+  bmap("n", "<leader>gi", lsp.buf.implementation)
+  bmap("n", "<leader>sh", lsp.buf.signature_help)
+  bmap("n", "<leader>gr", lsp.buf.references)
+  bmap("n", "<leader>gn", lsp.buf.rename)
+  bmap("n", "<leader>k", lsp.buf.hover)
+  bmap("n", "<leader>ca", lsp.buf.code_action)
+  bmap("n", "]g", lsp.diagnostic.goto_next)
+  bmap("n", "[g", lsp.diagnostic.goto_prev)
+  bmap(
+    "n",
+    "<leader>a",
+    function()
+      lsp.buf.formatting(nil, 1000)
+    end
+  )
 end
 
 return M
