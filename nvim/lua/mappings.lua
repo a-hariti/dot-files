@@ -2,23 +2,18 @@ local map = function(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, opts or {})
 end
 
+-- do buffer local mappings
+local bmap = function(mode, lhs, rhs, opts)
+  vim.api.nvim_buf_set_keymap(0, mode, lhs, rhs, opts or {})
+end
+
+local M = {}
+
 vim.g.mapleader = " "
 map("n", "'", "`", {noremap = true})
 map("n", "]h", "<Plug>(GitGutterNextHunk)")
 map("n", "[h", "<Plug>(GitGutterPrevHunk)")
 map("n", "<leader>e", ':lua require"nvim-tree".toggle(false, true)<cr>', {noremap = true})
-
-map("n", "<C-]>", ":lua vim.lsp.buf.definition()<CR>")
-map("n", "<leader>gi", ":lua vim.lsp.buf.implementation()<CR>")
-map("n", "<leader>sh", ":lua vim.lsp.buf.signature_help()<CR>")
-map("n", "<leader>gr", ":lua vim.lsp.buf.references()<CR>")
-map("n", "<leader>gn", ":lua vim.lsp.buf.rename()<CR>")
-map("n", "<leader>k", ":lua vim.lsp.buf.hover()<CR>")
-map("n", "<leader>ca", ":lua vim.lsp.buf.code_action()<CR>")
-map("n", "<leader>gg", ":lua vim.lsp.util.show_line_diagnostics()<CR>")
-map("n", "]g", ":lua vim.lsp.diagnostic.goto_next()<CR>")
-map("n", "[g", ":lua vim.lsp.diagnostic.goto_prev()<CR>")
-map("n", "<leader>a", ":lua vim.lsp.buf.formatting_sync(nil, 1000)<CR>", {silent = true})
 
 map("n", "<leader>d", ":Format<cr>")
 map("n", "<leader>v", ":e $MYVIMRC<CR>", {noremap = true})
@@ -82,3 +77,19 @@ map("n", "<leader>fb", ":lua require('telescope.builtin').buffers()<CR>")
 map("n", "<leader>fg", ":lua require('telescope.builtin').live_grep()<CR>")
 map("n", "<leader>fc", ":lua require('telescope.builtin').git_commits()<CR>")
 map("n", "<leader>ft", ":lua require('telescope.builtin').builtin()<CR>")
+
+function M.lsp_mappings()
+  bmap("n", "<C-]>", ":lua vim.lsp.buf.definition()<CR>")
+  bmap("n", "<leader>gi", ":lua vim.lsp.buf.implementation()<CR>")
+  bmap("n", "<leader>sh", ":lua vim.lsp.buf.signature_help()<CR>")
+  bmap("n", "<leader>gr", ":lua vim.lsp.buf.references()<CR>")
+  bmap("n", "<leader>gn", ":lua vim.lsp.buf.rename()<CR>")
+  bmap("n", "<leader>k", ":lua vim.lsp.buf.hover()<CR>")
+  bmap("n", "<leader>ca", ":lua vim.lsp.buf.code_action()<CR>")
+  bmap("n", "<leader>gg", ":lua vim.lsp.util.show_line_diagnostics()<CR>")
+  bmap("n", "]g", ":lua vim.lsp.diagnostic.goto_next()<CR>")
+  bmap("n", "[g", ":lua vim.lsp.diagnostic.goto_prev()<CR>")
+  bmap("n", "<leader>a", ":lua vim.lsp.buf.formatting_sync(nil, 1000)<CR>", {silent = true})
+end
+
+return M
