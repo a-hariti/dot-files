@@ -15,6 +15,8 @@ map("n", "]h", "<Plug>(GitGutterNextHunk)")
 map("n", "[h", "<Plug>(GitGutterPrevHunk)")
 map("n", "<leader>e", ':lua require"nvim-tree".toggle(false, true)<cr>', {noremap = true})
 
+map("n", "Q", ":q<cr>")
+
 map("n", "<leader>d", ":Format<cr>")
 map("n", "<leader>v", ":e $MYVIMRC<CR>", {noremap = true})
 
