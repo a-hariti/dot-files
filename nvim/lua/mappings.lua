@@ -4,8 +4,8 @@ end
 
 vim.g.mapleader = " "
 map("n", "'", "`", {noremap = true})
-map("n", "]h", "<Plug>(GitGutterNextHunk)", {noremap = true})
-map("n", "[h", "<Plug>(GitGutterPrevHunk)", {noremap = true})
+map("n", "]h", "<Plug>(GitGutterNextHunk)")
+map("n", "[h", "<Plug>(GitGutterPrevHunk)")
 map("n", "<leader>e", ':lua require"nvim-tree".toggle(false, true)<cr>', {noremap = true})
 
 map("n", "<C-]>", ":lua vim.lsp.buf.definition()<CR>")
