@@ -102,12 +102,13 @@ function M.lsp_mappings()
   bmap("n", "<C-]>", lsp.buf.definition)
   bmap("n", "<leader>gi", lsp.buf.implementation)
   bmap("n", "<leader>sh", lsp.buf.signature_help)
-  bmap("n", "<leader>gr", lsp.buf.references)
+  bmap("n", "<leader>gr", telescope.lsp_references)
   bmap("n", "<leader>gn", lsp.buf.rename)
   bmap("n", "<leader>k", lsp.buf.hover)
-  bmap("n", "<leader>ca", lsp.buf.code_action)
+  bmap("n", "<leader>ca", telescope.lsp_code_actions)
   bmap("n", "]g", lsp.diagnostic.goto_next)
   bmap("n", "[g", lsp.diagnostic.goto_prev)
+  map("n", "<leader>fd", telescope.diagnostics)
   bmap(
     "n",
     "<leader>a",
