@@ -16,6 +16,7 @@ cmp.setup({
     { name = 'buffer' },
     { name = 'path' },
     { name = 'cmd-line' },
+    { name = 'nvim_lua' },
   }),
   snippet = {
     expand = function(args)
