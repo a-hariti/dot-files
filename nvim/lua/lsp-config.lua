@@ -17,10 +17,6 @@ lsp_installer.on_server_ready(function(server)
     capabilities = capabilities,
   }
 
-  if server.name == 'emmet_ls' then
-    opts.filetypes = { 'html', 'css', 'scss', 'javascriptreact', 'typescriptreact', 'sass', 'stylus', 'less' }
-  end
-
   if server.name == 'tailwindcss' then
     opts.settings = {
       tailwindCSS = {
