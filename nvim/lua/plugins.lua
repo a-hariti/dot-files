@@ -21,9 +21,7 @@ return require('packer').startup(function(use)
 
   use({
     'cappyzawa/trim.nvim',
-    config = function()
-      require('trim').setup({})
-    end,
+    config = require('trim').setup({}),
   })
 
   use('nvim-lua/popup.nvim')
@@ -37,9 +35,7 @@ return require('packer').startup(function(use)
   })
   use({
     'folke/which-key.nvim',
-    config = function()
-      require('which-key').setup({})
-    end,
+    config = require('which-key').setup({}),
   })
   use('tpope/vim-fugitive')
   use('airblade/vim-gitgutter')
