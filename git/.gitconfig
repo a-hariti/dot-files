@@ -8,3 +8,5 @@
   s = status
   b = branch
   p = push
+[init]
+	defaultBranch = master
