@@ -92,6 +92,8 @@ return require('packer').startup(function(use)
   use('rakr/vim-one')
   use('hzchirs/vim-material')
   use({ 'ghifarit53/tokyonight-vim', as = 'tokyonight' })
+  -- nordfox, dayfox, dawnfox and duskfox
+  use('EdenEast/nightfox.nvim')
 
   if packer_bootstrap then
     require('packer').sync()
