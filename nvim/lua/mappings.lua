@@ -25,9 +25,7 @@ vim.g.mapleader = ' '
 map('n', "'", '`', { noremap = true })
 map('n', ']h', '<Plug>(GitGutterNextHunk)')
 map('n', '[h', '<Plug>(GitGutterPrevHunk)')
-map('n', '<leader>e', function()
-  require('nvim-tree').toggle(false, true)
-end)
+map('n', '<leader>e', ':NERDTreeToggle<cr>')
 
 map('n', 'Q', ':q<cr>')
 

@@ -40,23 +40,8 @@ return require('packer').startup(function(use)
   })
   use('tpope/vim-fugitive')
   use('airblade/vim-gitgutter')
-  use({
-    'kyazdani42/nvim-tree.lua',
-    requires = {
-      'kyazdani42/nvim-web-devicons', -- optional, for file icon
-    },
-    config = function()
-      vim.g.nvim_tree_width = 25
-      vim.g.nvim_tree_indent_markers = 1
-      require('nvim-tree').setup({
-        auto_open = 0,
-        auto_close = 1,
-        actions = {
-          open_file = { quit_on_open = false },
-        },
-      })
-    end,
-  })
+  use('preservim/nerdtree')
+  use('Xuyuanp/nerdtree-git-plugin')
 
   use('neovim/nvim-lspconfig')
   use('williamboman/nvim-lsp-installer')
