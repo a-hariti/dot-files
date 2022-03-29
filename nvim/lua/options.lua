@@ -28,5 +28,5 @@ vim.o.spelllang = 'en,fr'
 vim.o.foldmethod = 'expr'
 vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldlevelstart = 99
-
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.cmd('colorscheme tokyonight')
