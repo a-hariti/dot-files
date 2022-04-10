@@ -27,12 +27,9 @@ alias d="dirs -v | head"
 alias v.="vifm ."
 alias yt=youtube-dl
 
-
 function zz {
     zathura $@ > /dev/null 2>&1 &|
 }
-
-
 
 function extract {
     echo Extracting $1 ...
@@ -67,7 +64,6 @@ function man {
     command man "$@"
 }
 
-
 source "${HOME}/.zgen/zgen.zsh"
 
 # if the init script doesn't exist
@@ -80,6 +76,9 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/z
     zgen oh-my-zsh plugins/sudo
     zgen oh-my-zsh plugins/gitfast
+    zgen oh-my-zsh plugins/docker
+    zgen oh-my-zsh plugins/docker-compose
+    zgen oh-my-zsh plugins/npm
     zgen load zsh-users/zsh-syntax-highlighting
     zgen load zsh-users/zsh-autosuggestions
 
