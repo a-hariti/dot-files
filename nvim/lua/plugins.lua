@@ -43,7 +43,12 @@ return require('packer').startup(function(use)
   use('preservim/nerdtree')
   use('Xuyuanp/nerdtree-git-plugin')
 
-  use('github/copilot.vim')
+  use({
+    'github/copilot.vim',
+    config = function()
+      vim.cmd([[ let g:copilot_no_tab_map = v:true ]])
+    end,
+  })
 
   use('neovim/nvim-lspconfig')
   use('williamboman/nvim-lsp-installer')
