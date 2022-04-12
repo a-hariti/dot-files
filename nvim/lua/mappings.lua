@@ -23,9 +23,17 @@ local M = {}
 
 vim.g.mapleader = ' '
 map('n', "'", '`', { noremap = true })
+
 map('n', ']h', '<Plug>(GitGutterNextHunk)')
 map('n', '[h', '<Plug>(GitGutterPrevHunk)')
+
 map('n', '<leader>e', ':NERDTreeToggle<cr>')
+
+map('i', '<C-j>', 'copilot#Next()', { expr = true, script = true })
+map('i', '<C-k>', 'copilot#Previous()', { expr = true, script = true })
+map('i', '<C-l>', 'copilot#Accept("\\CR")', { expr = true, script = true })
+map('i', '<C-;>', 'copilot#Dismiss()', { expr = true, script = true })
+vim.cmd([[ let g:copilot_no_tab_map = v:true ]])
 
 map('n', 'Q', ':q<cr>')
 
