@@ -90,11 +90,11 @@ map({ 'n', 'v' }, '#', '<Plug>(asterisk-z#)')
 map({ 'n', 'v' }, 'g#', '<Plug>(asterisk-gz#)')
 
 local telescope = require('telescope.builtin')
-map('n', '<leader>ff', telescope.find_files)
-map('n', '<leader>fb', telescope.buffers)
-map('n', '<leader>fg', telescope.live_grep)
-map('n', '<leader>fc', telescope.git_commits)
-map('n', '<leader>ft', telescope.builtin)
+map('n', '<leader>f', telescope.find_files)
+map('n', '<leader>b', telescope.buffers)
+map('n', '<leader>g', telescope.live_grep)
+map('n', '<leader>tc', telescope.git_commits)
+map('n', '<leader>tt', telescope.builtin)
 
 function M.lsp_mappings()
   local lsp = vim.lsp
