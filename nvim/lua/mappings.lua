@@ -27,7 +27,7 @@ map('n', "'", '`', { noremap = true })
 map('n', ']h', '<Plug>(GitGutterNextHunk)')
 map('n', '[h', '<Plug>(GitGutterPrevHunk)')
 
-map('n', '<leader>e', ':NERDTreeToggle<cr>')
+map('n', '<leader>e', ':if &filetype == "nerdtree" | :NERDTreeToggle | else | :NERDTreeFind | endif <CR>')
 
 map('i', '<C-j>', 'copilot#Next()', { expr = true, script = true })
 map('i', '<C-k>', 'copilot#Previous()', { expr = true, script = true })
