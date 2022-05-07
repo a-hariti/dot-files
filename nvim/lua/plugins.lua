@@ -28,7 +28,13 @@ return require('packer').startup(function(use)
 
   use({
     'cappyzawa/trim.nvim',
-    config = require('trim').setup({}),
+    config = require('trim').setup({
+      patterns = {
+        [[%s/\s\+$//e]], -- remove unwanted spaces
+        [[%s/\($\n\s*\)\+\%$//]], -- trim last line
+        [[%s/\%^\n\+//]], -- trim first line
+      },
+    }),
   })
 
   use('nvim-lua/popup.nvim')
