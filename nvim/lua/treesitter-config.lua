@@ -13,4 +13,24 @@ require('nvim-treesitter.configs').setup({
   context_commentstring = {
     enable = true,
   },
+  rainbow = {
+    enable = true,
+    -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    extended_mode = false,
+  },
+  refactor = {
+    navigation = {
+      enable = true,
+      keymaps = {
+        goto_next_usage = ']u',
+        goto_previous_usage = '[u',
+      },
+    },
+  },
+  matchup = {
+    enable = true,
+  },
+  ['treesitter-context'] = {
+    enable = true,
+  },
 })

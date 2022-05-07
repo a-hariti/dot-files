@@ -19,6 +19,10 @@ return require('packer').startup(function(use)
     run = ':TSUpdate',
   })
   use('JoosepAlviste/nvim-ts-context-commentstring')
+  use('p00f/nvim-ts-rainbow')
+  use('nvim-treesitter/nvim-treesitter-refactor')
+  use('andymass/vim-matchup')
+  use('lewis6991/nvim-treesitter-context')
 
   use({
     'cappyzawa/trim.nvim',
