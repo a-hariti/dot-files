@@ -24,6 +24,8 @@ return require('packer').startup(function(use)
   use('andymass/vim-matchup')
   use('lewis6991/nvim-treesitter-context')
 
+  use('wellle/targets.vim')
+
   use({
     'cappyzawa/trim.nvim',
     config = require('trim').setup({}),
