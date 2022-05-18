@@ -39,6 +39,7 @@ map('n', '<leader>v', ':e $MYVIMRC<CR>', { noremap = true })
 
 map('n', '<leader>w', ':update<CR>', { noremap = true })
 map('n', '<leader>q', ':q<CR>', { noremap = true })
+map('n', '<leader>x', ':cclose<CR>', { noremap = true })
 
 map('n', '<leader><leader>', '<C-^>', { noremap = true })
 
