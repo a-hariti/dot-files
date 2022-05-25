@@ -22,7 +22,6 @@ return require('packer').startup(function(use)
   use('p00f/nvim-ts-rainbow')
   use('nvim-treesitter/nvim-treesitter-refactor')
   use('andymass/vim-matchup')
-  use('lewis6991/nvim-treesitter-context')
 
   use('wellle/targets.vim')
 
