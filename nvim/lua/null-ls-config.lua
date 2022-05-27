@@ -6,7 +6,26 @@ nulls.setup({
     builtins.diagnostics.eslint,
     builtins.formatting.eslint,
     builtins.formatting.prettier.with({
-      extra_args = { '--single-quote', '--print-width', 120, '--tab-width', 4 },
-    })
+      extra_args = {
+        '--config-precedence',
+        'file-override',
+        '--single-quote',
+        '--print-width',
+        120,
+        '--tab-width',
+        4,
+      },
+      filetypes = {
+        'html',
+        'json',
+        'svelte',
+        'markdown',
+        'css',
+        'javascript',
+        'javascriptreact',
+        'typescript',
+        'typescriptreact',
+      },
+    }),
   },
 })
