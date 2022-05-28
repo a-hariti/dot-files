@@ -7,9 +7,11 @@ lsp_installer.on_server_ready(function(server)
   local opts = {
     on_attach = function(client)
       -- defer formatting to null-ls
-      if client.name == 'sumneko_lua' or client.name == 'tsserver' then
-        client.resolved_capabilities.document_formatting = false
-        client.resolved_capabilities.document_range_formatting = false
+      for _, name in pairs({ 'sumneko_lua', 'tsserver', 'svelte', 'html' }) do
+        if client.name == name then
+          client.resolved_capabilities.document_formatting = false
+          client.resolved_capabilities.document_range_formatting = false
+        end
       end
       lsp_signature.on_attach()
       mappings.lsp_mappings()
