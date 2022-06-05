@@ -38,6 +38,7 @@ return require('packer').startup(function(use)
 
   use('nvim-lua/popup.nvim')
   use('nvim-lua/plenary.nvim')
+  use('ThePrimeagen/harpoon')
   use('nvim-telescope/telescope.nvim')
   use({
     'nvim-lualine/lualine.nvim',
