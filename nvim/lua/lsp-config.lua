@@ -2,6 +2,7 @@ local lsp_installer = require('nvim-lsp-installer')
 local lsp_signature = require('lsp_signature')
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local mappings = require('mappings')
+local nvim_lsp = require('lspconfig')
 
 lsp_installer.on_server_ready(function(server)
   local opts = {
@@ -15,6 +16,23 @@ lsp_installer.on_server_ready(function(server)
       end
       lsp_signature.on_attach()
       mappings.lsp_mappings()
+
+      local active_clients = vim.lsp.get_active_clients()
+      if client.name == 'denols' then
+        for _, client_ in pairs(active_clients) do
+          -- stop tsserver if denols is already active
+          if client_.name == 'tsserver' then
+            client_.stop()
+          end
+        end
+      elseif client.name == 'tsserver' then
+        for _, client_ in pairs(active_clients) do
+          -- prevent tsserver from starting if denols is already active
+          if client_.name == 'denols' then
+            client.stop()
+          end
+        end
+      end
     end,
     capabilities = capabilities,
   }
@@ -25,6 +43,8 @@ lsp_installer.on_server_ready(function(server)
         classAttributes = { 'class', 'className', 'classList' },
       },
     }
+  if server.name == 'denols' then
+    opts.root_dir = nvim_lsp.util.root_pattern('deno.json', 'deno.jsonc')
   end
 
   if server.name == 'sumneko_lua' then
