@@ -17,6 +17,7 @@ cmp.setup({
     { name = 'path' },
     { name = 'cmd-line' },
     { name = 'nvim_lua' },
+    { name = 'nvim_lsp_signature_help' },
   }),
   snippet = {
     expand = function(args)
