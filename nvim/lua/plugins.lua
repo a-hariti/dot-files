@@ -21,7 +21,13 @@ return require('packer').startup(function(use)
   use('JoosepAlviste/nvim-ts-context-commentstring')
   use('p00f/nvim-ts-rainbow')
   use('nvim-treesitter/nvim-treesitter-refactor')
-  use('andymass/vim-matchup')
+  use({
+    'andymass/vim-matchup',
+    config = function()
+      -- disable awkward offscreen matching
+      vim.cmd([[let g:matchup_matchparen_offscreen = {}]])
+    end,
+  })
 
   use('wellle/targets.vim')
 
