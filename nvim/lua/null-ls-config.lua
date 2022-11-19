@@ -4,7 +4,7 @@ nulls.setup({
   sources = {
     builtins.formatting.stylua,
     builtins.diagnostics.eslint,
-    builtins.formatting.eslint,
+    -- builtins.formatting.eslint,
     builtins.formatting.prettier.with({
       extra_args = {
         '--config-precedence',
