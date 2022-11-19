@@ -39,8 +39,16 @@ lsp_installer.on_server_ready(function(server)
     opts.settings = {
       tailwindCSS = {
         classAttributes = { 'class', 'className', 'classList' },
+        experimental = {
+          classRegex = {
+            'class "([^"]*)',
+          },
+        },
       },
     }
+    opts.filetypes = { 'html', 'sevelte', 'javascriptreact', 'typescriptreact', 'elm' }
+  end
+
   if server.name == 'denols' then
     opts.root_dir = nvim_lsp.util.root_pattern('deno.json', 'deno.jsonc')
   end
