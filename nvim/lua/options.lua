@@ -18,6 +18,8 @@ vim.o.lazyredraw = true
 vim.opt.shortmess:append('c')
 vim.o.splitbelow = true
 vim.o.splitright = true
+-- very useful for resizing splits
+vim.o.mouse = "n"
 vim.o.cursorline = true
 vim.o.showmode = true
 vim.o.list = true -- show white space
