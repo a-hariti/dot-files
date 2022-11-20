@@ -14,6 +14,7 @@ require('nvim-treesitter.configs').setup({
     'c',
     'latex',
   },
+  auto_install = true,
   -- Install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,
   -- List of parsers to ignore installing
