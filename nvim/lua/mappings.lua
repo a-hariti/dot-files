@@ -27,8 +27,14 @@ map('n', 'x', '"_x', { noremap = true })
 
 map('n', ']h', '<Plug>(GitGutterNextHunk)')
 map('n', '[h', '<Plug>(GitGutterPrevHunk)')
+map('n', '<leader>gg', ":Git<CR>")
 
-map('n', '<leader>e', ':if &filetype == "nerdtree" || &filetype == "" | :NERDTreeToggle | else | :NERDTreeFind | endif <CR>', {silent = true})
+map(
+  'n',
+  '<leader>e',
+  ':if &filetype == "nerdtree" || &filetype == "" | :NERDTreeToggle | else | :NERDTreeFind | endif <CR>',
+  { silent = true }
+)
 
 map('i', '<C-j>', 'copilot#Next()', { expr = true, script = true })
 map('i', '<C-k>', 'copilot#Previous()', { expr = true, script = true })
@@ -94,9 +100,7 @@ map({ 'n', 'v' }, 'g#', '<Plug>(asterisk-gz#)')
 local telescope = require('telescope.builtin')
 map('n', '<leader>f', telescope.find_files)
 map('n', '<leader>b', telescope.buffers)
-map('n', '<leader>gg', telescope.grep_string)
 map('n', '<leader>gl', telescope.live_grep)
--- map('v', '<leader>g', "\"zy:Telescope live_grep search=<C-R>z<CR>")
 map('n', '<leader>tl', telescope.current_buffer_fuzzy_find)
 map('n', '<leader>tt', telescope.builtin)
 
@@ -114,16 +118,16 @@ end)
 map('n', '<leader>.', function()
   harpoon_ui.nav_next()
 end)
-map('n', '<leader>la', function()
+map('n', '<leader>ja', function()
   harpoon_ui.nav_file(1)
 end)
-map('n', '<leader>ls', function()
+map('n', '<leader>js', function()
   harpoon_ui.nav_file(2)
 end)
-map('n', '<leader>ld', function()
+map('n', '<leader>jd', function()
   harpoon_ui.nav_file(3)
 end)
-map('n', '<leader>lf', function()
+map('n', '<leader>jf', function()
   harpoon_ui.nav_file(4)
 end)
 
@@ -131,7 +135,6 @@ function M.lsp_mappings()
   local lsp = vim.lsp
   bmap('n', '<C-]>', lsp.buf.definition)
   bmap('n', '<leader>gi', lsp.buf.implementation)
-  bmap('n', '<leader>sh', lsp.buf.signature_help)
   bmap('n', '<leader>gr', telescope.lsp_references)
   bmap('n', '<leader>gn', lsp.buf.rename)
   bmap('n', '<leader>k', lsp.buf.hover)
