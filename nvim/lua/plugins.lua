@@ -95,6 +95,7 @@ return require('packer').startup(function(use)
   use('haya14busa/vim-asterisk')
 
   --colorschemes
+  use('bluz71/vim-nightfly-colors')
   use('phanviet/vim-monokai-pro')
   use('morhetz/gruvbox')
   use('haishanh/night-owl.vim')
