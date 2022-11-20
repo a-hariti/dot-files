@@ -3,8 +3,6 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 local mappings = require('mappings')
 local nvim_lsp = require('lspconfig')
 
-Clients = vim.lsp.get_active_clients()
-
 lsp_installer.on_server_ready(function(server)
   local opts = {
     on_attach = function(client)
