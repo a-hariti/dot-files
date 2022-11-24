@@ -46,9 +46,10 @@ return require('packer').startup(function(use)
   use('nvim-lua/plenary.nvim')
   use('ThePrimeagen/harpoon')
   use('nvim-telescope/telescope.nvim')
+  -- required by lualine and nvim-tree
+  use({ 'kyazdani42/nvim-web-devicons', opt = true })
   use({
     'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
     config = require('lualine').setup({}),
   })
   use({
@@ -57,8 +58,12 @@ return require('packer').startup(function(use)
   })
   use('tpope/vim-fugitive')
   use('airblade/vim-gitgutter')
-  use('preservim/nerdtree')
-  use('Xuyuanp/nerdtree-git-plugin')
+  use({
+    'kyazdani42/nvim-tree.lua',
+    config = function()
+      require('nvim-tree').setup({ view = { relativenumber = true }, filters = { custom = { '.git' } } })
+    end,
+  })
 
   use({
     'github/copilot.vim',
