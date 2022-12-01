@@ -132,6 +132,10 @@ map('n', '<leader>jf', function()
   harpoon_ui.nav_file(4)
 end)
 
+map({ 'n', 'v' }, '<leader>s', function()
+  vim.lsp.buf.formatting(nil, 1000)
+end, { silent = true })
+
 function M.lsp_mappings()
   local lsp = vim.lsp
   bmap('n', '<C-]>', lsp.buf.definition)
@@ -143,8 +147,5 @@ function M.lsp_mappings()
   bmap('n', ']g', lsp.diagnostic.goto_next)
   bmap('n', '[g', lsp.diagnostic.goto_prev)
   map('n', '<leader>d', telescope.diagnostics)
-  bmap('n', '<leader>s', function()
-    lsp.buf.formatting(nil, 1000)
-  end)
 end
 return M
