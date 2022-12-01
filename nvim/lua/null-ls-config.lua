@@ -13,19 +13,22 @@ nulls.setup({
         '--print-width',
         120,
         '--tab-width',
-        4,
+        2,
       },
       filetypes = {
         'html',
         'json',
         'svelte',
-        'markdown',
+        -- 'markdown',
         'css',
         'javascript',
         'javascriptreact',
         'typescript',
         'typescriptreact',
       },
+    }),
+    builtins.formatting.deno_fmt.with({
+      filetypes = { 'markdown' }, -- only runs `deno fmt` for markdown
     }),
   },
 })
