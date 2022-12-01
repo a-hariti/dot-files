@@ -23,6 +23,16 @@ return require('packer').startup(function(use)
   use('p00f/nvim-ts-rainbow')
   use('nvim-treesitter/nvim-treesitter-refactor')
   use({
+    'lukas-reineke/indent-blankline.nvim',
+    config = function()
+      require('indent_blankline').setup({
+        char = '┊',
+        show_current_context = true,
+        -- show_current_context_start = true,
+      })
+    end,
+  })
+  use({
     'andymass/vim-matchup',
     config = function()
       -- disable awkward offscreen matching
@@ -59,6 +69,7 @@ return require('packer').startup(function(use)
   })
   use('tpope/vim-fugitive')
   use('airblade/vim-gitgutter')
+  use('tpope/vim-sleuth')
   use({
     'kyazdani42/nvim-tree.lua',
     config = function()
