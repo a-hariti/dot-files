@@ -5,6 +5,8 @@ require('nvim-treesitter.configs').setup({
     'tsx',
     'html',
     'css',
+    'jsdoc',
+    'comment',
     'go',
     'rust',
     'yaml',
