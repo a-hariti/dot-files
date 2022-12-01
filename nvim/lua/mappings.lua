@@ -23,7 +23,6 @@ local M = {}
 
 vim.g.mapleader = ' '
 map('n', "'", '`', { noremap = true })
-map('n', 'x', '"_x', { noremap = true })
 
 map('n', ']h', '<Plug>(GitGutterNextHunk)')
 map('n', '[h', '<Plug>(GitGutterPrevHunk)')
