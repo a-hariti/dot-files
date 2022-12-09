@@ -1,28 +1,24 @@
 #!/usr/bin/env bash
 
 # remap keyboard keys on mac
-# todo: skip on linux
-stow -Rv -t ~/Library/LaunchAgents mac-mappings
+[[ "$(uname -s)" = "Darwin" ]] && stow -Rv -t ~/Library/LaunchAgents mac-mappings
 
-# make sure the neovim directory is there
-mkdir -p ~/.config/nvim
+# set up zgen to manage zsh plugins
+git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+stow -vR -t ~ zsh
 
-home_dot_files=(
-    git
-    zsh
-    tmux
-)
+# make sure the neovim and alacritty directories are there
+mkdir -p ~/.config/{nvim,alacritty}
 
-dot_config_dot_files=(
-    nvim
-    alacritty
-)
+home_dot_files=( git tmux zsh )
 
-for item in $home_dot_files; do
+dot_config_dot_files=( nvim alacritty )
+
+for item in ${home_dot_files[@]}; do
     stow -vR -t ~ $item
 done
 
 
-for item in $dot_config_dot_files; do
+for item in ${dot_config_dot_files[@]}; do
     stow -vR -t ~/.config/$item $item
 done
