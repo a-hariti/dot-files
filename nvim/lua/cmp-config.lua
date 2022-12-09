@@ -1,4 +1,8 @@
-local cmp = require('cmp')
+local ok, cmp = pcall(require, 'cmp')
+if not ok then
+  print('cmp module not found')
+  return
+end
 local luasnip = require('luasnip')
 
 local has_words_before = function()

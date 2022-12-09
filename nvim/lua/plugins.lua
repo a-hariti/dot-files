@@ -1,7 +1,8 @@
 local fn = vim.fn
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({
+  print('bootstrapping packer')
+   fn.system({
     'git',
     'clone',
     '--depth',
@@ -9,6 +10,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
     'https://github.com/wbthomason/packer.nvim',
     install_path,
   })
+  return print('restart neovim to install plugins')
 end
 
 return require('packer').startup(function(use)
@@ -22,15 +24,10 @@ return require('packer').startup(function(use)
   use('JoosepAlviste/nvim-ts-context-commentstring')
   use('p00f/nvim-ts-rainbow')
   use('nvim-treesitter/nvim-treesitter-refactor')
+  use('jiangmiao/auto-pairs')
+  use('windwp/nvim-ts-autotag')
   use({
     'lukas-reineke/indent-blankline.nvim',
-    config = function()
-      require('indent_blankline').setup({
-        char = '┊',
-        show_current_context = true,
-        -- show_current_context_start = true,
-      })
-    end,
   })
   use({
     'andymass/vim-matchup',
@@ -44,13 +41,6 @@ return require('packer').startup(function(use)
 
   use({
     'cappyzawa/trim.nvim',
-    config = require('trim').setup({
-      patterns = {
-        [[%s/\s\+$//e]], -- remove unwanted spaces
-        [[%s/\($\n\s*\)\+\%$//]], -- trim last line
-        [[%s/\%^\n\+//]], -- trim first line
-      },
-    }),
   })
 
   use('nvim-lua/popup.nvim')
@@ -59,22 +49,13 @@ return require('packer').startup(function(use)
   use('nvim-telescope/telescope.nvim')
   -- required by lualine and nvim-tree
   use({ 'kyazdani42/nvim-web-devicons', opt = true })
-  use({
-    'nvim-lualine/lualine.nvim',
-    config = require('lualine').setup({}),
-  })
-  use({
-    'folke/which-key.nvim',
-    config = require('which-key').setup({}),
-  })
+  use({ 'nvim-lualine/lualine.nvim' })
+  use({ 'folke/which-key.nvim' })
   use('tpope/vim-fugitive')
   use('airblade/vim-gitgutter')
   use('tpope/vim-sleuth')
   use({
     'kyazdani42/nvim-tree.lua',
-    config = function()
-      require('nvim-tree').setup({ view = { relativenumber = true }, filters = { custom = { '.git' } } })
-    end,
   })
 
   use({
@@ -100,8 +81,6 @@ return require('packer').startup(function(use)
   use('tpope/vim-surround')
   use('tpope/vim-repeat')
 
-  use('jiangmiao/auto-pairs')
-  use('windwp/nvim-ts-autotag')
   use('tpope/vim-commentary')
   use({
     'unblevable/quick-scope',
@@ -122,8 +101,4 @@ return require('packer').startup(function(use)
   use({ 'ghifarit53/tokyonight-vim', as = 'tokyonight' })
   -- nordfox, dayfox, dawnfox and duskfox
   use('EdenEast/nightfox.nvim')
-
-  if packer_bootstrap then
-    require('packer').sync()
-  end
 end)

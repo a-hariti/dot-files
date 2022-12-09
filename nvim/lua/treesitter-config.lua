@@ -1,4 +1,10 @@
-require('nvim-treesitter.configs').setup({
+local ok, configs = pcall(require, 'nvim-treesitter.configs')
+if not ok then
+  print('nvim-treesitter.configs not found')
+  return
+end
+
+configs.setup({
   ensure_installed = {
     'javascript',
     'typescript',
@@ -14,10 +20,8 @@ require('nvim-treesitter.configs').setup({
     'jsonc',
     'lua',
     'c',
-    'latex',
   },
-  auto_install = true,
-  -- Install languages synchronously (only applied to `ensure_installed`)
+  auto_install = true, -- Install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,
   -- List of parsers to ignore installing
   ignore_install = {},

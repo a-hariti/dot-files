@@ -98,7 +98,11 @@ map({ 'n', 'v' }, 'g*', '<Plug>(asterisk-gz*)')
 map({ 'n', 'v' }, '#', '<Plug>(asterisk-z#)')
 map({ 'n', 'v' }, 'g#', '<Plug>(asterisk-gz#)')
 
-local telescope = require('telescope.builtin')
+local ok, telescope = pcall(require, 'telescope.builtin')
+if not ok then
+    print('telescope.builtin not found')
+    return;
+end
 map('n', '<leader>f', telescope.find_files)
 map('n', '<leader>b', telescope.buffers)
 map('n', '<leader>gl', telescope.live_grep)
@@ -106,7 +110,8 @@ map('n', '<leader>tl', telescope.current_buffer_fuzzy_find)
 map('n', '<leader>tt', telescope.builtin)
 
 -- Harpoon
-local harpoon_ui = require('harpoon.ui')
+local ok, harpoon_ui = pcall(require, 'harpoon.ui')
+if ok then
 map('n', '<leader>m', function()
   harpoon_ui.toggle_quick_menu()
 end)
@@ -131,14 +136,27 @@ end)
 map('n', '<leader>jf', function()
   harpoon_ui.nav_file(4)
 end)
+else
+  print('harpoon not found')
+end
 
 map({ 'n', 'v' }, '<leader>s', function()
   vim.lsp.buf.formatting(nil, 1000)
 end, { silent = true })
 
+local lsp_organize_imports = function()
+  local params = {
+    command = '_typescript.organizeImports',
+    arguments = { vim.api.nvim_buf_get_name(0) },
+    title = '',
+  }
+  vim.lsp.buf.execute_command(params)
+end
+
 function M.lsp_mappings()
   local lsp = vim.lsp
   bmap('n', '<C-]>', lsp.buf.definition)
+  bmap('n', '<leader>o', lsp_organize_imports)
   bmap('n', '<leader>gi', lsp.buf.implementation)
   bmap('n', '<leader>gr', telescope.lsp_references)
   bmap('n', '<leader>gn', lsp.buf.rename)

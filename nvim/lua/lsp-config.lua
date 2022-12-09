@@ -1,4 +1,8 @@
-local lsp_installer = require('nvim-lsp-installer')
+local ok, lsp_installer = pcall(require, 'nvim-lsp-installer')
+if not ok then
+  print('nvim-lsp-installer not found')
+  return
+end
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 local mappings = require('mappings')
 local nvim_lsp = require('lspconfig')

@@ -1,6 +1,13 @@
-local action_set = require('telescope.actions.set')
+local ok, telescope = pcall(require, 'telescope')
+--- safe require alredy as if telescope require suceeds, then the actions will be there
+local _, action_set = pcall(require, 'telescope.actions.set')
 
-require('telescope').setup({
+if not ok then
+    print('telescope module not found')
+    return
+end
+
+telescope.setup({
   pickers = {
     find_files = {
       attach_mappings = function()

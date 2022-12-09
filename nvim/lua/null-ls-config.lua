@@ -1,9 +1,13 @@
-local nulls = require('null-ls')
+local ok, nulls = pcall(require, 'null-ls')
+if not ok then
+  print('null-ls moudle not found')
+  return
+end
 local builtins = nulls.builtins
 nulls.setup({
   sources = {
     builtins.formatting.stylua,
-    builtins.diagnostics.eslint,
+    -- builtins.diagnostics.eslint,
     -- builtins.formatting.eslint,
     builtins.formatting.prettier.with({
       extra_args = {
