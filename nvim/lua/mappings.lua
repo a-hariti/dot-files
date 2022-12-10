@@ -37,9 +37,9 @@ map('n', '<leader>e', function()
   end
 end, { silent = true })
 
-map('i', '<C-j>', 'copilot#Next()', { expr = true, script = true })
-map('i', '<C-k>', 'copilot#Previous()', { expr = true, script = true })
-map('i', '<C-l>', 'copilot#Accept("")', { expr = true, script = true })
+map('i', '<C-j>', 'copilot#Next()', { expr = true, script = true, replace_keycodes = false })
+map('i', '<C-k>', 'copilot#Previous()', { expr = true, script = true, replace_keycodes = false })
+map('i', '<C-l>', 'copilot#Accept("")', { expr = true, script = true, replace_keycodes = false })
 
 map('n', 'Q', ':q<cr>')
 

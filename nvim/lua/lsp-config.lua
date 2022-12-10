@@ -1,89 +1,75 @@
-local ok, lsp_installer = pcall(require, 'nvim-lsp-installer')
+local ok, lspconfig = pcall(require, 'lspconfig')
 if not ok then
-  print('nvim-lsp-installer not found')
+  print('lspconfig not found')
   return
 end
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+require('mason').setup()
+require('mason-lspconfig').setup({
+  ensure_installed = { 'tsserver', 'sumneko_lua' },
+})
+
 local mappings = require('mappings')
-local nvim_lsp = require('lspconfig')
+local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-lsp_installer.on_server_ready(function(server)
-  local opts = {
-    on_attach = function(client)
-      -- defer formatting to null-ls
-      for _, name in pairs({ 'sumneko_lua', 'tsserver', 'svelte', 'html' }) do
-        if client.name == name then
-          client.resolved_capabilities.document_formatting = false
-          client.resolved_capabilities.document_range_formatting = false
-        end
-      end
-      mappings.lsp_mappings()
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, 'lua/?.lua')
+table.insert(runtime_path, 'lua/?/init.lua')
 
-      local active_clients = vim.lsp.get_active_clients()
-      if client.name == 'denols' then
-        for _, client_ in pairs(active_clients) do
-          -- stop tsserver if denols is already active
-          if client_.name == 'tsserver' then
-            client_.stop()
-          end
-        end
-      elseif client.name == 'tsserver' then
-        for _, client_ in pairs(active_clients) do
-          -- prevent tsserver from starting if denols is already active
-          if client_.name == 'denols' then
-            client.stop()
-          end
-        end
-      end
-    end,
-    capabilities = capabilities,
-  }
+local lua_opts = {
+  capabilities = cmp_capabilities,
+  on_attach = mappings.lsp_mappings,
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Setup your lua path
+        path = runtime_path,
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = { 'vim' },
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file('', true),
+      },
+    },
+  },
+}
+lspconfig.sumneko_lua.setup(lua_opts)
 
-  if server.name == 'tailwindcss' then
-    opts.settings = {
-      tailwindCSS = {
-        classAttributes = { 'class', 'className', 'classList' },
-        experimental = {
-          classRegex = {
-            'class "([^"]*)',
-          },
+lspconfig.tsserver.setup({
+  capabilities = cmp_capabilities,
+  on_attach = mappings.lsp_mappings,
+})
+
+lspconfig.html.setup({
+  capabilities = cmp_capabilities,
+  on_attach = mappings.lsp_mappings,
+})
+
+lspconfig.tailwindcss.setup({
+  capabilities = cmp_capabilities,
+  -- on_attach = mappings.lsp_mappings,
+  settings = {
+    tailwindCSS = {
+      classAttributes = { 'class', 'className', 'classList' },
+      experimental = {
+        -- Elm syntax
+        classRegex = {
+          'class "([^"]*)',
         },
       },
-    }
-    opts.filetypes = { 'html', 'sevelte', 'javascriptreact', 'typescriptreact', 'elm' }
-  end
+    },
+  },
+})
+lspconfig.csharp_ls.setup({
+  capabilities = cmp_capabilities,
+  on_attach = mappings.lsp_mappings,
+})
 
-  if server.name == 'denols' then
-    opts.root_dir = nvim_lsp.util.root_pattern('deno.json', 'deno.jsonc')
-  end
-
-  if server.name == 'sumneko_lua' then
-    local runtime_path = vim.split(package.path, ';')
-    table.insert(runtime_path, 'lua/?.lua')
-    table.insert(runtime_path, 'lua/?/init.lua')
-
-    opts.settings = {
-      Lua = {
-        runtime = {
-          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-          version = 'LuaJIT',
-          -- Setup your lua path
-          path = runtime_path,
-        },
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = { 'vim' },
-        },
-        workspace = {
-          -- Make the server aware of Neovim runtime files
-          library = vim.api.nvim_get_runtime_file('', true),
-        },
-      },
-    }
-  end
-
-  -- This setup() function will take the provided server configuration and decorate it with the necessary properties
-  -- before passing it onwards to lspconfig.
-  -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-  server:setup(opts)
-end)
+-- if server.name == 'denols' then
+--   opts.root_dir = nvim_lsp.util.root_pattern('deno.json', 'deno.jsonc')
+-- end

@@ -2,7 +2,7 @@ local fn = vim.fn
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
   print('bootstrapping packer')
-   fn.system({
+  fn.system({
     'git',
     'clone',
     '--depth',
@@ -66,7 +66,8 @@ return require('packer').startup(function(use)
   })
 
   use('neovim/nvim-lspconfig')
-  use('williamboman/nvim-lsp-installer')
+  use({ 'williamboman/mason.nvim' })
+  use({ 'williamboman/mason-lspconfig.nvim' })
   use('jose-elias-alvarez/null-ls.nvim')
   use('hrsh7th/cmp-nvim-lsp')
   use('hrsh7th/cmp-buffer')
