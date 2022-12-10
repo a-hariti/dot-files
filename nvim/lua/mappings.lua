@@ -28,14 +28,7 @@ map('n', ']h', '<Plug>(GitGutterNextHunk)')
 map('n', '[h', '<Plug>(GitGutterPrevHunk)')
 map('n', '<leader>gg', ':Git<CR>')
 
-map('n', '<leader>e', function()
-  local filetype = vim.bo.filetype
-  if filetype == '' or filetype == 'NvimTree' then
-    vim.cmd('NvimTreeToggle')
-  else
-    vim.cmd('NvimTreeFindFile')
-  end
-end, { silent = true })
+map('n', '<leader>e', ':NvimTreeFindFileToggle<cr>', { silent = true })
 
 map('i', '<C-j>', 'copilot#Next()', { expr = true, script = true, replace_keycodes = false })
 map('i', '<C-k>', 'copilot#Previous()', { expr = true, script = true, replace_keycodes = false })
