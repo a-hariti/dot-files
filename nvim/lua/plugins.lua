@@ -15,17 +15,15 @@ return require('packer').startup(function(use)
 
   use({
     'nvim-treesitter/nvim-treesitter',
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    'p00f/nvim-ts-rainbow',
+    'nvim-treesitter/nvim-treesitter-refactor',
+    'windwp/nvim-ts-autotag',
     run = ':TSUpdate',
   })
-  use('nvim-treesitter/nvim-treesitter-textobjects')
-  use('JoosepAlviste/nvim-ts-context-commentstring')
-  use('p00f/nvim-ts-rainbow')
-  use('nvim-treesitter/nvim-treesitter-refactor')
   use('jiangmiao/auto-pairs')
-  use('windwp/nvim-ts-autotag')
-  use({
-    'lukas-reineke/indent-blankline.nvim',
-  })
+  use('lukas-reineke/indent-blankline.nvim')
   use({
     'andymass/vim-matchup',
     config = function()
@@ -46,14 +44,12 @@ return require('packer').startup(function(use)
   use('nvim-telescope/telescope.nvim')
   -- required by lualine and nvim-tree
   use({ 'kyazdani42/nvim-web-devicons', opt = true })
-  use({ 'nvim-lualine/lualine.nvim' })
-  use({ 'folke/which-key.nvim' })
+  use('nvim-lualine/lualine.nvim')
+  use('folke/which-key.nvim')
   use('tpope/vim-fugitive')
   use('airblade/vim-gitgutter')
   use('tpope/vim-sleuth')
-  use({
-    'kyazdani42/nvim-tree.lua',
-  })
+  use('kyazdani42/nvim-tree.lua')
 
   use({
     'github/copilot.vim',
