@@ -1,5 +1,5 @@
-local success, indent_blankline = pcall(require, 'indent_blankline')
-if success then
+local ok, indent_blankline = pcall(require, 'indent_blankline')
+if ok then
   indent_blankline.setup({
     char = '┊',
     show_current_context = true,
@@ -9,8 +9,8 @@ else
   print('indent_blankline module not found')
 end
 
-local success, trim = pcall(require, 'trim')
-if success then
+local ok, trim = pcall(require, 'trim')
+if ok then
   trim.setup({
     patterns = {
       [[%s/\s\+$//e]], -- remove unwanted spaces
@@ -22,24 +22,24 @@ else
   print('trim module not found')
 end
 
-local success, lualine = pcall(require, 'lualine')
-if success then
+local ok, lualine = pcall(require, 'lualine')
+if ok then
   lualine.setup({})
 else
   print('lualine module not found')
 end
 
-local success, lualine = pcall(require, 'which-key')
-if success then
+local ok, lualine = pcall(require, 'which-key')
+if ok then
   lualine.setup({})
 else
   print('which-key module not found')
 end
 
-local success, nvim_tree = pcall(require, 'nvim-tree')
-if success then
+local ok, nvim_tree = pcall(require, 'nvim-tree')
+if ok then
   nvim_tree.setup({
-    view = { relativenumber = true, adaptive_size = true },
+    view = { relativenumber = true, ive_size = true },
     filters = { custom = { '.git' } },
   })
 else
