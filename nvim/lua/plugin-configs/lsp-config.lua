@@ -11,6 +11,7 @@ require('mason-lspconfig').setup({
 
 local mappings = require('mappings')
 local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+cmp_capabilities.offsetEncoding = 'utf-8'
 
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
@@ -65,7 +66,7 @@ lspconfig.tailwindcss.setup({
     },
   },
 })
-lspconfig.csharp_ls.setup({
+lspconfig.clangd.setup({
   capabilities = cmp_capabilities,
   on_attach = mappings.lsp_mappings,
 })
