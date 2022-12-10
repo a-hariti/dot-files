@@ -39,7 +39,7 @@ end
 local success, nvim_tree = pcall(require, 'nvim-tree')
 if success then
   nvim_tree.setup({
-    view = { relativenumber = true },
+    view = { relativenumber = true, adaptive_size = true },
     filters = { custom = { '.git' } },
   })
 else
