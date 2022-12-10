@@ -1,17 +1,14 @@
-local fn = vim.fn
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  print('bootstrapping packer')
-  fn.system({
-    'git',
-    'clone',
-    '--depth',
-    '1',
-    'https://github.com/wbthomason/packer.nvim',
-    install_path,
-  })
-  return print('restart neovim to install plugins')
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
+    vim.cmd([[packadd packer.nvim]])
+    return true
+  end
+  return false
 end
+local packer_bootstrap = ensure_packer()
 
 return require('packer').startup(function(use)
   use('wbthomason/packer.nvim')
@@ -102,4 +99,9 @@ return require('packer').startup(function(use)
   use({ 'ghifarit53/tokyonight-vim', as = 'tokyonight' })
   -- nordfox, dayfox, dawnfox and duskfox
   use('EdenEast/nightfox.nvim')
+
+  if packer_bootstrap then
+    print('installing plugins ...')
+    require('packer').sync()
+  end
 end)
