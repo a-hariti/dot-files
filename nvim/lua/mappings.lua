@@ -30,6 +30,9 @@ map("n", "<C-u>", "<C-u>zz")
 map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 
+map("v", "<C-j>", ":m '>+1<CR>gv=gv")
+map("v", "<C-k>", ":m '<-2<CR>gv=gv")
+
 map('n', ']h', '<Plug>(GitGutterNextHunk)')
 map('n', '[h', '<Plug>(GitGutterPrevHunk)')
 map('n', '<leader>gg', ':Git<CR>')
