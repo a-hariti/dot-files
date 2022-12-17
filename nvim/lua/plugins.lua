@@ -96,6 +96,7 @@ return require('packer').startup(function(use)
   use({ 'ghifarit53/tokyonight-vim', as = 'tokyonight' })
   -- nordfox, dayfox, dawnfox and duskfox
   use('EdenEast/nightfox.nvim')
+  use({ 'rose-pine/neovim', as = 'rose-pine' })
 
   if packer_bootstrap then
     print('installing plugins ...')
