@@ -33,10 +33,7 @@ return require('packer').startup(function(use)
   })
 
   use('wellle/targets.vim')
-
-  use({
-    'cappyzawa/trim.nvim',
-  })
+  use('cappyzawa/trim.nvim')
 
   use('nvim-lua/popup.nvim')
   use('nvim-lua/plenary.nvim')
@@ -59,8 +56,8 @@ return require('packer').startup(function(use)
   })
 
   use('neovim/nvim-lspconfig')
-  use({ 'williamboman/mason.nvim' })
-  use({ 'williamboman/mason-lspconfig.nvim' })
+  use('williamboman/mason.nvim')
+  use('williamboman/mason-lspconfig.nvim')
   use('jose-elias-alvarez/null-ls.nvim')
   use('hrsh7th/cmp-nvim-lsp')
   use('hrsh7th/cmp-buffer')
