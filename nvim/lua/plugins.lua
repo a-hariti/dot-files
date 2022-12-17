@@ -83,6 +83,7 @@ return require('packer').startup(function(use)
     end,
   })
   use('haya14busa/vim-asterisk')
+  use('mbbill/undotree')
 
   --colorschemes
   use('bluz71/vim-nightfly-colors')
