@@ -155,6 +155,21 @@ local lsp_organize_imports = function()
   vim.lsp.buf.execute_command(params)
 end
 
+local function nav_diagnostics(next_)
+  local error_severity = { severity = vim.diagnostic.severity.ERROR }
+  local has_errors = next(vim.diagnostic.get(0, error_severity)) ~= nil
+  print('errors: ', has_errors)
+  local opts = {}
+  if has_errors then
+    opts = error_severity
+  end
+  if next_ then
+    vim.diagnostic.goto_next(opts)
+  else
+    vim.diagnostic.goto_prev(opts)
+  end
+end
+
 function M.lsp_mappings()
   bmap('n', '<C-]>', vim.lsp.buf.definition)
   bmap('n', '<leader>o', lsp_organize_imports)
@@ -163,9 +178,12 @@ function M.lsp_mappings()
   bmap('n', '<leader>gn', vim.lsp.buf.rename)
   bmap('n', '<leader>k', vim.lsp.buf.hover)
   bmap('n', '<leader>ca', vim.lsp.buf.code_action)
-  bmap('n', ']g', vim.diagnostic.goto_next)
-  bmap('n', '[g', vim.diagnostic.goto_prev)
-  map('n', '<leader>d', telescope.diagnostics)
+  bmap('n', '[g', function()
+    nav_diagnostics(false)
+  end)
+  bmap('n', ']g', function()
+    nav_diagnostics(true)
+  end)
 end
 
 return M
