@@ -33,7 +33,10 @@ vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldlevelstart = 99
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.termguicolors = true
-local ok = pcall(vim.cmd.colorscheme, 'night-owl')
-if not ok then
+local ok = pcall(vim.cmd.colorscheme, 'nightfly')
+if ok then
+  -- change the default error virtual text color
+  vim.cmd([[ hi link DiagnosticVirtualTextError DiagnosticError ]])
+else
   print('colorscheme not found')
 end
