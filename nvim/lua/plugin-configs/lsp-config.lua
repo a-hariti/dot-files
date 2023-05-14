@@ -4,12 +4,23 @@ if not ok then
   return
 end
 
-require('mason').setup()
-require('mason-lspconfig').setup({
-  ensure_installed = { 'tsserver', 'sumneko_lua' },
-})
+local rust_tools = require('rust-tools')
 
 local mappings = require('mappings')
+
+rust_tools.setup({
+  server = {
+    on_attach = function(_, _)
+      mappings.lsp_mappings()
+    end,
+  },
+})
+
+require('mason').setup()
+require('mason-lspconfig').setup({
+  ensure_installed = { 'tsserver', 'lua_ls' },
+})
+
 local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 cmp_capabilities.offsetEncoding = 'utf-8'
 
@@ -23,25 +34,106 @@ require('mason-lspconfig').setup_handlers({
       on_attach = mappings.lsp_mappings,
     })
   end,
+  ['tsserver'] = function()
+    lspconfig.tsserver.setup({
+      capabilities = cmp_capabilities,
+      on_attach = function(client)
+        client.server_capabilities.document_formatting = false
+        mappings.lsp_mappings()
+      end,
+    })
+  end,
+  -- ['svelte'] = function()
+  --   lspconfig.tsserver.setup({
+  --     capabilities = cmp_capabilities,
+  --     on_attach = function(client)
+  --       client.server_capabilities.document_formatting = false
+  --       mappings.lsp_mappings()
+  --     end,
+  --   })
+  -- end,
   -- Next, you can provide a dedicated handler for specific servers.
   ['tailwindcss'] = function()
     lspconfig.tailwindcss.setup({
       capabilities = cmp_capabilities,
-      -- on_attach = mappings.lsp_mappings,
+      on_attach = mappings.lsp_mappings,
+      -- filetypes copied and adjusted from tailwindcss-intellisense
+      filetypes = {
+        -- html
+        'aspnetcorerazor',
+        'astro',
+        'astro-markdown',
+        'blade',
+        'django-html',
+        'htmldjango',
+        'edge',
+        'eelixir', -- vim ft
+        'elixir',
+        'ejs',
+        'erb',
+        'eruby', -- vim ft
+        'gohtml',
+        'haml',
+        'handlebars',
+        'hbs',
+        'html',
+        -- 'HTML (Eex)',
+        -- 'HTML (EEx)',
+        'html-eex',
+        'heex',
+        'jade',
+        'leaf',
+        'liquid',
+        'markdown',
+        'mdx',
+        'mustache',
+        'njk',
+        'nunjucks',
+        'php',
+        'razor',
+        'slim',
+        'twig',
+        -- css
+        'css',
+        'less',
+        'postcss',
+        'sass',
+        'scss',
+        'stylus',
+        'sugarss',
+        -- js
+        'javascript',
+        'javascriptreact',
+        'reason',
+        'rescript',
+        'typescript',
+        'typescriptreact',
+        -- mixed
+        'vue',
+        'svelte',
+        'elm',
+      },
       settings = {
         tailwindCSS = {
           classAttributes = { 'class', 'className', 'classList' },
           experimental = {
             -- Elm syntax
             classRegex = {
-              'class "([^"]*)',
+              '\\bclass[\\s(<|]+"([^"]*)"',
+              '\\bclass[\\s(]+"[^"]*"[\\s+]+"([^"]*)"',
+              '\\bclass[\\s<|]+"[^"]*"\\s*\\+{2}\\s*" ([^"]*)"',
+              '\\bclass[\\s<|]+"[^"]*"\\s*\\+{2}\\s*" [^"]*"\\s*\\+{2}\\s*" ([^"]*)"',
+              '\\bclass[\\s<|]+"[^"]*"\\s*\\+{2}\\s*" [^"]*"\\s*\\+{2}\\s*" [^"]*"\\s*\\+{2}\\s*" ([^"]*)"',
+              '\\bclassList[\\s\\[\\(]+"([^"]*)"',
+              '\\bclassList[\\s\\[\\(]+"[^"]*",\\s[^\\)]+\\)[\\s\\[\\(,]+"([^"]*)"',
+              '\\bclassList[\\s\\[\\(]+"[^"]*",\\s[^\\)]+\\)[\\s\\[\\(,]+"[^"]*",\\s[^\\)]+\\)[\\s\\[\\(,]+"([^"]*)"',
             },
           },
         },
       },
     })
   end,
-  ['sumneko_lua'] = function()
+  ['lua_ls'] = function()
     local runtime_path = vim.split(package.path, ';')
     table.insert(runtime_path, 'lua/?.lua')
     table.insert(runtime_path, 'lua/?/init.lua')
@@ -68,10 +160,6 @@ require('mason-lspconfig').setup_handlers({
         },
       },
     }
-    lspconfig.sumneko_lua.setup(lua_opts)
+    lspconfig.lua_ls.setup(lua_opts)
   end,
 })
-
--- if server.name == 'denols' then
---   opts.root_dir = nvim_lsp.util.root_pattern('deno.json', 'deno.jsonc')
--- end

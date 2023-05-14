@@ -20,9 +20,11 @@ return require('packer').startup(function(use)
     'p00f/nvim-ts-rainbow',
     'nvim-treesitter/nvim-treesitter-refactor',
     'windwp/nvim-ts-autotag',
+    'nvim-treesitter/playground',
+    'nvim-treesitter/nvim-treesitter-context',
+    'windwp/nvim-autopairs',
     run = ':TSUpdate',
   })
-  use('jiangmiao/auto-pairs')
   use('lukas-reineke/indent-blankline.nvim')
   use({
     'andymass/vim-matchup',
@@ -32,7 +34,7 @@ return require('packer').startup(function(use)
     end,
   })
 
-  use('wellle/targets.vim')
+  -- use('wellle/targets.vim')
   use('cappyzawa/trim.nvim')
 
   use('nvim-lua/popup.nvim')
@@ -63,12 +65,14 @@ return require('packer').startup(function(use)
   use('hrsh7th/cmp-buffer')
   use('hrsh7th/cmp-path')
   use('hrsh7th/cmp-cmdline')
-  -- use('hrsh7th/cmp-nvim-lsp-signature-help')
+  use('hrsh7th/cmp-nvim-lsp-signature-help')
   use('L3MON4D3/LuaSnip')
   use('rafamadriz/friendly-snippets')
   use('saadparwaiz1/cmp_luasnip')
   use('hrsh7th/cmp-nvim-lua')
   use('hrsh7th/nvim-cmp')
+  use('simrat39/rust-tools.nvim')
+  use('mfussenegger/nvim-dap')
 
   use('tpope/vim-surround')
   use('tpope/vim-repeat')
@@ -83,6 +87,13 @@ return require('packer').startup(function(use)
   use('haya14busa/vim-asterisk')
   use('mbbill/undotree')
 
+  -- use({
+  --   'lervag/vimtex',
+  --   config = function()
+  --     vim.cmd([[ let g:vimtex_view_method = 'skim' ]])
+  --   end,
+  -- })
+
   --colorschemes
   use('bluz71/vim-nightfly-colors')
   use('phanviet/vim-monokai-pro')
@@ -95,6 +106,8 @@ return require('packer').startup(function(use)
   -- nordfox, dayfox, dawnfox and duskfox
   use('EdenEast/nightfox.nvim')
   use({ 'rose-pine/neovim', as = 'rose-pine' })
+  use({ 'catppuccin/nvim', as = 'catppuccin' })
+  use({ 'projekt0n/github-nvim-theme', tag = 'v0.0.7' })
 
   if packer_bootstrap then
     print('installing plugins ...')

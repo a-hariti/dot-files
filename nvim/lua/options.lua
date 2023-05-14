@@ -19,7 +19,7 @@ vim.opt.shortmess:append('c')
 vim.o.splitbelow = true
 vim.o.splitright = true
 -- very useful for resizing splits
-vim.o.mouse = "n"
+vim.o.mouse = 'n'
 vim.o.cursorline = true
 vim.o.showmode = true
 vim.o.list = true -- show white space
@@ -33,7 +33,7 @@ vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldlevelstart = 99
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.termguicolors = true
-local ok = pcall(vim.cmd.colorscheme, 'nightfly')
+local ok = pcall(vim.cmd.colorscheme, 'vim-material')
 if ok then
   -- change the default error virtual text color
   vim.cmd([[ hi link DiagnosticVirtualTextError DiagnosticError ]])

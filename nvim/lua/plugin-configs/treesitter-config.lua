@@ -24,12 +24,14 @@ configs.setup({
   auto_install = true, -- Install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,
   -- List of parsers to ignore installing
-  ignore_install = {},
+  ignore_install = { 'latex' },
   highlight = {
     -- `false` will disable the whole extension
     enable = true,
     -- list of language that will be disabled
-    disable = {},
+    disable = function(lang, bufnr)
+      return lang == 'elm' or vim.api.nvim_buf_line_count(bufnr) > 10000
+    end,
   },
   context_commentstring = {
     enable = true,
@@ -56,6 +58,30 @@ configs.setup({
   },
   autotag = {
     enable = true,
+    filetypes = {
+      'html',
+      'javascript',
+      'typescript',
+      'javascriptreact',
+      'typescriptreact',
+      'svelte',
+      'vue',
+      'tsx',
+      'jsx',
+      'rescript',
+      'xml',
+      'php',
+      'markdown',
+      'astro',
+      'glimmer',
+      'handlebars',
+      'hbs',
+    },
+  },
+  query_linter = {
+    enable = true,
+    use_virtual_text = true,
+    lint_events = { 'BufWrite', 'CursorHold' },
   },
   textobjects = {
     select = {
@@ -72,8 +98,7 @@ configs.setup({
         ['if'] = '@function.inner',
         ['ac'] = '@conditional.outer',
         ['ic'] = '@conditional.inner',
-        ['aC'] = '@class.outer',
-        ['iC'] = '@class.inner',
+        ['aC'] = { query = '@function.call', query_group = 'textobjects', desc = 'Select a function call' },
       },
 
       -- If you set this to `true` (default is `false`) then any textobject is
@@ -85,28 +110,38 @@ configs.setup({
       -- * query_string: eg '@function.inner'
       -- * selection_mode: eg 'v'
       -- and should return true of false
-      include_surrounding_whitespace = true,
+      include_surrounding_whitespace = false,
     },
     move = {
       -- TODO: might come back to this later
-      enable = false,
+      enable = true,
       set_jumps = true, -- whether to set jumps in the jumplist
       goto_next_start = {
-        [']m'] = '@function.outer',
+        [']f'] = '@function.outer',
         [']]'] = { query = '@class.outer', desc = 'Next class start' },
       },
       goto_next_end = {
-        [']M'] = '@function.outer',
+        [']F'] = '@function.outer',
         [']['] = '@class.outer',
       },
       goto_previous_start = {
-        ['[m'] = '@function.outer',
+        ['[f'] = '@function.outer',
         ['[['] = '@class.outer',
       },
       goto_previous_end = {
-        ['[M'] = '@function.outer',
+        ['[F'] = '@function.outer',
         ['[]'] = '@class.outer',
       },
+    },
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      -- set to `false` to disable one of the mappings
+      init_selection = '<leader>v',
+      scope_incremental = '<C-n>',
+      node_incremental = '<tab>',
+      node_decremental = '<s-tab>',
     },
   },
 })

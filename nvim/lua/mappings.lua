@@ -24,28 +24,25 @@ local M = {}
 vim.g.mapleader = ' '
 map('n', "'", '`', { noremap = true })
 
-map("n", "J", "mzJ`z")
-map("n", "<C-d>", "<C-d>zz")
-map("n", "<C-u>", "<C-u>zz")
-map("n", "n", "nzzzv")
-map("n", "N", "Nzzzv")
+map('n', 'J', 'mzJ`z')
+map('n', '<C-d>', '<C-d>zz')
+map('n', '<C-u>', '<C-u>zz')
 
-map("v", "<C-j>", ":m '>+1<CR>gv=gv")
-map("v", "<C-k>", ":m '<-2<CR>gv=gv")
+map('v', '<C-j>', ":m '>+1<CR>gv=gv")
+map('v', '<C-k>', ":m '<-2<CR>gv=gv")
 
-map('n', ']h', '<Plug>(GitGutterNextHunk)')
-map('n', '[h', '<Plug>(GitGutterPrevHunk)')
+map('n', ']g', '<Plug>(GitGutterNextHunk)')
+map('n', '[g', '<Plug>(GitGutterPrevHunk)')
 map('n', '<leader>gg', ':Git<CR>')
 
-map('n', '<leader>e', ':NvimTreeFindFileToggle<cr>', { silent = true })
+map('n', '<leader>e', ':NvimTreeFindFile<cr>', { silent = true })
 
 map('i', '<C-j>', 'copilot#Next()', { expr = true, script = true, replace_keycodes = false })
 map('i', '<C-k>', 'copilot#Previous()', { expr = true, script = true, replace_keycodes = false })
-map('i', '<C-l>', 'copilot#Accept("")', { expr = true, script = true, replace_keycodes = false })
+map('i', '<C-l>', 'copilot#Accept("\\<CR>")', { expr = true, script = true, replace_keycodes = false })
+map('i', '<C-x>', 'copilot#Dismiss()', { expr = true, script = true, replace_keycodes = false })
 
-map('n', 'Q', ':q<cr>')
-
-map('n', '<leader>v', ':e $MYVIMRC<CR>', { noremap = true })
+map('n', 'Q', '<nop>')
 
 map('n', '<leader>w', ':update<CR>', { noremap = true })
 map('n', '<leader>q', ':q<CR>', { noremap = true })
@@ -61,10 +58,11 @@ map('n', '<M-down>', ':resize -1<CR>', { silent = true })
 map('n', '<M-left>', ':vertical resize -1<CR>', { silent = true, noremap = true })
 map('n', '<M-right>', ':vertical resize +1<CR>', { silent = true, noremap = true })
 
+map('v', '<leader>p', '"_dp')
 map('n', '<leader>p', '"+p')
 map('n', '<leader>y', '"+y')
 map('v', '<leader>y', '"+y')
-map('v', '<leader>p', '"+p')
+map('v', '<leader>P', '"+p')
 
 -- escape terminal mode
 map('t', '<esc><esc>', '<c-\\><c-n>')
@@ -105,19 +103,21 @@ if not ok then
   print('telescope.builtin not found')
   return
 end
-map('n', '<leader>f', telescope.find_files)
+map('n', '<leader>ff', telescope.find_files)
+map('n', '<leader>fs', telescope.lsp_document_symbols)
+map('n', '<leader>fw', telescope.lsp_workspace_symbols)
+map('n', '<leader>fg', telescope.live_grep)
+map('n', '<leader>fl', telescope.current_buffer_fuzzy_find)
 map('n', '<leader>b', telescope.buffers)
-map('n', '<leader>gl', telescope.live_grep)
-map('n', '<leader>tl', telescope.current_buffer_fuzzy_find)
 map('n', '<leader>tt', telescope.builtin)
 
 -- Harpoon
 local ok, harpoon_ui = pcall(require, 'harpoon.ui')
 if ok then
-  map('n', '<leader>m', function()
+  map('n', '<leader>hh', function()
     harpoon_ui.toggle_quick_menu()
   end)
-  map('n', '<leader>a', function()
+  map('n', '<leader>m', function()
     require('harpoon.mark').add_file()
   end)
   map('n', '<leader>,', function()
@@ -155,18 +155,13 @@ local lsp_organize_imports = function()
   vim.lsp.buf.execute_command(params)
 end
 
-local function nav_diagnostics(next_)
-  local error_severity = { severity = vim.diagnostic.severity.ERROR }
-  local has_errors = next(vim.diagnostic.get(0, error_severity)) ~= nil
-  print('errors: ', has_errors)
-  local opts = {}
-  if has_errors then
-    opts = error_severity
-  end
-  if next_ then
-    vim.diagnostic.goto_next(opts)
-  else
-    vim.diagnostic.goto_prev(opts)
+local function nav_diagnostic_errors(next_)
+  return function()
+    if next_ then
+      vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
+    else
+      vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
+    end
   end
 end
 
@@ -178,12 +173,10 @@ function M.lsp_mappings()
   bmap('n', '<leader>gn', vim.lsp.buf.rename)
   bmap('n', '<leader>k', vim.lsp.buf.hover)
   bmap('n', '<leader>ca', vim.lsp.buf.code_action)
-  bmap('n', '[g', function()
-    nav_diagnostics(false)
-  end)
-  bmap('n', ']g', function()
-    nav_diagnostics(true)
-  end)
+  bmap('n', ']e', nav_diagnostic_errors(true))
+  bmap('n', '[e', nav_diagnostic_errors(false))
+  bmap('n', ']d', vim.diagnostic.goto_next)
+  bmap('n', '[d', vim.diagnostic.goto_prev)
 end
 
 return M

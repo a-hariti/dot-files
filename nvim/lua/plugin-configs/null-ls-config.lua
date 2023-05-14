@@ -6,16 +6,21 @@ end
 local builtins = nulls.builtins
 nulls.setup({
   sources = {
+    builtins.formatting.ruff,
+    builtins.formatting.black,
+    builtins.diagnostics.ruff,
+    builtins.formatting.latexindent,
     builtins.formatting.stylua,
     -- builtins.diagnostics.eslint,
     -- builtins.formatting.eslint,
+    builtins.formatting.beautysh,
     builtins.formatting.prettier.with({
       extra_args = {
         '--config-precedence',
-        'file-override',
+        'prefer-file',
         '--single-quote',
         '--print-width',
-        120,
+        100,
         '--tab-width',
         2,
       },
@@ -25,6 +30,8 @@ nulls.setup({
         'svelte',
         -- 'markdown',
         'css',
+        'scss',
+        'svg',
         'javascript',
         'javascriptreact',
         'typescript',
@@ -33,6 +40,7 @@ nulls.setup({
     }),
     builtins.formatting.deno_fmt.with({
       filetypes = { 'markdown' }, -- only runs `deno fmt` for markdown
+      extra_args = { '--', '--line-width', 120 },
     }),
   },
 })

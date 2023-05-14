@@ -14,6 +14,7 @@ vim.cmd([[
     au InsertLeave * set relativenumber
 
     au FileType go setlocal noexpandtab
+    au FileType elm setlocal foldmethod=syntax
 
     " auto reload vimrc on save
     au! BufWritePost init.vim so % | redraw
