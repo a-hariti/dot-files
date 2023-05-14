@@ -40,6 +40,7 @@ return require('packer').startup(function(use)
   use('nvim-lua/popup.nvim')
   use('nvim-lua/plenary.nvim')
   use('ThePrimeagen/harpoon')
+  use('rgroli/other.nvim')
   use('nvim-telescope/telescope.nvim')
   -- required by lualine and nvim-tree
   use({ 'kyazdani42/nvim-web-devicons', opt = true })

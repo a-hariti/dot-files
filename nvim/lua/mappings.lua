@@ -109,6 +109,9 @@ map('n', '<leader>fl', telescope.current_buffer_fuzzy_find)
 map('n', '<leader>b', telescope.buffers)
 map('n', '<leader>tt', telescope.builtin)
 
+-- other file
+map('n', '<leader>o', ':Other<CR>')
+
 -- Harpoon
 local ok, harpoon_ui = pcall(require, 'harpoon.ui')
 if ok then
@@ -165,7 +168,6 @@ end
 
 function M.lsp_mappings()
   bmap('n', '<C-]>', vim.lsp.buf.definition)
-  bmap('n', '<leader>o', lsp_organize_imports)
   bmap('n', '<leader>gi', vim.lsp.buf.implementation)
   bmap('n', '<leader>gr', telescope.lsp_references)
   bmap('n', '<leader>gn', vim.lsp.buf.rename)
