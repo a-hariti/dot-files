@@ -60,7 +60,7 @@ map('n', '<M-right>', ':vertical resize +1<CR>', { silent = true, noremap = true
 
 map('n', '<leader>y', '"+y')
 map('v', '<leader>y', '"+y')
-map('v', '<leader>p', '"+p')
+map({ 'n', 'v' }, '<leader>p', '"+p')
 
 -- escape terminal mode
 map('t', '<esc><esc>', '<c-\\><c-n>')
