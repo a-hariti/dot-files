@@ -102,7 +102,7 @@ if not ok then
   return
 end
 map('n', '<leader>ff', function()
-  telescope.find_files({ find_command = { 'rg', '--files', '--hidden', '--iglob', '-g', '!.git' } })
+  telescope.find_files({ find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } })
 end)
 map('n', '<leader>fs', telescope.lsp_document_symbols)
 map('n', '<leader>fw', telescope.lsp_workspace_symbols)
