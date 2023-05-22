@@ -101,7 +101,9 @@ if not ok then
   print('telescope.builtin not found')
   return
 end
-map('n', '<leader>ff', telescope.find_files)
+map('n', '<leader>ff', function()
+  telescope.find_files({ find_command = { 'rg', '--files', '--hidden', '--iglob', '-g', '!.git' } })
+end)
 map('n', '<leader>fs', telescope.lsp_document_symbols)
 map('n', '<leader>fw', telescope.lsp_workspace_symbols)
 map('n', '<leader>fg', telescope.live_grep)

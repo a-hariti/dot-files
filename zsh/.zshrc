@@ -8,13 +8,8 @@ zstyle :compinstall filename '/home/abdellah/.zshrc'
 # capitalization agnostique completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
-# managing dotfiles with a git bare repo
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-
 export GOPATH=$HOME/go
-export PATH=$PATH:$HOME/.cargo/bin:/usr/local/go/bin:$GOPATH/bin:~/.scripts:~/.local/bin:~/.npm-global/bin
-
-export NPM_CONFIG_PREFIX=~/.npm-global
+export PATH=$PATH:$HOME/.cargo/bin:/usr/local/go/bin:$GOPATH/bin:~/.scripts:~/.local/bin
 
 export VISUAL=nvim
 export EDITOR="$VISUAL"
@@ -23,8 +18,7 @@ export KEYTIMEOUT=1
 
 alias v=nvim
 alias vim=nvim
-alias d="dirs -v | head"
-alias v.="vifm ."
+alias mv='mv -i'
 alias yt=youtube-dl
 
 function zz {
@@ -103,6 +97,9 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/docker
     zgen oh-my-zsh plugins/docker-compose
     zgen oh-my-zsh plugins/npm
+    zgen oh-my-zsh plugins/docker
+    zgen oh-my-zsh plugins/fzf
+    zgen oh-my-zsh plugins/nvm
     zgen load zsh-users/zsh-syntax-highlighting
     zgen load zsh-users/zsh-autosuggestions
 
@@ -143,6 +140,9 @@ export PATH="/opt/homebrew/opt/postgresql@12/bin:$PATH"
 export BUN_INSTALL="/Users/abdellah/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-export PATH="/opt/homebrew/opt/node@18/bin:$PATH"
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+# This loads nvm
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"

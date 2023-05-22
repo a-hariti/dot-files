@@ -8,6 +8,7 @@ nulls.setup({
   sources = {
     builtins.formatting.ruff,
     builtins.formatting.black,
+    builtins.formatting.phpcbf,
     builtins.diagnostics.ruff,
     builtins.formatting.latexindent,
     builtins.formatting.stylua,
