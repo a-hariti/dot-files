@@ -116,8 +116,11 @@ map('n', '<leader>o', ':Other<CR>')
 
 -- Harpoon
 local ok, harpoon_ui = pcall(require, 'harpoon.ui')
-if ok then
-  map('n', '<leader>hh', function()
+
+if not ok then
+  print('harpoon not found')
+else
+  map('n', '<leader>0', function()
     harpoon_ui.toggle_quick_menu()
   end)
   map('n', '<leader>m', function()
@@ -129,34 +132,23 @@ if ok then
   map('n', '<leader>.', function()
     harpoon_ui.nav_next()
   end)
-  map('n', '<leader>ja', function()
+  map('n', '<leader>1', function()
     harpoon_ui.nav_file(1)
   end)
-  map('n', '<leader>js', function()
+  map('n', '<leader>2', function()
     harpoon_ui.nav_file(2)
   end)
-  map('n', '<leader>jd', function()
+  map('n', '<leader>3', function()
     harpoon_ui.nav_file(3)
   end)
-  map('n', '<leader>jf', function()
+  map('n', '<leader>4', function()
     harpoon_ui.nav_file(4)
   end)
-else
-  print('harpoon not found')
 end
 
 map({ 'n', 'v' }, '<leader>s', function()
   vim.lsp.buf.format({ async = true })
 end, { silent = true })
-
-local lsp_organize_imports = function()
-  local params = {
-    command = '_typescript.organizeImports',
-    arguments = { vim.api.nvim_buf_get_name(0) },
-    title = '',
-  }
-  vim.lsp.buf.execute_command(params)
-end
 
 local function nav_diagnostic_errors(next_)
   return function()
