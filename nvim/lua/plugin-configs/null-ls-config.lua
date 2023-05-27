@@ -3,13 +3,18 @@ if not ok then
   print('null-ls moudle not found')
   return
 end
+
 local builtins = nulls.builtins
 nulls.setup({
+  -- debug = true,
   sources = {
-    builtins.formatting.ruff,
-    builtins.formatting.black,
-    builtins.formatting.phpcbf,
+    -- PHP
+    builtins.formatting.pint,
+    builtins.diagnostics.psalm,
+
     builtins.diagnostics.ruff,
+    builtins.formatting.ruff,
+
     builtins.formatting.latexindent,
     builtins.formatting.stylua,
     -- builtins.diagnostics.eslint,
@@ -44,4 +49,9 @@ nulls.setup({
       extra_args = { '--', '--line-width', 120 },
     }),
   },
+})
+
+require('mason-null-ls').setup({
+  ensure_installed = nil,
+  automatic_installation = true,
 })

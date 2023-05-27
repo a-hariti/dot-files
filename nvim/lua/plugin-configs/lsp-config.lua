@@ -34,6 +34,7 @@ require('mason-lspconfig').setup_handlers({
       on_attach = mappings.lsp_mappings,
     })
   end,
+  -- Next, you can provide a dedicated handler for specific servers.
   ['tsserver'] = function()
     lspconfig.tsserver.setup({
       capabilities = cmp_capabilities,
@@ -43,16 +44,6 @@ require('mason-lspconfig').setup_handlers({
       end,
     })
   end,
-  -- ['svelte'] = function()
-  --   lspconfig.tsserver.setup({
-  --     capabilities = cmp_capabilities,
-  --     on_attach = function(client)
-  --       client.server_capabilities.document_formatting = false
-  --       mappings.lsp_mappings()
-  --     end,
-  --   })
-  -- end,
-  -- Next, you can provide a dedicated handler for specific servers.
   ['tailwindcss'] = function()
     lspconfig.tailwindcss.setup({
       capabilities = cmp_capabilities,

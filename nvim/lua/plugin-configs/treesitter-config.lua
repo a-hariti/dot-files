@@ -33,6 +33,9 @@ configs.setup({
       return lang == 'elm' or vim.api.nvim_buf_line_count(bufnr) > 10000
     end,
   },
+  indent = {
+    enable = true,
+  },
   context_commentstring = {
     enable = true,
   },
