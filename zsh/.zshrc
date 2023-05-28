@@ -1,3 +1,6 @@
+# uncomment to enable profiling
+# zmodload zsh/zprof
+
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
@@ -99,7 +102,6 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/npm
     zgen oh-my-zsh plugins/docker
     zgen oh-my-zsh plugins/fzf
-    zgen oh-my-zsh plugins/nvm
     zgen load zsh-users/zsh-syntax-highlighting
     zgen load zsh-users/zsh-autosuggestions
 
@@ -142,7 +144,8 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 
-# nvm
-export NVM_DIR="$HOME/.nvm"
-# This loads nvm
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
+# uncomment to enable profiling
+# zprof
