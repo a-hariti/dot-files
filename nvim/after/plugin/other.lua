@@ -1,8 +1,3 @@
---  +layout.server.ts
---  +layout.svelte
---  +page.server.ts
---  +page.svelte
-
 require('other-nvim').setup({
   mappings = {
     -- navigate from page|layout.svelte to page|layout.server.ts

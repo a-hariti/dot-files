@@ -1,25 +1,7 @@
-local merge_tables = function(first, second)
-  local all = {}
-  for k, v in pairs(first) do
-    all[k] = v
-  end
-  for k, v in pairs(second) do
-    all[k] = v
-  end
-  return all
-end
-
 -- do global mappings
 local map = function(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts or {})
 end
-
--- do buffer local mappings
-local bmap = function(mode, lhs, rhs, opts)
-  vim.keymap.set(mode, lhs, rhs, merge_tables(opts or {}, { buffer = 0 }))
-end
-
-local M = {}
 
 vim.g.mapleader = ' '
 map('n', "'", '`', { noremap = true })
@@ -36,11 +18,6 @@ map('n', '[g', '<Plug>(GitGutterPrevHunk)')
 map('n', '<leader>gg', ':Git<CR>')
 
 map('n', '<leader>e', ':NvimTreeFindFile<cr>', { silent = true })
-
-map('i', '<C-j>', 'copilot#Next()', { expr = true, script = true, replace_keycodes = false })
-map('i', '<C-k>', 'copilot#Previous()', { expr = true, script = true, replace_keycodes = false })
-map('i', '<C-l>', 'copilot#Accept("\\<CR>")', { expr = true, script = true, replace_keycodes = false })
-map('i', '<C-x>', 'copilot#Dismiss()', { expr = true, script = true, replace_keycodes = false })
 
 map('n', 'Q', '<nop>')
 
@@ -66,7 +43,7 @@ map({ 'n', 'v' }, '<leader>p', '"+p')
 map('t', '<esc><esc>', '<c-\\><c-n>')
 
 -- toggle fold
-map('n', '<S-tab>', 'za')
+map('n', '<leader>z', 'za')
 
 -- get rid of annyoing serach highlight
 map('n', '<esc>', ':noh<CR>')
@@ -115,62 +92,29 @@ map('n', '<leader>tt', telescope.builtin)
 map('n', '<leader>o', ':Other<CR>')
 
 -- Harpoon
-local ok, harpoon_ui = pcall(require, 'harpoon.ui')
+local harpoon_ui = require('harpoon.ui')
 
-if not ok then
-  print('harpoon not found')
-else
-  map('n', '<leader>0', function()
-    harpoon_ui.toggle_quick_menu()
-  end)
-  map('n', '<leader>m', function()
-    require('harpoon.mark').add_file()
-  end)
-  map('n', '<leader>,', function()
-    harpoon_ui.nav_prev()
-  end)
-  map('n', '<leader>.', function()
-    harpoon_ui.nav_next()
-  end)
-  map('n', '<leader>1', function()
-    harpoon_ui.nav_file(1)
-  end)
-  map('n', '<leader>2', function()
-    harpoon_ui.nav_file(2)
-  end)
-  map('n', '<leader>3', function()
-    harpoon_ui.nav_file(3)
-  end)
-  map('n', '<leader>4', function()
-    harpoon_ui.nav_file(4)
-  end)
-end
-
-map({ 'n', 'v' }, '<leader>s', function()
-  vim.lsp.buf.format({ async = true })
-end, { silent = true })
-
-local function nav_diagnostic_errors(next_)
-  return function()
-    if next_ then
-      vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
-    else
-      vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
-    end
-  end
-end
-
-function M.lsp_mappings()
-  bmap('n', '<C-]>', vim.lsp.buf.definition)
-  bmap('n', '<leader>gi', vim.lsp.buf.implementation)
-  bmap('n', '<leader>gr', telescope.lsp_references)
-  bmap('n', '<leader>gn', vim.lsp.buf.rename)
-  bmap('n', '<leader>k', vim.lsp.buf.hover)
-  bmap('n', '<leader>ca', vim.lsp.buf.code_action)
-  bmap('n', ']e', nav_diagnostic_errors(true))
-  bmap('n', '[e', nav_diagnostic_errors(false))
-  bmap('n', ']d', vim.diagnostic.goto_next)
-  bmap('n', '[d', vim.diagnostic.goto_prev)
-end
-
-return M
+map('n', '<leader>0', function()
+  harpoon_ui.toggle_quick_menu()
+end)
+map('n', '<leader>m', function()
+  require('harpoon.mark').add_file()
+end)
+map('n', '<leader>,', function()
+  harpoon_ui.nav_prev()
+end)
+map('n', '<leader>.', function()
+  harpoon_ui.nav_next()
+end)
+map('n', '<leader>1', function()
+  harpoon_ui.nav_file(1)
+end)
+map('n', '<leader>2', function()
+  harpoon_ui.nav_file(2)
+end)
+map('n', '<leader>3', function()
+  harpoon_ui.nav_file(3)
+end)
+map('n', '<leader>4', function()
+  harpoon_ui.nav_file(4)
+end)

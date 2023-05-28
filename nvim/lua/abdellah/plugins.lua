@@ -34,7 +34,6 @@ return require('packer').startup(function(use)
     end,
   })
 
-  -- use('wellle/targets.vim')
   use('cappyzawa/trim.nvim')
 
   use('nvim-lua/popup.nvim')
@@ -51,18 +50,14 @@ return require('packer').startup(function(use)
   use('tpope/vim-sleuth')
   use('kyazdani42/nvim-tree.lua')
 
-  use({
-    'github/copilot.vim',
-    config = function()
-      vim.cmd([[ let g:copilot_no_tab_map = v:true ]])
-    end,
-  })
+  use('github/copilot.vim')
 
   use('neovim/nvim-lspconfig')
   use('williamboman/mason.nvim')
   use('williamboman/mason-lspconfig.nvim')
   use('jose-elias-alvarez/null-ls.nvim')
-  use('jay-babu/mason-null-ls.nvim')
+  -- use('jay-babu/mason-null-ls.nvim')
+
   use('hrsh7th/cmp-nvim-lsp')
   use('hrsh7th/cmp-buffer')
   use('hrsh7th/cmp-path')
@@ -73,8 +68,6 @@ return require('packer').startup(function(use)
   use('saadparwaiz1/cmp_luasnip')
   use('hrsh7th/cmp-nvim-lua')
   use('hrsh7th/nvim-cmp')
-  use('simrat39/rust-tools.nvim')
-  use('mfussenegger/nvim-dap')
 
   use('tpope/vim-surround')
   use('tpope/vim-repeat')
@@ -88,13 +81,6 @@ return require('packer').startup(function(use)
   })
   use('haya14busa/vim-asterisk')
   use('mbbill/undotree')
-
-  -- use({
-  --   'lervag/vimtex',
-  --   config = function()
-  --     vim.cmd([[ let g:vimtex_view_method = 'skim' ]])
-  --   end,
-  -- })
 
   --colorschemes
   use('bluz71/vim-nightfly-colors')
@@ -112,7 +98,6 @@ return require('packer').startup(function(use)
   use({ 'projekt0n/github-nvim-theme', tag = 'v0.0.7' })
 
   if packer_bootstrap then
-    print('installing plugins ...')
     require('packer').sync()
   end
 end)

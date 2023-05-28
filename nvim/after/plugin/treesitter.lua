@@ -13,15 +13,12 @@ configs.setup({
     'css',
     'jsdoc',
     'comment',
-    'go',
     'rust',
     'yaml',
     'json',
-    'jsonc',
     'lua',
-    'c',
   },
-  auto_install = true, -- Install languages synchronously (only applied to `ensure_installed`)
+  auto_install = true,
   sync_install = false,
   -- List of parsers to ignore installing
   ignore_install = { 'latex' },

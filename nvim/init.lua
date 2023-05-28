@@ -1,5 +1,1 @@
-require('options')
-require('mappings')
-require('plugins')
-require('plugin-configs')
-require('autocmds')
+require('abdellah')
