@@ -32,6 +32,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+-- https://github.com/elixir-tools/elixir-tools.nvim
+require('elixir').setup()
+
 require('mason').setup()
 require('mason-lspconfig').setup({ ensure_installed = { 'tsserver', 'lua_ls' } })
 
@@ -76,5 +79,69 @@ require('mason-lspconfig').setup_handlers({
       },
     }
     lspconfig.lua_ls.setup(lua_opts)
+  end,
+
+  ['tailwindcss'] = function()
+    lspconfig.tailwindcss.setup({
+      init_options = { userLanguages = { elixir = 'html-eex', eelixir = 'html-eex', heex = 'html-eex' } },
+      settings = { tailwindCSS = { experimental = { classRegex = { 'class[:]\\s*"([^"]*)"' } } } },
+
+      -- filetypes copied and adjusted from tailwindcss-intellisense
+      filetypes = {
+        -- html
+        'aspnetcorerazor',
+        'astro',
+        'astro-markdown',
+        'blade',
+        'django-html',
+        'htmldjango',
+        'edge',
+        'eelixir', -- vim ft
+        'elixir',
+        'ejs',
+        'erb',
+        'eruby', -- vim ft
+        'gohtml',
+        'haml',
+        'handlebars',
+        'hbs',
+        'html',
+        -- 'HTML (Eex)',
+        -- 'HTML (EEx)',
+        'html-eex',
+        'heex',
+        'jade',
+        'leaf',
+        'liquid',
+        'markdown',
+        'mdx',
+        'mustache',
+        'njk',
+        'nunjucks',
+        'php',
+        'razor',
+        'slim',
+        'twig',
+        -- css
+        'css',
+        'less',
+        'postcss',
+        'sass',
+        'scss',
+        'stylus',
+        'sugarss',
+        -- js
+        'javascript',
+        'javascriptreact',
+        'reason',
+        'rescript',
+        'typescript',
+        'typescriptreact',
+        -- mixed
+        'vue',
+        'svelte',
+        'elm',
+      },
+    })
   end,
 })

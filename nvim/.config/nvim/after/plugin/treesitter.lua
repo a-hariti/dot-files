@@ -76,6 +76,7 @@ configs.setup({
       'glimmer',
       'handlebars',
       'hbs',
+      'heex',
     },
   },
   query_linter = {
