@@ -51,6 +51,14 @@ cmp.setup({
       end
     end, { 'i', 'c' }),
   },
+  formatting = {
+    -- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
+    format = require('lspkind').cmp_format({
+      mode = 'symbol', -- show only symbol annotations
+      maxwidth = 50,
+      ellipsis_char = '...',
+    }),
+  },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
