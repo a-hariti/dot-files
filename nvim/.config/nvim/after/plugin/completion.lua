@@ -25,7 +25,7 @@ cmp.setup({
       else
         fallback()
       end
-    end, { 'i' }),
+    end, { 'i', 's' }),
 
     ['<C-b>'] = cmp.mapping(function(fallback)
       if luasnip.expand_or_locally_jumpable(-1) then
@@ -33,13 +33,13 @@ cmp.setup({
       else
         fallback()
       end
-    end, { 'i' }),
+    end, { 'i', 's' }),
 
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       else
-        cmp.complete()
+        fallback()
       end
     end, { 'i', 'c' }),
 
@@ -67,9 +67,8 @@ cmp.setup({
   },
   cmp.setup.cmdline(':', {
     sources = cmp.config.sources({
-        { name = 'path' } },
-      { { name = 'cmdline' }
-      }),
+      { name = 'path' },
+    }, { { name = 'cmdline' } }),
   }),
   cmp.setup.cmdline({ '/', '?' }, { sources = { { name = 'buffer' } } }),
 })
