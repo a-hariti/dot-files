@@ -1,7 +1,7 @@
 vim.cmd([[
   augroup packer_user_config
     autocmd!
-    autocmd BufWritePost */lua/plugins.lua exe 'luafile ' . expand('<afile>')  | PackerCompile
+    autocmd BufWritePost */lua/abdellah/plugins.lua exe 'luafile ' . expand('<afile>')  | PackerCompile
   augroup end
 ]])
 
