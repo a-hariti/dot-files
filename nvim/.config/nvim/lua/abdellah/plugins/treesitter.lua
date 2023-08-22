@@ -47,9 +47,6 @@ local function config()
         },
       },
     },
-    matchup = {
-      enable = true,
-    },
     ['treesitter-context'] = {
       enable = true,
     },
@@ -158,5 +155,6 @@ return {
   },
   build = ':TSUpdate',
   config = config,
-  event = 'BufReadPost',
+  event = 'BufReadPre',
+  version = '0.9.0',
 }
