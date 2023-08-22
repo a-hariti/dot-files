@@ -1,5 +1,6 @@
 vim.o.backup = false
 vim.o.undofile = true
+vim.o.swapfile = false
 vim.o.writebackup = true
 vim.o.updatetime = 300
 vim.o.signcolumn = 'yes'
