@@ -3,7 +3,6 @@ local map = function(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts or {})
 end
 
-vim.g.mapleader = ' '
 map('n', "'", '`', { noremap = true })
 
 map('n', 'J', 'mzJ`z')
@@ -84,6 +83,9 @@ end)
 map('n', '<leader>fs', telescope.lsp_document_symbols)
 map('n', '<leader>fw', telescope.lsp_workspace_symbols)
 map('n', '<leader>fg', telescope.live_grep)
+map('n', '<leader>fd', function()
+  telescope.live_grep({ default_text = vim.fn.expand('<cword>') })
+end)
 map('n', '<leader>fl', telescope.current_buffer_fuzzy_find)
 map('n', '<leader>b', telescope.buffers)
 map('n', '<leader>tt', telescope.builtin)
