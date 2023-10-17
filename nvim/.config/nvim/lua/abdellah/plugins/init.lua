@@ -24,4 +24,6 @@ return {
   { 'rose-pine/neovim', name = 'rose-pine' },
   { 'catppuccin/nvim', name = 'catppuccin' },
   { 'projekt0n/github-nvim-theme', version = 'v0.0.7' },
+
+  'stevearc/dressing.nvim',
 }

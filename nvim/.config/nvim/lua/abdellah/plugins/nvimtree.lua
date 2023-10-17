@@ -1,5 +1,5 @@
 return {
-  'kyazdani42/nvim-tree.lua',
+  'nvim-tree/nvim-tree.lua',
   event = 'BufWinEnter',
   config = function()
     require('nvim-tree').setup({
