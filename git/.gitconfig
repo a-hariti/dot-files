@@ -1,6 +1,6 @@
 [user]
-	name = Abdellah Hariti
-	email = haritiabdellah@gmail.com
+  name = Abdellah Hariti
+  email = haritiabdellah@gmail.com
 
 [alias]
   co = checkout
@@ -8,5 +8,10 @@
   s = status
   b = branch
   p = push
+
 [init]
-	defaultBranch = master
+  defaultBranch = master
+
+# rebase pull
+[pull]
+  rebase = true
