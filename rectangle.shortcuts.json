@@ -1,0 +1,217 @@
+{
+  "bundleId" : "com.knollsoft.Rectangle",
+  "defaults" : {
+    "footprintFade" : {
+      "int" : 0
+    },
+    "snapEdgeMarginTop" : {
+      "float" : 5
+    },
+    "attemptMatchOnNextPrevDisplay" : {
+      "int" : 0
+    },
+    "fullIgnoreBundleIds" : {
+
+    },
+    "centerHalfCycles" : {
+      "int" : 0
+    },
+    "showAllActionsInMenu" : {
+      "int" : 0
+    },
+    "screenEdgeGapLeft" : {
+      "float" : 0
+    },
+    "screenEdgeGapTop" : {
+      "float" : 0
+    },
+    "specifiedWidth" : {
+      "float" : 1680
+    },
+    "alternateDefaultShortcuts" : {
+      "bool" : true
+    },
+    "todoSidebarWidth" : {
+      "float" : 400
+    },
+    "curtainChangeSize" : {
+      "int" : 0
+    },
+    "resizeOnDirectionalMove" : {
+      "bool" : false
+    },
+    "snapModifiers" : {
+      "int" : 0
+    },
+    "SUEnableAutomaticChecks" : {
+      "bool" : false
+    },
+    "snapEdgeMarginRight" : {
+      "float" : 5
+    },
+    "windowSnapping" : {
+      "int" : 2
+    },
+    "altThirdCycle" : {
+      "int" : 0
+    },
+    "todoMode" : {
+      "bool" : false
+    },
+    "launchOnLogin" : {
+      "bool" : true
+    },
+    "sizeOffset" : {
+      "float" : 0
+    },
+    "minimumWindowHeight" : {
+      "float" : 0
+    },
+    "screenEdgeGapBottom" : {
+      "float" : 0
+    },
+    "subsequentExecutionMode" : {
+      "int" : 0
+    },
+    "screenEdgeGapRight" : {
+      "float" : 0
+    },
+    "minimumWindowWidth" : {
+      "float" : 0
+    },
+    "disabledApps" : {
+
+    },
+    "gapSize" : {
+      "float" : 0
+    },
+    "allowAnyShortcut" : {
+      "bool" : false
+    },
+    "notifiedOfProblemApps" : {
+      "bool" : false
+    },
+    "snapEdgeMarginBottom" : {
+      "float" : 5
+    },
+    "footprintAlpha" : {
+      "float" : 0.3
+    },
+    "hideMenubarIcon" : {
+      "bool" : false
+    },
+    "specifiedHeight" : {
+      "float" : 1050
+    },
+    "almostMaximizeWidth" : {
+      "float" : 0
+    },
+    "unsnapRestore" : {
+      "int" : 0
+    },
+    "obtainWindowOnClick" : {
+      "int" : 0
+    },
+    "almostMaximizeHeight" : {
+      "float" : 0
+    },
+    "traverseSingleScreen" : {
+      "int" : 0
+    },
+    "ignoredSnapAreas" : {
+      "int" : 0
+    },
+    "footprintBorderWidth" : {
+      "float" : 2
+    },
+    "todoApplication" : {
+
+    },
+    "footprintColor" : {
+
+    },
+    "snapEdgeMarginLeft" : {
+      "float" : 5
+    },
+    "centeredDirectionalMove" : {
+      "int" : 0
+    },
+    "todo" : {
+      "int" : 0
+    },
+    "relaunchOpensMenu" : {
+      "bool" : false
+    }
+  },
+  "shortcuts" : {
+    "firstTwoThirds" : {
+      "keyCode" : 14,
+      "modifierFlags" : 786432
+    },
+    "previousDisplay" : {
+      "modifierFlags" : 1835008,
+      "keyCode" : 123
+    },
+    "bottomHalf" : {
+      "keyCode" : 38,
+      "modifierFlags" : 1310720
+    },
+    "lastThird" : {
+      "keyCode" : 5,
+      "modifierFlags" : 786432
+    },
+    "rightHalf" : {
+      "modifierFlags" : 1310720,
+      "keyCode" : 37
+    },
+    "lastTwoThirds" : {
+      "modifierFlags" : 786432,
+      "keyCode" : 17
+    },
+    "maximizeHeight" : {
+      "keyCode" : 4,
+      "modifierFlags" : 1441792
+    },
+    "restore" : {
+      "keyCode" : 51,
+      "modifierFlags" : 786432
+    },
+    "smaller" : {
+      "keyCode" : 27,
+      "modifierFlags" : 786432
+    },
+    "firstThird" : {
+      "keyCode" : 2,
+      "modifierFlags" : 786432
+    },
+    "leftHalf" : {
+      "keyCode" : 4,
+      "modifierFlags" : 1310720
+    },
+    "larger" : {
+      "keyCode" : 24,
+      "modifierFlags" : 786432
+    },
+    "topHalf" : {
+      "keyCode" : 40,
+      "modifierFlags" : 1310720
+    },
+    "centerThird" : {
+      "modifierFlags" : 786432,
+      "keyCode" : 3
+    },
+    "center" : {
+      "keyCode" : 8,
+      "modifierFlags" : 786432
+    },
+    "nextDisplay" : {
+      "keyCode" : 124,
+      "modifierFlags" : 1835008
+    },
+    "maximize" : {
+      "modifierFlags" : 1310720,
+      "keyCode" : 46
+    }
+  },
+  "version" : "52"
+}
