@@ -49,6 +49,16 @@ local function config()
         -- on_attach = lsp_mappings,
       })
     end,
+    -- latex
+    ['texlab'] = function()
+      lspconfig.texlab.setup({
+        capabilities = cmp_capabilities,
+        latexFormatter = 'latexindent',
+        latexindent = {
+          modifyLineBreaks = true,
+        },
+      })
+    end,
     -- Next, you can provide a dedicated handler for specific servers.
     ['tsserver'] = function()
       lspconfig.tsserver.setup({

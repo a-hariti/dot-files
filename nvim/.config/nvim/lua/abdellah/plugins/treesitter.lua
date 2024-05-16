@@ -1,6 +1,12 @@
 local function config()
   local configs = require('nvim-treesitter.configs')
 
+  require('ts_context_commentstring').setup({
+    context_commentstring = {
+      enable = true,
+    },
+  })
+
   configs.setup({
     ensure_installed = {
       'javascript',
@@ -28,9 +34,6 @@ local function config()
       end,
     },
     indent = {
-      enable = true,
-    },
-    context_commentstring = {
       enable = true,
     },
     rainbow = {
@@ -79,6 +82,7 @@ local function config()
       lint_events = { 'BufWrite', 'CursorHold' },
     },
     textobjects = {
+			enable = false,
       select = {
         enable = true,
 
@@ -145,7 +149,7 @@ end
 return {
   'nvim-treesitter/nvim-treesitter',
   dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
+    -- 'nvim-treesitter/nvim-treesitter-textobjects',
     'JoosepAlviste/nvim-ts-context-commentstring',
     'p00f/nvim-ts-rainbow',
     'nvim-treesitter/nvim-treesitter-refactor',
