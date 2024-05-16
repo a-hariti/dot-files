@@ -8,6 +8,9 @@
   s = status
   b = branch
   p = push
+  ss = stash
+  sp = stash pop
+  l = log
 
 [init]
   defaultBranch = master
