@@ -12,8 +12,6 @@
         <!-- 1. right alt to right control
              2. escape to caps lock
              3. caps lock to escape
-            4. § to delete
-
         -->
         <string>{"UserKeyMapping":[
             {
@@ -27,10 +25,6 @@
             {
               "HIDKeyboardModifierMappingSrc": 0x700000039,
               "HIDKeyboardModifierMappingDst": 0x700000029
-            },
-            {
-              "HIDKeyboardModifierMappingSrc": 0x700000064,
-              "HIDKeyboardModifierMappingDst": 0x70000004C
             }
         ]}</string>
     </array>
