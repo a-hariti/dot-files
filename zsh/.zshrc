@@ -148,5 +148,16 @@ export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
 # uncomment to enable profiling
 # zprof
