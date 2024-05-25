@@ -1,16 +1,15 @@
 return {
   'nvim-lua/popup.nvim',
   'nvim-lua/plenary.nvim',
-  { 'ThePrimeagen/harpoon', event = 'BufRead' },
   { 'kyazdani42/nvim-web-devicons' },
   { 'tpope/vim-fugitive', cmd = 'Git' },
   { 'airblade/vim-gitgutter', event = 'BufRead' },
   { 'tpope/vim-sleuth', event = 'BufRead' },
+  'williamboman/mason.nvim',
   -- 'elixir-tools/elixir-tools.nvim',
   'tpope/vim-surround',
   'tpope/vim-repeat',
   'tpope/vim-commentary',
-  'haya14busa/vim-asterisk',
   'mbbill/undotree',
   'bluz71/vim-nightfly-colors',
   'phanviet/vim-monokai-pro',
@@ -23,7 +22,7 @@ return {
   'EdenEast/nightfox.nvim',
   { 'rose-pine/neovim', name = 'rose-pine' },
   { 'catppuccin/nvim', name = 'catppuccin' },
-  { 'projekt0n/github-nvim-theme', version = 'v0.0.7' },
+  { 'projekt0n/github-nvim-theme' },
 
   'stevearc/dressing.nvim',
 }

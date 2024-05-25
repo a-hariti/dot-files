@@ -2,6 +2,7 @@ return {
   'rgroli/other.nvim',
   event = 'BufReadPost',
   config = function()
+    vim.keymap.set('n', '<leader>o', ':Other<CR>')
     require('other-nvim').setup({
       mappings = {
         -- navigate from page|layout.svelte to page|layout.server.ts

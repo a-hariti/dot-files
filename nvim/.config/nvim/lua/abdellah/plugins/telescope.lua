@@ -1,6 +1,11 @@
 return {
   'nvim-telescope/telescope.nvim',
-  event = 'UIEnter',
+  dependencies = {
+    'nvim-lua/popup.nvim',
+    'nvim-lua/plenary.nvim',
+    'nvim-telescope/telescope-fzy-native.nvim',
+  },
+  event = { 'BufWinEnter' },
   config = function()
     local telescope = require('telescope')
     local action_set = require('telescope.actions.set')
@@ -23,5 +28,21 @@ return {
         },
       },
     })
+    require('telescope').load_extension('fzy_native')
+
+    local map = vim.keymap.set
+    local builtins = require('telescope.builtin')
+    map('n', '<leader>ff', function()
+      builtins.find_files({ find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } })
+    end)
+    map('n', '<leader>fs', builtins.lsp_document_symbols)
+    map('n', '<leader>fk', builtins.lsp_workspace_symbols)
+    map('n', '<leader>fg', builtins.live_grep)
+    map('n', '<leader>fw', function()
+      builtins.live_grep({ default_text = vim.fn.expand('<cword>') })
+    end)
+    map('n', '<leader>fl', builtins.current_buffer_fuzzy_find)
+    map('n', '<leader>b', builtins.buffers)
+    map('n', '<leader>tt', builtins.builtin)
   end,
 }
