@@ -38,10 +38,17 @@ return {
     map('n', '<leader>fs', builtins.lsp_document_symbols)
     map('n', '<leader>fk', builtins.lsp_workspace_symbols)
     map('n', '<leader>fg', builtins.live_grep)
+    map('n', '<leader>fl', function()
+      local str = vim.fn.getline('.')
+      -- trim leading and trailing whitespace and escape newlines
+      str = str:gsub('^%s*(.-)%s*$', '%1'):gsub('\n', '\\n')
+      -- and regex characters including \n, ^, $, ., *, +, ?, (, ), [, ], {, }, |
+      str = vim.fn.escape(str, '\\^$.*+?()[]{}|')
+      builtins.live_grep({ default_text = str })
+    end)
     map('n', '<leader>fw', function()
       builtins.live_grep({ default_text = vim.fn.expand('<cword>') })
     end)
-    map('n', '<leader>fl', builtins.current_buffer_fuzzy_find)
     map('n', '<leader>b', builtins.buffers)
     map('n', '<leader>tt', builtins.builtin)
   end,
