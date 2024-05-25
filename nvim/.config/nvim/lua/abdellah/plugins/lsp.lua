@@ -29,7 +29,6 @@ local function config()
     end,
   })
 
-  require('mason').setup()
   require('mason-lspconfig').setup({ ensure_installed = { 'tsserver', 'lua_ls' } })
 
   local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
