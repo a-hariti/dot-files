@@ -3,7 +3,6 @@ return {
   'nvim-lua/plenary.nvim',
   { 'kyazdani42/nvim-web-devicons' },
   { 'tpope/vim-fugitive', cmd = 'Git' },
-  { 'airblade/vim-gitgutter', event = 'BufRead' },
   { 'tpope/vim-sleuth', event = 'BufRead' },
   'williamboman/mason.nvim',
   -- 'elixir-tools/elixir-tools.nvim',
