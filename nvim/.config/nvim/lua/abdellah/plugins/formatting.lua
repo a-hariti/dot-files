@@ -23,7 +23,7 @@ return {
         svg = { 'prettierd' },
         css = { 'prettierd' },
         scss = { 'prettierd' },
-        json = { 'prettierd' },
+        json = { 'fixjson', 'prettierd' },
         svelte = { 'prettierd' },
         yaml = { 'prettierd' },
         markdown = { 'prettierd' },
