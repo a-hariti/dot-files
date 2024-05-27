@@ -1,15 +1,21 @@
+--- @param bufnr number: buffer number
+--- @return boolean: whether the file is too large to parse (10000 lines)
 local function is_file_too_large(bufnr)
   local size = vim.api.nvim_buf_line_count(bufnr)
   return size > 10000
 end
+
+--- @param bufnr number: buffer number
+--- @return boolean: whether the file is likely minified
 local function is_minified_file(bufnr)
   -- is likely minified if one of the first 5 lines is longer than 1000 characters
-  for i = 0, 5 do
-    local line = vim.api.nvim_buf_get_lines(bufnr, i, i + 1, false)[1]
+  local first_5_lines = vim.api.nvim_buf_get_lines(bufnr, 0, 5, false)
+  for _, line in ipairs(first_5_lines) do
     if #line > 1000 then
       return true
     end
   end
+  return false
 end
 
 local function config()
