@@ -29,7 +29,7 @@ local function config()
     end,
   })
 
-  require('mason-lspconfig').setup({ ensure_installed = { 'tsserver', 'lua_ls' } })
+  require('mason-lspconfig').setup({ ensure_installed = { 'ts_ls', 'lua_ls' } })
 
   local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
   cmp_capabilities.offsetEncoding = 'utf-8'
@@ -55,8 +55,8 @@ local function config()
       })
     end,
     -- Next, you can provide a dedicated handler for specific servers.
-    ['tsserver'] = function()
-      lspconfig.tsserver.setup({
+    ['ts_ls'] = function()
+      lspconfig.ts_ls.setup({
         capabilities = cmp_capabilities,
         on_attach = function(client)
           client.server_capabilities.document_formatting = false
