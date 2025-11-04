@@ -8,133 +8,128 @@ setopt appendhistory autocd
 
 zstyle :compinstall filename '/home/abdellah/.zshrc'
 
-# Speed up completions: cache results and avoid slow compaudit fixes
 export ZSH_DISABLE_COMPFIX=true
 export ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${HOST}-${ZSH_VERSION}"
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "$HOME/.zcompcache"
 
-# capitalization agnostique completion
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+# Group all completion zstyles
+zstyle ':completion:*' \
+    use-cache on \
+    cache-path "$HOME/.zcompcache" \
+    rehash true \
+    matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# compinit is now loaded by zgenom/oh-my-zsh, so the standalone call is removed.
 
 export KEYTIMEOUT=1
+
+# Disable OMZ auto-update checks at startup
+# zstyle ':omz:update' mode disabled
 
 alias v=nvim
 alias mv='mv -i'
 
-function extract {
-    echo Extracting $1 ...
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xjf $1  ;;
-            *.tar.gz)    tar xzf $1  ;;
-            *.bz2)       bunzip2 $1  ;;
-            *.rar)       rar x $1    ;;
-            *.gz)        gunzip $1   ;;
-            *.tar)       tar xf $1   ;;
-            *.tbz2)      tar xjf $1  ;;
-            *.tgz)       tar xzf $1  ;;
-            *.zip)       unzip $1   ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1  ;;
-            *)        echo "'$1' cannot be extracted via extract()" ;;
-        esac
-    else
-        echo "'$1' is not a valid file"
-    fi
-}
+# Use the powerful zsh-contrib 'extract' function
+autoload -Uz extract
 
 # colorful man pages
-function man {
+man() {
     LESS_TERMCAP_md=$'\e[01;31m' \
         LESS_TERMCAP_me=$'\e[0m' \
         LESS_TERMCAP_se=$'\e[0m' \
         LESS_TERMCAP_so=$'\e[01;44;33m' \
-        LESS_TERMCAP_ue=$'\e[0m' \
+        LESS_TERMCAP_ue=$'\e[00m' \
         LESS_TERMCAP_us=$'\e[01;32m' \
         command man "$@"
 }
 
-source "${HOME}/.zgen/zgen.zsh"
-
-function s() {
+s() {
     # default to "start" script
     local script="start"
     if [ -f "package.json" ]; then
-
         if jq -e '.scripts.dev' package.json >/dev/null; then
             script="dev"
         fi
     else
         echo "No package.json file found. Exiting..."
-        exit 1
+        return 1 # Use 'return' instead of 'exit' to not kill the shell
     fi
-    # define binay to run (npm or yarn based on lock file)
+
+    # define binary to run (npm or yarn based on lock file)
     local bin="npm"
     if [ -f "yarn.lock" ]; then
         bin="yarn"
-    else
-        bin="npm"
     fi
+    # Redundant 'else' block removed
 
     # run the script
-    $bin run "$script" "$@"
+    "$bin" run "$script" "$@"
 }
 
+# Load zgenom
+source "${HOME}/.zgenom/zgenom.zsh"
+
 # if the init script doesn't exist
-if ! zgen saved; then
-    echo "Creating a zgen save"
+if ! zgenom saved; then
+    echo "Creating a zgenom save"
 
     # specify plugins here
-    zgen oh-my-zsh
-    zgen oh-my-zsh themes/arrow
-    zgen oh-my-zsh plugins/z
-    zgen oh-my-zsh plugins/sudo
-    zgen oh-my-zsh plugins/gitfast
-    zgen oh-my-zsh plugins/docker
-    zgen oh-my-zsh plugins/docker-compose
-    zgen oh-my-zsh plugins/npm
-    zgen oh-my-zsh plugins/yarn
-    # keep highlighting lean for faster startup
-    ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
-    zgen load zsh-users/zsh-syntax-highlighting
-    zgen load zsh-users/zsh-autosuggestions
-    zgen load popstas/zsh-command-time
+    zgenom oh-my-zsh
+    zgenom oh-my-zsh themes/arrow
+    zgenom oh-my-zsh plugins/z
+    zgenom oh-my-zsh plugins/git
+    zgenom oh-my-zsh plugins/docker
+    zgenom oh-my-zsh plugins/yarn
+
+    # ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
+    zgenom load zsh-users/zsh-syntax-highlighting
+    zgenom load zsh-users/zsh-autosuggestions
+    zgenom load popstas/zsh-command-time
 
     # generate the init script from plugins above
-    zgen save
+    zgenom save
 fi
 
 # vim mode
 bindkey -v
-
-# fix backspace not woriking after going to normal mode and back
+# fix backspace not working after going to normal mode and back
 bindkey "^?" backward-delete-char
 
 # Activate virtual env and save the path as a tmux variable,
 # so that new panes/windows can re-activate as necessary
-function sv() {
+sv() {
     # source venv/bin/activate &&  # commented out by conda initialize
     tmux set-environment VIRTUAL_ENV $VIRTUAL_ENV
 }
 
+# --- Lazy-loaded Completions ---
+# These will only be loaded when you first press Tab on the command.
+# This requires compinit to have already been run (which zgenom does).
+
 # bun completions
-[ -s "/Users/abdellah/.bun/_bun" ] && source "/Users/abdellah/.bun/_bun"
+if [[ -s "/Users/abdellah/.bun/_bun" ]]; then
+  compdef '_bun' 'bun'
+fi
 
 # solana completions
-[ -s "$HOME/.solana/_completions" ] && source "$HOME/.solana/_completions"
+if [[ -s "$HOME/.solana/_completions" ]]; then
+  compdef '_solana' 'solana'
+fi
 
+# --- Fzf Configuration ---
+# Use fd as the default fzf finder
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+
+# Custom fzf completion generators using fd
 _fzf_compgen_path() {
   fd --hidden --follow --exclude ".git" . "$1"
 }
 
-_fzf_compgen_dir() {
+_ff_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
-# Set up fzf key bindings and fuzzy completion (without spawning the fzf binary)
+# Load fzf shell integrations
 if [[ -o interactive ]]; then
-  # Homebrew fzf scripts
   FZF_SHELL_DIR="/opt/homebrew/opt/fzf/shell"
   if [[ -f "$FZF_SHELL_DIR/key-bindings.zsh" ]]; then
     source "$FZF_SHELL_DIR/key-bindings.zsh"
@@ -144,31 +139,31 @@ if [[ -o interactive ]]; then
   fi
 fi
 
-
+# Lazy-load rbenv and friends on first use
 __nvm_lazy_source() {
   : "${NVM_DIR:=$HOME/.nvm}"
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 }
-nvm()  { unset -f nvm; __nvm_lazy_source; command nvm "$@"; }
-node() { unset -f node; __nvm_lazy_source; command node "$@"; }
-npm()  { unset -f npm;  __nvm_lazy_source; command npm "$@"; }
-npx()  { unset -f npx;  __nvm_lazy_source; command npx "$@"; }
-
-# Lazy-load rbenv and friends on first use
 __rbenv_lazy_init() {
   if command -v rbenv >/dev/null 2>&1; then
-    # remove wrappers so subsequent calls hit real commands/shims
     unset -f rbenv ruby gem bundle rake rails irb 2>/dev/null
     eval "$(rbenv init - zsh 2>/dev/null)"
   fi
 }
-rbenv() { unset -f rbenv; __rbenv_lazy_init; command rbenv "$@"; }
-ruby()  { unset -f ruby; __rbenv_lazy_init; command ruby  "$@"; }
-gem()   { unset -f gem; __rbenv_lazy_init; command gem   "$@"; }
-bundle(){ unset -f bundle; __rbenv_lazy_init; command bundle "$@"; }
-rake()  { unset -f rake; __rbenv_lazy_init; command rake  "$@"; }
-rails() { unset -f rails; __rbenv_lazy_init; command rails "$@"; }
-irb()   { unset -f irb; __rbenv_lazy_init; command irb   "$@"; }
+__lazy_wrap() {
+  local init_func="$1"; shift
+  for cmd in "$@"; do
+    eval "
+      $cmd() {
+        unset -f $cmd
+        $init_func
+        command $cmd \"\$@\"
+      }
+    "
+  done
+}
+__lazy_wrap __rbenv_lazy_init rbenv ruby gem bundle rake rails irb
+__lazy_wrap __nvm_lazy_source nvm node npm npx
 
 # uncomment to enable profiling
 # zprof
