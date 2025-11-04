@@ -8,25 +8,19 @@ setopt appendhistory autocd
 
 zstyle :compinstall filename '/home/abdellah/.zshrc'
 
+# Speed up completions: cache results and avoid slow compaudit fixes
+export ZSH_DISABLE_COMPFIX=true
+export ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${HOST}-${ZSH_VERSION}"
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$HOME/.zcompcache"
+
 # capitalization agnostique completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-
-export GOPATH=$HOME/go
-export PATH=$PATH:$HOME/.cargo/bin:/usr/local/go/bin:$GOPATH/bin:~/.scripts:~/.local/bin
-
-export VISUAL=nvim
-export EDITOR="$VISUAL"
 
 export KEYTIMEOUT=1
 
 alias v=nvim
-alias vim=nvim
 alias mv='mv -i'
-alias yt=youtube-dl
-
-function zz {
-    zathura $@ > /dev/null 2>&1 &|
-}
 
 function extract {
     echo Extracting $1 ...
@@ -101,8 +95,8 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/docker-compose
     zgen oh-my-zsh plugins/npm
     zgen oh-my-zsh plugins/yarn
-    zgen oh-my-zsh plugins/docker
-    zgen oh-my-zsh plugins/fzf
+    # keep highlighting lean for faster startup
+    ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
     zgen load zsh-users/zsh-syntax-highlighting
     zgen load zsh-users/zsh-autosuggestions
     zgen load popstas/zsh-command-time
@@ -120,34 +114,15 @@ bindkey "^?" backward-delete-char
 # Activate virtual env and save the path as a tmux variable,
 # so that new panes/windows can re-activate as necessary
 function sv() {
-    source venv/bin/activate &&
+    # source venv/bin/activate &&  # commented out by conda initialize
     tmux set-environment VIRTUAL_ENV $VIRTUAL_ENV
 }
-if [ -n "$VIRTUAL_ENV" ]; then
-    source $VIRTUAL_ENV/bin/activate;
-fi
-
-export LANG="en_US.UTF-8"
-export LC_COLLATE="en_US.UTF-8"
-export LC_CTYPE="en_US.UTF-8"
-export LC_MESSAGES="en_US.UTF-8"
-export LC_MONETARY="en_US.UTF-8"
-export LC_NUMERIC="en_US.UTF-8"
-export LC_TIME="en_US.UTF-8"
-export LC_ALL="en_US.UTF-8"
-export PATH="/opt/homebrew/opt/postgresql@12/bin:$PATH"
 
 # bun completions
 [ -s "/Users/abdellah/.bun/_bun" ] && source "/Users/abdellah/.bun/_bun"
 
-# bun
-export BUN_INSTALL="/Users/abdellah/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
+# solana completions
+[ -s "$HOME/.solana/_completions" ] && source "$HOME/.solana/_completions"
 
 _fzf_compgen_path() {
   fd --hidden --follow --exclude ".git" . "$1"
@@ -157,8 +132,43 @@ _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
-# Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
+# Set up fzf key bindings and fuzzy completion (without spawning the fzf binary)
+if [[ -o interactive ]]; then
+  # Homebrew fzf scripts
+  FZF_SHELL_DIR="/opt/homebrew/opt/fzf/shell"
+  if [[ -f "$FZF_SHELL_DIR/key-bindings.zsh" ]]; then
+    source "$FZF_SHELL_DIR/key-bindings.zsh"
+  fi
+  if [[ -f "$FZF_SHELL_DIR/completion.zsh" ]]; then
+    source "$FZF_SHELL_DIR/completion.zsh"
+  fi
+fi
+
+
+__nvm_lazy_source() {
+  : "${NVM_DIR:=$HOME/.nvm}"
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+}
+nvm()  { unset -f nvm; __nvm_lazy_source; command nvm "$@"; }
+node() { unset -f node; __nvm_lazy_source; command node "$@"; }
+npm()  { unset -f npm;  __nvm_lazy_source; command npm "$@"; }
+npx()  { unset -f npx;  __nvm_lazy_source; command npx "$@"; }
+
+# Lazy-load rbenv and friends on first use
+__rbenv_lazy_init() {
+  if command -v rbenv >/dev/null 2>&1; then
+    # remove wrappers so subsequent calls hit real commands/shims
+    unset -f rbenv ruby gem bundle rake rails irb 2>/dev/null
+    eval "$(rbenv init - zsh 2>/dev/null)"
+  fi
+}
+rbenv() { unset -f rbenv; __rbenv_lazy_init; command rbenv "$@"; }
+ruby()  { unset -f ruby; __rbenv_lazy_init; command ruby  "$@"; }
+gem()   { unset -f gem; __rbenv_lazy_init; command gem   "$@"; }
+bundle(){ unset -f bundle; __rbenv_lazy_init; command bundle "$@"; }
+rake()  { unset -f rake; __rbenv_lazy_init; command rake  "$@"; }
+rails() { unset -f rails; __rbenv_lazy_init; command rails "$@"; }
+irb()   { unset -f irb; __rbenv_lazy_init; command irb   "$@"; }
 
 # uncomment to enable profiling
 # zprof
