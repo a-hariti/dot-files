@@ -10,4 +10,4 @@ if [[ ! -d "${HOME}/.zgen" ]]; then
     git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
 fi
 
-stow --target ~ git zsh tmux nvim alacritty
+stow --target ~ git zsh tmux nvim alacritty ghostty

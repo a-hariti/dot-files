@@ -49,16 +49,16 @@ local function config()
       end,
     },
     indent = {
-      enable = true,
+      enable = false,
     },
     rainbow = {
-      enable = true,
+      enable = false,
       -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
       extended_mode = false,
     },
     refactor = {
       navigation = {
-        enable = true,
+        enable = false,
         keymaps = {
           goto_next_usage = ']u',
           goto_previous_usage = '[u',
@@ -66,10 +66,10 @@ local function config()
       },
     },
     ['treesitter-context'] = {
-      enable = true,
+      enable = false,
     },
     autotag = {
-      enable = true,
+      enable = false,
       filetypes = {
         'html',
         'javascript',
@@ -94,7 +94,7 @@ local function config()
     textobjects = {
       enable = false,
       select = {
-        enable = true,
+        enable = false,
 
         -- Automatically jump forward to textobj, similar to targets.vim
         lookahead = true,
@@ -164,7 +164,7 @@ return {
     'nvim-treesitter/nvim-treesitter-refactor',
     'windwp/nvim-ts-autotag',
     'nvim-treesitter/playground',
-    'nvim-treesitter/nvim-treesitter-context',
+    -- 'nvim-treesitter/nvim-treesitter-context',
   },
   build = function()
     require('nvim-treesitter.install').update({ with_sync = true })()
