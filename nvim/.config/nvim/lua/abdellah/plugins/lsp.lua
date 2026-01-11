@@ -29,124 +29,125 @@ local function config()
     end,
   })
 
-  require('mason-lspconfig').setup({ ensure_installed = { 'ts_ls', 'lua_ls' } })
-
   local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
   cmp_capabilities.offsetEncoding = 'utf-8'
 
-  require('mason-lspconfig').setup_handlers({
-    -- The first entry (without a key) will be the default handler
-    -- and will be called for each installed server that doesn't have
-    -- a dedicated handler.
-    function(server_name)
-      lspconfig[server_name].setup({
-        capabilities = cmp_capabilities,
-        -- on_attach = lsp_mappings,
-      })
-    end,
-    -- latex
-    ['texlab'] = function()
-      lspconfig.texlab.setup({
-        capabilities = cmp_capabilities,
-        latexFormatter = 'latexindent',
-        latexindent = {
-          modifyLineBreaks = true,
-        },
-      })
-    end,
-    -- Next, you can provide a dedicated handler for specific servers.
-    ['ts_ls'] = function()
-      lspconfig.ts_ls.setup({
-        capabilities = cmp_capabilities,
-        on_attach = function(client)
-          client.server_capabilities.document_formatting = false
-        end,
-      })
-    end,
-    ['lua_ls'] = function()
-      local runtime_path = vim.split(package.path, ';')
-      table.insert(runtime_path, 'lua/?.lua')
-      table.insert(runtime_path, 'lua/?/init.lua')
+  require('mason-lspconfig').setup({
+    ensure_installed = { 'ts_ls', 'lua_ls' },
+    handlers = {
+      -- The first entry (without a key) will be the default handler
+      -- and will be called for each installed server that doesn't have
+      -- a dedicated handler.
+      function(server_name)
+        lspconfig[server_name].setup({
+          capabilities = cmp_capabilities,
+          -- on_attach = lsp_mappings,
+        })
+      end,
+      -- latex
+      ['texlab'] = function()
+        lspconfig.texlab.setup({
+          capabilities = cmp_capabilities,
+          latexFormatter = 'latexindent',
+          latexindent = {
+            modifyLineBreaks = true,
+          },
+        })
+      end,
+      -- Next, you can provide a dedicated handler for specific servers.
+      ['ts_ls'] = function()
+        lspconfig.ts_ls.setup({
+          capabilities = cmp_capabilities,
+          on_attach = function(client)
+            client.server_capabilities.document_formatting = false
+          end,
+        })
+      end,
+      ['lua_ls'] = function()
+        local runtime_path = vim.split(package.path, ';')
+        table.insert(runtime_path, 'lua/?.lua')
+        table.insert(runtime_path, 'lua/?/init.lua')
 
-      local lua_opts = {
-        capabilities = cmp_capabilities,
-        -- on_attach = lsp_mappings,
-        settings = {
-          Lua = {
-            runtime = { version = 'LuaJIT', path = runtime_path },
-            diagnostics = { globals = { 'vim' } },
-            workspace = { -- Make the server aware of Neovim runtime files
-              library = vim.api.nvim_get_runtime_file('', true),
+        local lua_opts = {
+          capabilities = cmp_capabilities,
+          -- on_attach = lsp_mappings,
+          settings = {
+            Lua = {
+              runtime = { version = 'LuaJIT', path = runtime_path },
+              diagnostics = { globals = { 'vim' } },
+              workspace = { -- Make the server aware of Neovim runtime files
+                library = vim.api.nvim_get_runtime_file('', true),
+              },
             },
           },
-        },
-      }
-      lspconfig.lua_ls.setup(lua_opts)
-    end,
+        }
+        lspconfig.lua_ls.setup(lua_opts)
+      end,
 
-    ['tailwindcss'] = function()
-      lspconfig.tailwindcss.setup({
-        init_options = { userLanguages = { elixir = 'html-eex', eelixir = 'html-eex', heex = 'html-eex' } },
-        settings = { tailwindCSS = { experimental = { classRegex = { 'class[:]\\s*"([^"]*)"' } } } },
+      ['tailwindcss'] = function()
+        lspconfig.tailwindcss.setup({
+          init_options = { userLanguages = { elixir = 'html-eex', eelixir = 'html-eex', heex = 'html-eex' } },
+          settings = { tailwindCSS = { experimental = { classRegex = { 'class[:]\\s*"([^"]*)"' } } } },
 
-        -- filetypes copied and adjusted from tailwindcss-intellisense
-        filetypes = {
-          -- html
-          'aspnetcorerazor',
-          'astro',
-          'astro-markdown',
-          'blade',
-          'django-html',
-          'htmldjango',
-          'edge',
-          'eelixir', -- vim ft
-          'elixir',
-          'ejs',
-          'erb',
-          'eruby', -- vim ft
-          'gohtml',
-          'haml',
-          'handlebars',
-          'hbs',
-          'html',
-          -- 'HTML (Eex)',
-          -- 'HTML (EEx)',
-          'html-eex',
-          'heex',
-          'jade',
-          'leaf',
-          'liquid',
-          'markdown',
-          'mdx',
-          'mustache',
-          'njk',
-          'nunjucks',
-          'php',
-          'razor',
-          'slim',
-          'twig',
-          -- css
-          'css',
-          'less',
-          'postcss',
-          'sass',
-          'scss',
-          'stylus',
-          'sugarss',
-          -- js
-          'javascript',
-          'javascriptreact',
-          'reason',
-          'rescript',
-          'typescript',
-          'typescriptreact',
-          -- mixed
-          'vue',
-          'svelte',
-          'elm',
-        },
-      })
-    end,
+          -- filetypes copied and adjusted from tailwindcss-intellisense
+          filetypes = {
+            -- html
+            'aspnetcorerazor',
+            'astro',
+            'astro-markdown',
+            'blade',
+            'django-html',
+            'htmldjango',
+            'edge',
+            'eelixir', -- vim ft
+            'elixir',
+            'ejs',
+            'erb',
+            'eruby', -- vim ft
+            'gohtml',
+            'haml',
+            'handlebars',
+            'hbs',
+            'html',
+            -- 'HTML (Eex)',
+            -- 'HTML (EEx)',
+            'html-eex',
+            'heex',
+            'jade',
+            'leaf',
+            'liquid',
+            'markdown',
+            'mdx',
+            'mustache',
+            'njk',
+            'nunjucks',
+            'php',
+            'razor',
+            'slim',
+            'twig',
+            -- css
+            'css',
+            'less',
+            'postcss',
+            'sass',
+            'scss',
+            'stylus',
+            'sugarss',
+            -- js
+            'javascript',
+            'javascriptreact',
+            'reason',
+            'rescript',
+            'typescript',
+            'typescriptreact',
+            -- mixed
+            'vue',
+            'svelte',
+            'elm',
+          },
+        })
+      end,
+    },
   })
 end
 return {
