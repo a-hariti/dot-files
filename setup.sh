@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-git clone --depth=1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+if [[ ! -d ~/.tmux/plugins/tpm ]]; then
+    git clone --depth=1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
 
 # remap keyboard keys on mac
 [[ "$(uname -s)" = "Darwin" ]] && stow mac-mappings --target ~/Library/LaunchAgents

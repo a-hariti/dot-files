@@ -6,7 +6,7 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt appendhistory autocd
 
-zstyle :compinstall filename '/home/abdellah/.zshrc'
+zstyle :compinstall filename '$HOME/.zshrc'
 
 export ZSH_DISABLE_COMPFIX=true
 export ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${HOST}-${ZSH_VERSION}"
@@ -107,7 +107,7 @@ sv() {
 # This requires compinit to have already been run (which zgenom does).
 
 # bun completions
-if [[ -s "/Users/abdellah/.bun/_bun" ]]; then
+if [[ -s "$HOME/.bun/_bun" ]]; then
   compdef '_bun' 'bun'
 fi
 
@@ -170,10 +170,10 @@ __lazy_wrap __nvm_lazy_source nvm node npm npx
 # zprof
 
 # Amp CLI
-export PATH="/Users/abdellah/.amp/bin:$PATH"
+export PATH="$HOME/.amp/bin:$PATH"
 
 # Added by Antigravity
-export PATH="/Users/abdellah/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 
 # opencode
-export PATH=/Users/abdellah/.opencode/bin:$PATH
+export PATH=$HOME/.opencode/bin:$PATH
