@@ -27,6 +27,7 @@ export KEYTIMEOUT=1
 
 alias v=nvim
 alias mv='mv -i'
+alias gs='git status'
 
 # Use the powerful zsh-contrib 'extract' function
 autoload -Uz extract
@@ -167,3 +168,12 @@ __lazy_wrap __nvm_lazy_source nvm node npm npx
 
 # uncomment to enable profiling
 # zprof
+
+# Amp CLI
+export PATH="/Users/abdellah/.amp/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/abdellah/.antigravity/antigravity/bin:$PATH"
+
+# opencode
+export PATH=/Users/abdellah/.opencode/bin:$PATH
