@@ -1,0 +1,78 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "alt-t": ["task::Rerun", { "reevaluate_context": true }],
+    },
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "shift-tab": "editor::AcceptEditPrediction",
+      "ctrl-space": "editor::ShowCompletions",
+      "ctrl-j": "editor::ShowCompletions",
+      // autocomplete
+    },
+  },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      // "*": "vim::SearchUnderCursor",
+      // "#": "vim::SearchUnderCursorPrevious",
+      "cmd-tab": "editor::AcceptEditPrediction",
+      "space space": "pane::AlternateFile",
+      "space s": "editor::Format",
+      "space n": "editor::Rename",
+      "space r": "editor::FindAllReferences",
+      "space w": "workspace::Save",
+      "space e": "pane::RevealInProjectPanel",
+      "cmd-k l": "pane::SplitRight",
+      "cmd-k h": "pane::SplitLeft",
+      // precise marks with ' instead of `
+      "'": ["workspace::SendKeystrokes", "`"],
+      "space h": "editor::ToggleInlayHints",
+    },
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      // Cmd + Escape to enter Vi mode in the terminal, i to exit
+      "cmd-escape": "terminal::ToggleViMode",
+    },
+  },
+  {
+    "context": "Editor  && vim_mode == visual",
+    "bindings": {
+      // "*": "vim::SearchUnderCursor",
+      // "#": "vim::SearchUnderCursorPrevious",
+      "ctrl-j": "editor::MoveLineDown",
+      "ctrl-k": "editor::MoveLineUp",
+      "tab": "vim::SelectLargerSyntaxNode",
+      "shift-tab": "vim::SelectSmallerSyntaxNode",
+    },
+  },
+
+  // navigate between normal panes & termainal
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-w j": "workspace::ActivatePaneDown",
+      "ctrl-w k": "workspace::ActivatePaneUp",
+      "ctrl-w h": "workspace::ActivatePaneLeft",
+      "ctrl-w l": "workspace::ActivatePaneRight",
+    },
+  },
+  {
+    "context": "",
+    "bindings": {
+      "cmd-shift-j": "workspace::NewTerminal",
+    },
+  },
+]

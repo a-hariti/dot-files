@@ -13,3 +13,7 @@ if [[ ! -d "${HOME}/.zgen" ]]; then
 fi
 
 stow --target ~ git zsh tmux nvim alacritty ghostty
+
+# Zed (stow into .config/zed)
+mkdir -p ~/.config/zed
+stow --target ~/.config/zed zed
