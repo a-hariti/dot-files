@@ -16,9 +16,7 @@
     "context": "Editor && vim_mode == insert",
     "bindings": {
       "shift-tab": "editor::AcceptEditPrediction",
-      "ctrl-space": "editor::ShowCompletions",
       "ctrl-j": "editor::ShowCompletions",
-      // autocomplete
     },
   },
   {
