@@ -1,56 +1,44 @@
 {
   "edit_predictions": {
-    "mode": "subtle"
+    "mode": "subtle",
   },
   "show_edit_predictions": true,
-  "toolbar": {
-    "breadcrumbs": true
-  },
+  "toolbar": { "breadcrumbs": true },
   "icon_theme": "OpenMoji Icon Theme",
   "features": { "edit_prediction_provider": "zed" },
   "agent": {
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "gpt-4o"
+      "model": "o3-mini",
     },
-    "default_model": { "provider": "copilot_chat", "model": "o3-mini" }
+    "default_model": { "provider": "copilot_chat", "model": "o3-mini" },
   },
-  "telemetry": { "metrics": false },
+  "telemetry": { "metrics": true },
   "vim_mode": true,
+  "inlay_hints": {
+    "enabled": true,
+  },
+  "theme": "Ayu Dark",
   "relative_line_numbers": "enabled",
   "vertical_scroll_margin": 0,
   "buffer_line_height": { "custom": 1.6 },
-  "ui_font_size": 15,
-  "buffer_font_size": 13,
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
   "format_on_save": "off",
   "search": { "regex": true },
-  "theme": "Ayu Dark",
   "git": {
     "git_gutter": null,
     "gutter_debounce": null,
-    "inline_blame": { "enabled": false }
+    "inline_blame": { "enabled": false },
   },
-  "languages": {
-    "Python": { "language_servers": ["pyright", "ruff"] },
-    "Rust": { "show_edit_predictions": true,
-              "inlay_hints": { "enabled": true } },
-    "TypeScript": { "inlay_hints": { "enabled": true } }
-  },
-  "context_servers": {
-    "MCP_DOCKER": {
-      "enabled": true,
-      "command": "docker",
-      "args": ["mcp", "gateway", "run"]
-    }
-  },
+  "context_servers": {},
   "terminal": {
-    "font_family": "JetBrainsMono Nerd Font Mono",
     "scroll_multiplier": 1.0,
     "detect_venv": {
       "on": {
         "directories": [".env", "env", ".venv", "venv"],
-        "activate_script": "default"
-      }
-    }
-  }
+        "activate_script": "default",
+      },
+    },
+  },
 }
