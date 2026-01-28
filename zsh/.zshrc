@@ -6,10 +6,12 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt appendhistory autocd
 
-zstyle :compinstall filename '$HOME/.zshrc'
+zstyle :compinstall filename "$HOME/.zshrc"
 
 export ZSH_DISABLE_COMPFIX=true
 export ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${HOST}-${ZSH_VERSION}"
+
+fpath=("$HOME/.zsh/completions" "$HOME/.bun" $fpath)
 
 # Group all completion zstyles
 zstyle ':completion:*' \
@@ -17,8 +19,6 @@ zstyle ':completion:*' \
     cache-path "$HOME/.zcompcache" \
     rehash true \
     matcher-list 'm:{a-zA-Z}={A-Za-z}'
-
-# compinit is now loaded by zgenom/oh-my-zsh, so the standalone call is removed.
 
 export KEYTIMEOUT=1
 
@@ -102,19 +102,9 @@ sv() {
     tmux set-environment VIRTUAL_ENV $VIRTUAL_ENV
 }
 
-# --- Lazy-loaded Completions ---
-# These will only be loaded when you first press Tab on the command.
-# This requires compinit to have already been run (which zgenom does).
-
-# bun completions
-if [[ -s "$HOME/.bun/_bun" ]]; then
-  compdef '_bun' 'bun'
-fi
-
-# solana completions
-if [[ -s "$HOME/.solana/_completions" ]]; then
-  compdef '_solana' 'solana'
-fi
+# Simple completion init (single pass for reliability)
+autoload -Uz compinit
+compinit -d "$ZSH_COMPDUMP"
 
 # --- Fzf Configuration ---
 # Use fd as the default fzf finder
@@ -125,7 +115,7 @@ _fzf_compgen_path() {
   fd --hidden --follow --exclude ".git" . "$1"
 }
 
-_ff_compgen_dir() {
+_fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
@@ -177,3 +167,4 @@ export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 
 # opencode
 export PATH=$HOME/.opencode/bin:$PATH
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
