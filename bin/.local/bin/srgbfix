@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+srgbfix() {
+    local target="$1"
+
+    # If no argument is provided, find the most recent screenshot on the Desktop
+    if [[ -z "$target" ]]; then
+        target=$(ls -t ~/Desktop/Screenshot* 2>/dev/null | grep -v ".srgb.png" | head -n 1)
+
+        if [[ -z "$target" ]]; then
+            echo "Error: No screenshot found on Desktop and no file provided."
+            return 1
+        fi
+    fi
+
+    if [[ -f "$target" ]]; then
+        local base="${target%.*}"
+        local output="${base}.srgb.png"
+        local profile="/System/Library/ColorSync/Profiles/sRGB Profile.icc"
+
+        sips --matchTo "$profile" "$target" --out "$output" > /dev/null
+        if [[ $? -ne 0 ]]; then
+            echo "Error: sips failed to process the image."
+            return 1
+        fi
+        if [[ -z "$1" ]]; then
+            echo "Converted & Copied image to sRGB:"
+        else
+            echo "Converted & Copied latest screenshot to sRGB:"
+        fi
+        echo "  $(basename "$target") -> $(basename "$output")"
+        osascript -e "set the clipboard to (read (POSIX file \"$output\") as «class PNGf»)"
+        # echo "Successfully created and copied to clipboard: $output"
+    else
+        echo "Error: File '$target' not found."
+        return 1
+    fi
+}
+
+srgbfix "$1"

@@ -12,7 +12,7 @@ if [[ ! -d "${HOME}/.zgen" ]]; then
     git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
 fi
 
-stow --target ~ git zsh tmux nvim alacritty ghostty
+stow --target ~ git zsh tmux nvim alacritty ghostty bin
 
 # Zed (stow into .config/zed)
 mkdir -p ~/.config/zed
