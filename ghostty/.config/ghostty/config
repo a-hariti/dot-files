@@ -1,3 +1,5 @@
 # theme = light:Raycast Light,dark: Raycast Dark
 theme = Raycast Dark
 keybind = shift+enter=text:\x1b\r
+font-size = 16
+font-family = Lilex
