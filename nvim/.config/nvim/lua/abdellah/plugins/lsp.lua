@@ -1,160 +1,170 @@
 local function config()
-  local lspconfig = require('lspconfig')
+	local lspconfig = require('lspconfig')
 
-  local lsp_mapings = function(bufnr)
-    local telescope = require('telescope.builtin')
-    local opts = { buffer = bufnr, remap = false }
-    local ERROR = vim.diagnostic.severity.ERROR
-    local map = vim.keymap.set
-    map('n', '<C-]>', vim.lsp.buf.definition, opts)
-    map('n', '<leader>gi', vim.lsp.buf.implementation, opts)
-    map('n', '<leader>gr', telescope.lsp_references, opts)
-    map('n', '<leader>n', vim.lsp.buf.rename, opts)
-    map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-    map('n', ']d', vim.diagnostic.goto_next, opts)
-    map('n', '[d', vim.diagnostic.goto_prev, opts)
-    -- Error specific navigation
-    map('n', ']e', function()
-      vim.diagnostic.goto_next({ severity = ERROR })
-    end, opts)
-    map('n', '[e', function()
-      vim.diagnostic.goto_prev({ severity = ERROR })
-    end, opts)
-  end
+	local lsp_mapings = function(bufnr)
+		local telescope = require('telescope.builtin')
+		local opts = { buffer = bufnr, remap = false }
+		local ERROR = vim.diagnostic.severity.ERROR
+		local map = vim.keymap.set
+		map('n', '<C-]>', vim.lsp.buf.definition, opts)
+		map('n', '<leader>gi', vim.lsp.buf.implementation, opts)
+		map('n', '<leader>gr', telescope.lsp_references, opts)
+		map('n', '<leader>n', vim.lsp.buf.rename, opts)
+		map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+		map('n', ']d', vim.diagnostic.goto_next, opts)
+		map('n', '[d', vim.diagnostic.goto_prev, opts)
+		map('n', ']d', function()
+			vim.diagnostic.jump({ count = 1 })
+		end
+		, opts)
+		-- map('n', '[d', vim.diagnostic.goto_prev, opts)
+		map('n', '[d', function()
+			vim.diagnostic.jump({ count = -1 })
+		end
+		, opts)
+		-- Error specific navigation
+		map('n', ']e', function()
+			-- vim.diagnostic.goto_next({ severity = ERROR })
+			vim.diagnostic.jump({ count = 1, severity = ERROR })
+		end, opts)
+		map('n', '[e', function()
+			vim.diagnostic.jump({ count = -1, severity = ERROR })
+		end, opts)
+	end
 
-  vim.api.nvim_create_autocmd('LspAttach', {
-    desc = 'LSP actions',
-    callback = function(ev)
-      local client = vim.lsp.get_client_by_id(ev.data.client_id)
-      if client.server_capabilities.documentSymbolProvider then
-        require('nvim-navic').attach(client, ev.buf)
-      end
-      lsp_mapings(ev.buf)
-    end,
-  })
+	vim.api.nvim_create_autocmd('LspAttach', {
+		desc = 'LSP actions',
+		callback = function(ev)
+			local client = vim.lsp.get_client_by_id(ev.data.client_id)
+			if client.server_capabilities.documentSymbolProvider then
+				require('nvim-navic').attach(client, ev.buf)
+			end
+			lsp_mapings(ev.buf)
+		end,
+	})
 
-  local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-  cmp_capabilities.offsetEncoding = 'utf-8'
+	local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+	cmp_capabilities.offsetEncoding = 'utf-8'
 
-  require('mason-lspconfig').setup({
-    ensure_installed = { 'ts_ls', 'lua_ls' },
-    handlers = {
-      -- The first entry (without a key) will be the default handler
-      -- and will be called for each installed server that doesn't have
-      -- a dedicated handler.
-      function(server_name)
-        lspconfig[server_name].setup({
-          capabilities = cmp_capabilities,
-          -- on_attach = lsp_mappings,
-        })
-      end,
-      -- latex
-      ['texlab'] = function()
-        lspconfig.texlab.setup({
-          capabilities = cmp_capabilities,
-          latexFormatter = 'latexindent',
-          latexindent = {
-            modifyLineBreaks = true,
-          },
-        })
-      end,
-      -- Next, you can provide a dedicated handler for specific servers.
-      ['ts_ls'] = function()
-        lspconfig.ts_ls.setup({
-          capabilities = cmp_capabilities,
-          on_attach = function(client)
-            client.server_capabilities.document_formatting = false
-          end,
-        })
-      end,
-      ['lua_ls'] = function()
-        lspconfig.lua_ls.setup({
-          capabilities = cmp_capabilities,
-          settings = {
-            Lua = {
-              diagnostics = {
-                globals = { 'vim' },
-              },
-              telemetry = {
-                enable = false,
-              },
-            },
-          },
-        })
-      end,
+	require('mason-lspconfig').setup({
+		ensure_installed = { 'ts_ls', 'lua_ls' },
+		handlers = {
+			-- The first entry (without a key) will be the default handler
+			-- and will be called for each installed server that doesn't have
+			-- a dedicated handler.
+			function(server_name)
+				lspconfig[server_name].setup({
+					capabilities = cmp_capabilities,
+					-- on_attach = lsp_mappings,
+				})
+			end,
+			-- latex
+			['texlab'] = function()
+				lspconfig.texlab.setup({
+					capabilities = cmp_capabilities,
+					latexFormatter = 'latexindent',
+					latexindent = {
+						modifyLineBreaks = true,
+					},
+				})
+			end,
+			-- Next, you can provide a dedicated handler for specific servers.
+			['ts_ls'] = function()
+				lspconfig.ts_ls.setup({
+					capabilities = cmp_capabilities,
+					on_attach = function(client)
+						client.server_capabilities.document_formatting = false
+					end,
+				})
+			end,
+			['lua_ls'] = function()
+				lspconfig.lua_ls.setup({
+					capabilities = cmp_capabilities,
+					settings = {
+						Lua = {
+							diagnostics = {
+								globals = { 'vim' },
+							},
+							telemetry = {
+								enable = false,
+							},
+						},
+					},
+				})
+			end,
 
-      ['tailwindcss'] = function()
-        lspconfig.tailwindcss.setup({
-          init_options = { userLanguages = { elixir = 'html-eex', eelixir = 'html-eex', heex = 'html-eex' } },
-          settings = { tailwindCSS = { experimental = { classRegex = { 'class[:]\\s*"([^"]*)"' } } } },
+			['tailwindcss'] = function()
+				lspconfig.tailwindcss.setup({
+					init_options = { userLanguages = { elixir = 'html-eex', eelixir = 'html-eex', heex = 'html-eex' } },
+					settings = { tailwindCSS = { experimental = { classRegex = { 'class[:]\\s*"([^"]*)"' } } } },
 
-          -- filetypes copied and adjusted from tailwindcss-intellisense
-          filetypes = {
-            -- html
-            'aspnetcorerazor',
-            'astro',
-            'astro-markdown',
-            'blade',
-            'django-html',
-            'htmldjango',
-            'edge',
-            'eelixir', -- vim ft
-            'elixir',
-            'ejs',
-            'erb',
-            'eruby', -- vim ft
-            'gohtml',
-            'haml',
-            'handlebars',
-            'hbs',
-            'html',
-            -- 'HTML (Eex)',
-            -- 'HTML (EEx)',
-            'html-eex',
-            'heex',
-            'jade',
-            'leaf',
-            'liquid',
-            'markdown',
-            'mdx',
-            'mustache',
-            'njk',
-            'nunjucks',
-            'php',
-            'razor',
-            'slim',
-            'twig',
-            -- css
-            'css',
-            'less',
-            'postcss',
-            'sass',
-            'scss',
-            'stylus',
-            'sugarss',
-            -- js
-            'javascript',
-            'javascriptreact',
-            'reason',
-            'rescript',
-            'typescript',
-            'typescriptreact',
-            -- mixed
-            'vue',
-            'svelte',
-            'elm',
-          },
-        })
-      end,
-    },
-  })
+					-- filetypes copied and adjusted from tailwindcss-intellisense
+					filetypes = {
+						-- html
+						'aspnetcorerazor',
+						'astro',
+						'astro-markdown',
+						'blade',
+						'django-html',
+						'htmldjango',
+						'edge',
+						'eelixir', -- vim ft
+						'elixir',
+						'ejs',
+						'erb',
+						'eruby', -- vim ft
+						'gohtml',
+						'haml',
+						'handlebars',
+						'hbs',
+						'html',
+						-- 'HTML (Eex)',
+						-- 'HTML (EEx)',
+						'html-eex',
+						'heex',
+						'jade',
+						'leaf',
+						'liquid',
+						'markdown',
+						'mdx',
+						'mustache',
+						'njk',
+						'nunjucks',
+						'php',
+						'razor',
+						'slim',
+						'twig',
+						-- css
+						'css',
+						'less',
+						'postcss',
+						'sass',
+						'scss',
+						'stylus',
+						'sugarss',
+						-- js
+						'javascript',
+						'javascriptreact',
+						'reason',
+						'rescript',
+						'typescript',
+						'typescriptreact',
+						-- mixed
+						'vue',
+						'svelte',
+						'elm',
+					},
+				})
+			end,
+		},
+	})
 end
 return {
-  'neovim/nvim-lspconfig',
-  event = 'BufReadPre',
-  dependencies = {
-    'williamboman/mason.nvim',
-    'williamboman/mason-lspconfig.nvim',
-  },
-  config = config,
+	'neovim/nvim-lspconfig',
+	event = 'BufReadPre',
+	dependencies = {
+		'williamboman/mason.nvim',
+		'williamboman/mason-lspconfig.nvim',
+	},
+	config = config,
 }
