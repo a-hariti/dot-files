@@ -37,6 +37,9 @@ map({ 'n', 'v' }, '<leader>p', '"+p')
 -- escape terminal mode
 map('t', '<esc><esc>', '<c-\\><c-n>')
 
+-- resolve ambiguity of :G
+vim.cmd('cabbrev G Git')
+
 -- toggle fold
 map('n', '<leader>z', 'za')
 

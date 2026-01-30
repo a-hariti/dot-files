@@ -37,6 +37,10 @@ vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.termguicolors = true
 vim.g.mapleader = ' '
 
+-- Fix telescope preview colors
+vim.api.nvim_set_hl(0, 'TelescopePreviewNormal', { link = 'Normal' })
+vim.api.nvim_set_hl(0, 'TelescopePreviewBorder', { link = 'Normal' })
+
 -- highlight mdx files as markdown
 vim.cmd([[
   autocmd BufNewFile,BufRead *.mdx set filetype=markdown

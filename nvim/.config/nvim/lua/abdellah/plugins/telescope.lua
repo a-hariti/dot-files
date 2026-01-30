@@ -13,7 +13,7 @@ return {
 
     telescope.setup({
       defaults = {
-        mappings = { n = { ['<C-q>'] = actions.smart_send_to_qflist } },
+        mappings = { n = { ["<C-q>"] = actions.smart_send_to_qflist } },
       },
       pickers = {
         find_files = {
@@ -32,12 +32,16 @@ return {
 
     local map = vim.keymap.set
     local builtins = require('telescope.builtin')
-    map('n', '<leader>ff', function()
+
+    -- Primary shortcuts
+    map('n', '<D-p>', function()
       builtins.find_files({ find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } })
     end)
-    map('n', '<leader>fs', builtins.lsp_document_symbols)
-    map('n', '<leader>fk', builtins.lsp_workspace_symbols)
-    map('n', '<leader>fg', builtins.live_grep)
+    map('n', 'g/', builtins.live_grep)
+    map('n', '<C-t>', builtins.lsp_document_symbols, { noremap = true })
+    map('n', '<C-S-t>', builtins.lsp_workspace_symbols, { noremap = true })
+
+    -- Helper mappings
     map('n', '<leader>fl', function()
       local str = vim.fn.getline('.')
       -- trim leading and trailing whitespace and escape newlines
