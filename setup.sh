@@ -4,9 +4,6 @@ if [[ ! -d ~/.tmux/plugins/tpm ]]; then
     git clone --depth=1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-# remap keyboard keys on mac
-[[ "$(uname -s)" = "Darwin" ]] && stow mac-mappings --target ~/Library/LaunchAgents
-
 # set up zgen to manage zsh plugins
 if [[ ! -d "${HOME}/.zgen" ]]; then
     git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
@@ -18,12 +15,21 @@ stow --target ~ git zsh tmux nvim alacritty ghostty bin
 mkdir -p ~/.config/zed
 stow --target ~/.config/zed zed
 
-# Rectangle configuration (Mac only)
+# macOS specific setup
 if [[ "$(uname -s)" = "Darwin" ]]; then
-    RECTANGLE_DIR="$HOME/Library/Application Support/Rectangle"
-    mkdir -p "$RECTANGLE_DIR"
-    ln -sf "$PWD/RectangleConfig.json" "$RECTANGLE_DIR/RectangleConfig.json"
-    
-    # Restart Rectangle to trigger import
-    killall Rectangle 2>/dev/null && open -a Rectangle
+    # remap keyboard keys
+    stow mac-mappings --target ~/Library/LaunchAgents
+
+    # Rectangle configuration
+    if [[ -d "/Applications/Rectangle.app" ]]; then
+        RECTANGLE_DIR="$HOME/Library/Application Support/Rectangle"
+        mkdir -p "$RECTANGLE_DIR"
+        ln -sf "$PWD/RectangleConfig.json" "$RECTANGLE_DIR/RectangleConfig.json"
+        # Restart Rectangle to trigger import
+        if pgrep -x "Rectangle" >/dev/null; then
+            killall Rectangle 2>/dev/null
+            while pgrep -x "Rectangle" >/dev/null; do sleep 0.1; done
+            open -a Rectangle 2>/dev/null
+        fi
+    fi
 fi
