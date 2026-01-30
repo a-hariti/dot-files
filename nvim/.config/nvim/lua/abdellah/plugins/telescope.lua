@@ -4,18 +4,89 @@ return {
     'nvim-lua/popup.nvim',
     'nvim-lua/plenary.nvim',
     'nvim-telescope/telescope-fzy-native.nvim',
+    'onsails/lspkind.nvim',
   },
   event = { 'BufWinEnter' },
   config = function()
     local telescope = require('telescope')
     local action_set = require('telescope.actions.set')
     local actions = require('telescope.actions')
+    local lspkind = require('lspkind')
+    local entry_display = require('telescope.pickers.entry_display')
+    local utils = require('telescope.utils')
+
+    local function lsp_symbols_entry_maker(opts)
+      local make_entry = require('telescope.make_entry')
+      local original_maker = make_entry.gen_from_lsp_symbols(opts)
+
+      local type_highlight = {
+        Class = 'TelescopeResultsClass',
+        Constant = 'TelescopeResultsConstant',
+        Field = 'TelescopeResultsField',
+        Function = 'TelescopeResultsFunction',
+        Method = 'TelescopeResultsMethod',
+        Property = 'TelescopeResultsOperator',
+        Struct = 'TelescopeResultsStruct',
+        Variable = 'TelescopeResultsVariable',
+      }
+
+      return function(entry)
+        local e = original_maker(entry)
+        if not e then
+          return e
+        end
+
+        local icon = lspkind.symbolic(e.symbol_type, { mode = 'symbol' })
+        local symbol_name = (icon or '') .. ' ' .. e.symbol_name
+
+        if opts.workspace then
+          local displayer = entry_display.create({
+            separator = ' ',
+            items = {
+              { width = opts.symbol_width or 30 },
+              { remaining = true },
+            },
+          })
+
+          e.display = function(entry)
+            local display_path, path_style = utils.transform_path(opts, entry.filename)
+            return displayer({
+              symbol_name,
+              { display_path, path_style },
+            })
+          end
+        else
+          local displayer = entry_display.create({
+            separator = ' ',
+            items = {
+              { width = opts.symbol_width or 30 },
+              { remaining = true },
+            },
+          })
+
+          e.display = function(entry)
+            return displayer({
+              symbol_name,
+              { '[' .. entry.symbol_type:lower() .. ']', type_highlight[entry.symbol_type] or 'TelescopeResultsVariable' },
+            })
+          end
+        end
+
+        return e
+      end
+    end
 
     telescope.setup({
       defaults = {
         mappings = { n = { ["<C-q>"] = actions.smart_send_to_qflist } },
       },
       pickers = {
+        lsp_document_symbols = {
+          entry_maker = lsp_symbols_entry_maker({ symbol_width = 40, hidden = true }),
+        },
+        lsp_workspace_symbols = {
+          entry_maker = lsp_symbols_entry_maker({ symbol_width = 40, workspace = true }),
+        },
         find_files = {
           attach_mappings = function()
             action_set.select:enhance({
@@ -38,8 +109,8 @@ return {
       builtins.find_files({ find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } })
     end)
     map('n', 'g/', builtins.live_grep)
-    map('n', '<C-t>', builtins.lsp_document_symbols, { noremap = true })
-    map('n', '<C-S-t>', builtins.lsp_workspace_symbols, { noremap = true })
+    map('n', 'gs', builtins.lsp_document_symbols, { noremap = true })
+    map('n', 'gS', builtins.lsp_workspace_symbols, { noremap = true })
 
     -- Helper mappings
     map('n', '<leader>fl', function()
