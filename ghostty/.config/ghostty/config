@@ -1,2 +1,3 @@
-theme=ayu
+# theme = light:Raycast Light,dark: Raycast Dark
+theme = Raycast Dark
 keybind = shift+enter=text:\x1b\r

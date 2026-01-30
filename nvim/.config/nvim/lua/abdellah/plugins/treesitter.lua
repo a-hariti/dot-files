@@ -58,15 +58,12 @@ local function config()
     },
     refactor = {
       navigation = {
-        enable = false,
+        enable = true,
         keymaps = {
           goto_next_usage = ']u',
           goto_previous_usage = '[u',
         },
       },
-    },
-    ['treesitter-context'] = {
-      enable = false,
     },
     autotag = {
       enable = false,
@@ -158,13 +155,12 @@ end
 
 return {
   'nvim-treesitter/nvim-treesitter',
+  version = 'v0.10.0',
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
     -- 'p00f/nvim-ts-rainbow',
     'nvim-treesitter/nvim-treesitter-refactor',
     'windwp/nvim-ts-autotag',
-    'nvim-treesitter/playground',
-    -- 'nvim-treesitter/nvim-treesitter-context',
   },
   build = function()
     require('nvim-treesitter.install').update({ with_sync = true })()
