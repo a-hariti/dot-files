@@ -27,9 +27,9 @@
   "format_on_save": "off",
   "search": { "regex": true },
   "git": {
-    "git_gutter": null,
-    "gutter_debounce": null,
+    "git_gutter": "tracked_files",
     "inline_blame": { "enabled": false },
+    "enable_status": true
   },
   "context_servers": {},
   "terminal": {

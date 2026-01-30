@@ -2,59 +2,57 @@
 //
 // For information on binding keys, see the Zed
 // documentation: https://zed.dev/docs/key-bindings
-//
 // To see the default key bindings run `zed: open default keymap`
 // from the command palette.
 [
   {
     "context": "Workspace",
     "bindings": {
-      "alt-t": ["task::Rerun", { "reevaluate_context": true }],
-    },
+      "alt-t": ["task::Rerun", { "reevaluate_context": true }]
+    }
   },
   {
     "context": "Editor && vim_mode == insert",
     "bindings": {
-      "shift-tab": "editor::AcceptEditPrediction",
-      "ctrl-j": "editor::ShowCompletions",
-    },
+      "cmd-l": "editor::AcceptEditPrediction",
+      "ctrl-j": "editor::ShowCompletions"
+    }
   },
   {
     "context": "Editor && vim_mode == normal",
     "bindings": {
-      // "*": "vim::SearchUnderCursor",
-      // "#": "vim::SearchUnderCursorPrevious",
-      "cmd-tab": "editor::AcceptEditPrediction",
+      "*": "vim::SearchUnderCursor",
+      "#": "vim::SearchUnderCursorPrevious",
       "space space": "pane::AlternateFile",
       "space s": "editor::Format",
       "space n": "editor::Rename",
       "space r": "editor::FindAllReferences",
       "space w": "workspace::Save",
       "space e": "pane::RevealInProjectPanel",
-      "cmd-k l": "pane::SplitRight",
-      "cmd-k h": "pane::SplitLeft",
+      "space d": "diagnostics::Deploy",
+      "cmd-g": "git::ToggleStaged",
       // precise marks with ' instead of `
       "'": ["workspace::SendKeystrokes", "`"],
-      "space h": "editor::ToggleInlayHints",
-    },
+      "space h": "editor::ToggleInlayHints"
+    }
   },
   {
     "context": "Terminal",
     "bindings": {
       // Cmd + Escape to enter Vi mode in the terminal, i to exit
-      "cmd-escape": "terminal::ToggleViMode",
-    },
+      "cmd-escape": "terminal::ToggleViMode"
+    }
   },
   {
     "context": "Editor  && vim_mode == visual",
     "bindings": {
-      // "*": "vim::SearchUnderCursor",
-      // "#": "vim::SearchUnderCursorPrevious",
+      "*": "vim::SearchUnderCursor",
+      "#": "vim::SearchUnderCursorPrevious",
       "ctrl-j": "editor::MoveLineDown",
       "ctrl-k": "editor::MoveLineUp",
       "tab": "vim::SelectLargerSyntaxNode",
-      "shift-tab": "vim::SelectSmallerSyntaxNode",
-    },
+      "shift-tab": "vim::SelectSmallerSyntaxNode"
+    }
   },
 
   // navigate between normal panes & termainal
@@ -64,13 +62,13 @@
       "ctrl-w j": "workspace::ActivatePaneDown",
       "ctrl-w k": "workspace::ActivatePaneUp",
       "ctrl-w h": "workspace::ActivatePaneLeft",
-      "ctrl-w l": "workspace::ActivatePaneRight",
-    },
+      "ctrl-w l": "workspace::ActivatePaneRight"
+    }
   },
   {
     "context": "",
     "bindings": {
-      "cmd-shift-j": "workspace::NewTerminal",
-    },
-  },
+      "cmd-shift-j": "workspace::NewTerminal"
+    }
+  }
 ]
