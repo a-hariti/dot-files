@@ -1,9 +1,8 @@
 return {
   'nvim-lua/popup.nvim',
   'nvim-lua/plenary.nvim',
-  { 'kyazdani42/nvim-web-devicons' },
+  { 'nvim-tree/nvim-web-devicons' },
   { 'tpope/vim-fugitive',          cmd = 'Git' },
-  { 'tpope/vim-sleuth',            event = 'BufRead' },
   'williamboman/mason.nvim',
   -- 'elixir-tools/elixir-tools.nvim',
   'tpope/vim-surround',

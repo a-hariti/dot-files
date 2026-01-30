@@ -62,7 +62,6 @@ local function config()
       { name = 'buffer' },
       { name = 'path' },
       { name = 'cmd-line' },
-      { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
     }),
     snippet = {
@@ -89,7 +88,6 @@ return {
     'L3MON4D3/LuaSnip',
     'rafamadriz/friendly-snippets',
     'saadparwaiz1/cmp_luasnip',
-    'hrsh7th/cmp-nvim-lua',
     'onsails/lspkind.nvim',
   },
   config = config,
