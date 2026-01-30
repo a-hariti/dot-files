@@ -8,7 +8,6 @@ return {
   -- 'elixir-tools/elixir-tools.nvim',
   'tpope/vim-surround',
   'tpope/vim-repeat',
-  'tpope/vim-commentary',
   'mbbill/undotree',
   'bluz71/vim-nightfly-colors',
   'phanviet/vim-monokai-pro',
