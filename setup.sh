@@ -17,3 +17,13 @@ stow --target ~ git zsh tmux nvim alacritty ghostty bin
 # Zed (stow into .config/zed)
 mkdir -p ~/.config/zed
 stow --target ~/.config/zed zed
+
+# Rectangle configuration (Mac only)
+if [[ "$(uname -s)" = "Darwin" ]]; then
+    RECTANGLE_DIR="$HOME/Library/Application Support/Rectangle"
+    mkdir -p "$RECTANGLE_DIR"
+    ln -sf "$PWD/RectangleConfig.json" "$RECTANGLE_DIR/RectangleConfig.json"
+    
+    # Restart Rectangle to trigger import
+    killall Rectangle 2>/dev/null && open -a Rectangle
+fi
