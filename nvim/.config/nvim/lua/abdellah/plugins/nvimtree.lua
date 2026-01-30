@@ -10,7 +10,6 @@ return {
     local keymap = vim.keymap
     keymap.set({ 'n', 'v' }, '<leader>e', '<cmd>NvimTreeFindFileToggle<CR>', { desc = 'Toggle file explorer and focus current file' })
     keymap.set({ 'n', 'v' }, '<D-b>', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle file explorer' })
-    keymap.set('n', '<leader>fe', '<cmd>NvimTreeFindFile<CR>', { desc = 'Toggle file explorer on current file' })
     keymap.set('n', '<leader>r', '<cmd>NvimTreeRefresh<CR>')
   end,
 }
