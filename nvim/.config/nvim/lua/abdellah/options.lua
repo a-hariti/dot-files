@@ -40,6 +40,7 @@ vim.g.mapleader = ' '
 -- Fix telescope preview colors
 vim.api.nvim_set_hl(0, 'TelescopePreviewNormal', { link = 'Normal' })
 vim.api.nvim_set_hl(0, 'TelescopePreviewBorder', { link = 'Normal' })
+vim.api.nvim_set_hl(0, 'FloatBorder', { link = 'Normal' })
 
 -- highlight mdx files as markdown
 vim.cmd([[
