@@ -10,8 +10,6 @@ map('n', '<C-u>', '<C-u>zz')
 map('v', '<C-j>', ":m '>+1<CR>gv=gv")
 map('v', '<C-k>', ":m '<-2<CR>gv=gv")
 
-map('n', ']g', '<Plug>(GitGutterNextHunk)')
-map('n', '[g', '<Plug>(GitGutterPrevHunk)')
 map('n', '<leader>gg', ':Git<CR>')
 
 map('n', 'Q', '<nop>')
