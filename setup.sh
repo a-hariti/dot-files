@@ -9,7 +9,11 @@ if [[ ! -d "${HOME}/.zgen" ]]; then
     git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
 fi
 
-stow --target ~ git zsh tmux alacritty ghostty
+stow --target ~ git zsh tmux ghostty
+
+# Alacritty (stow into .config/alacritty)
+mkdir -p ~/.config/alacritty
+stow --target ~/.config/alacritty alacritty
 
 # Neovim (stow into .config/nvim)
 mkdir -p ~/.config/nvim
