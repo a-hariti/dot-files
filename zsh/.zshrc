@@ -25,10 +25,6 @@ export KEYTIMEOUT=1
 # Disable OMZ auto-update checks at startup
 # zstyle ':omz:update' mode disabled
 
-alias v=nvim
-alias mv='mv -i'
-alias gs='git status'
-
 # Use the powerful zsh-contrib 'extract' function
 autoload -Uz extract
 
@@ -94,6 +90,11 @@ fi
 bindkey -v
 # fix backspace not working after going to normal mode and back
 bindkey "^?" backward-delete-char
+
+alias v=nvim
+alias mv='mv -i'
+alias gs='git status'
+alias gdc='git diff --cached'
 
 # Activate virtual env and save the path as a tmux variable,
 # so that new panes/windows can re-activate as necessary
