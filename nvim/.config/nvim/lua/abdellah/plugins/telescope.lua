@@ -78,7 +78,21 @@ return {
 
     telescope.setup({
       defaults = {
-        mappings = { n = { ["<C-q>"] = actions.smart_send_to_qflist } },
+        vimgrep_arguments = {
+          'rg',
+          '--color=never',
+          '--no-heading',
+          '--with-filename',
+          '--line-number',
+          '--column',
+          '--smart-case',
+          '--hidden',
+          '--glob',
+          '!.git/*',
+          '--glob',
+          '!node_modules/*',
+        },
+        mappings = { n = { ['<C-q>'] = actions.smart_send_to_qflist } },
       },
       pickers = {
         lsp_document_symbols = {
