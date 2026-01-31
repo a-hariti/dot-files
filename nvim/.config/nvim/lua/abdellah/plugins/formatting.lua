@@ -10,7 +10,7 @@ return {
         -- These options will be passed to conform.format()
         -- timeout_ms = 500,
         async = true,
-        lsp_fallback = true,
+        lsp_fallback = false,
       },
       formatters_by_ft = {
         lua = { 'stylua' },
@@ -35,7 +35,7 @@ return {
       },
     })
     vim.keymap.set({ 'n', 'v' }, '<leader>s', function()
-      conform.format({ lsp_fallback = true, async = true, timeout_ms = 500 })
+      conform.format({ lsp_fallback = false, async = true, timeout_ms = 500 })
     end)
   end,
 }
