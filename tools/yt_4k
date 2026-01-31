@@ -1,0 +1,39 @@
+# yt4k: Converts screen recordings to YouTube-optimized 4K MP4.
+#
+# ENCODING:
+# - Upscale: 3840px width via Lanczos for text sharpness.
+# - Quality: CRF 17, 'slow' preset, and 'animation' tuning for dev content.
+#		This prioritizes sharpness over optimizing for moving textures
+# - Color: Standard Rec. 709 (1-1-1) to bypass the macOS Gamma Shift.
+input="$1"
+
+# 1. Check for missing argument
+if [[ -z "$input" ]]; then
+		echo "Usage: yt4k <filename>"
+		exit 1
+fi
+
+# 2. Check if file exists
+if [[ ! -f "$input" ]]; then
+		echo "Error: File '$input' not found."
+		exit 1
+fi
+
+# 3. Verify it is a supported video format (case-insensitive)
+if [[ ! "$input" =~ \.(mov|mp4|mkv|webm)$ ]]; then
+		echo "Error: '$input' does not appear to be a supported video file."
+		exit 1
+fi
+
+local output="${input%.*}_4K_YT.mp4"
+echo "Processing $input -> $output..."
+
+ffmpeg -i "$input" \
+		-vf "scale=3840:-1:flags=lanczos" \
+		-c:v libx264 -crf 17 -preset slow -tune animation \
+		-pix_fmt yuv420p \
+		-color_primaries 1 -color_trc 1 -colorspace 1 \
+		-movflags +faststart \
+		"$output"
+
+echo "Success! Created: $output"
