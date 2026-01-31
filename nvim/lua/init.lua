@@ -1,7 +1,7 @@
-require('abdellah.options')
-require('abdellah.autocmds')
-require('abdellah.lazy')
-require('abdellah.mappings')
+require('options')
+require('autocmds')
+require('plugin_manager')
+require('mappings')
 
 -- Global UI overrides
 local border = 'rounded'
