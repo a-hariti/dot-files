@@ -99,6 +99,7 @@ alias mv='mv -i'
 alias gs='git status'
 alias gdc='git diff --cached'
 alias tree='tree --gitignore'
+alias py='python'
 
 # Activate virtual env and save the path as a tmux variable,
 # so that new panes/windows can re-activate as necessary
