@@ -13,6 +13,9 @@ export ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${HOST}-${ZSH_VERSION}"
 
 fpath=("$HOME/.zsh/completions" "$HOME/.bun" $fpath)
 
+export PATH="$(brew --prefix)/opt/python/libexec/bin:$PATH"
+export XDG_CONFIG_HOME=/Users/abdellah/.config
+
 # Group all completion zstyles
 zstyle ':completion:*' \
     use-cache on \
