@@ -11,24 +11,36 @@ fi
 
 stow --target ~ git zsh tmux
 
+ensure_dir() {
+    local dir="$1"
+    # Remove broken symlinks so mkdir can succeed.
+    if [[ -L "$dir" && ! -e "$dir" ]]; then
+        rm -f "$dir"
+    fi
+    mkdir -p "$dir"
+}
+
+# Ensure base config dir exists
+ensure_dir ~/.config
+
 # Alacritty (stow into .config/alacritty)
-mkdir -p ~/.config/alacritty
+ensure_dir ~/.config/alacritty
 stow --target ~/.config/alacritty alacritty
 
 # Ghostty (stow into .config/ghostty)
-mkdir -p ~/.config/ghostty
+ensure_dir ~/.config/ghostty
 stow --target ~/.config/ghostty ghostty
 
 # Neovim (stow into .config/nvim)
-mkdir -p ~/.config/nvim
+ensure_dir ~/.config/nvim
 stow --target ~/.config/nvim nvim
 
 # local tools (symlink into ~/.local/bin)
-mkdir -p ~/.local/bin
+ensure_dir ~/.local/bin
 stow --target ~/.local/bin tools
 
 # Zed (stow into .config/zed)
-mkdir -p ~/.config/zed
+ensure_dir ~/.config/zed
 stow --target ~/.config/zed zed
 
 # macOS specific setup
@@ -49,3 +61,5 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
         fi
     fi
 fi
+
+echo "✔︎ dot files setup complete"
