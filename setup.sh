@@ -43,6 +43,10 @@ stow --target ~/.local/bin tools
 ensure_dir ~/.config/zed
 stow --target ~/.config/zed zed
 
+# Presenterm (stow into .config/presenterm)
+ensure_dir ~/.config/presenterm
+stow --target ~/.config/presenterm presenterm
+
 # macOS specific setup
 if [[ "$(uname -s)" = "Darwin" ]]; then
     # remap keyboard keys

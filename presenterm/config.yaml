@@ -1,0 +1,7 @@
+snippet:
+  exec:
+    enable: true
+  exec_replace:
+    enable: true
+defaults:
+  max_columns: 120
