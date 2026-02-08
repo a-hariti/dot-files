@@ -6,6 +6,7 @@ brew "stow"
 brew "zsh"
 brew "fd"
 brew "fzf"
+brew "ripgrep"
 brew "jq"
 
 # GUI Applications

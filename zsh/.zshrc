@@ -113,12 +113,13 @@ autoload -Uz compinit
 compinit -d "$ZSH_COMPDUMP"
 
 # --- Fzf Configuration ---
-# Use fd as the default fzf finder
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+# Use ripgrep as the default fzf finder
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# Custom fzf completion generators using fd
+# Custom fzf completion generators using ripgrep
 _fzf_compgen_path() {
-  fd --hidden --follow --exclude ".git" . "$1"
+  rg --files --hidden --follow --glob "!.git/*" "$1"
 }
 
 _fzf_compgen_dir() {
