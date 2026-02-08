@@ -7,6 +7,7 @@ import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 
+const MODEL = "gpt-4o-mini-tts";
 function printHelp() {
   console.log(`
 Usage: sayy [options] [text]
@@ -89,7 +90,7 @@ async function main() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "tts-1",
+        model: MODEL,
         input: text,
         voice: values.voice,
         speed: parseFloat(values.rate),
