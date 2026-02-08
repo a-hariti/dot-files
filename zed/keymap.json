@@ -31,6 +31,8 @@
       "space e": "pane::RevealInProjectPanel",
       "space d": "diagnostics::Deploy",
       "cmd-g": "git::ToggleStaged",
+      "space g n": "git::StageAndNext",
+      "space g g": "git_panel::ToggleFocus",
       // precise marks with ' instead of `
       "'": ["workspace::SendKeystrokes", "`"],
       "space h": "editor::ToggleInlayHints"
