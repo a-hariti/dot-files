@@ -5,7 +5,6 @@
   "show_edit_predictions": true,
   "toolbar": { "breadcrumbs": true },
   "icon_theme": "OpenMoji Icon Theme",
-  "features": { "edit_prediction_provider": "copilot" },
   "agent": {
     "inline_assistant_model": {
       "provider": "copilot_chat",
