@@ -12,6 +12,11 @@ map('v', '<C-k>', ":m '<-2<CR>gv=gv")
 
 map('n', '<leader>gg', ':Git<CR>')
 
+local function toggle_diagnostics()
+  vim.diagnostic.enable(vim.diagnostic.is_enabled())
+end
+map('n', '<leader>dd', toggle_diagnostics, { desc = 'Toggle diagnostics display' })
+
 map('n', 'Q', '<nop>')
 
 map('n', '<leader>w', ':update<CR>')
