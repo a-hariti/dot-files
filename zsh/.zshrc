@@ -94,6 +94,7 @@ bindkey -v
 # fix backspace not working after going to normal mode and back
 bindkey "^?" backward-delete-char
 
+alias al="alias | fzf"
 alias v=nvim
 alias mv='mv -i'
 alias gs='git status'
