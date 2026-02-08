@@ -19,6 +19,19 @@ local function is_minified_file(bufnr)
 end
 
 local function config()
+  -- nvim-treesitter v0.10.0 uses `tree-sitter generate --no-bindings`, but
+  -- tree-sitter CLI >= 0.26 removed that flag, causing installs (e.g. swift)
+  -- to fail. Override the args to be compatible with both old and new CLIs.
+  local ok_install, ts_install = pcall(require, 'nvim-treesitter.install')
+  if ok_install and vim.fn.executable('tree-sitter') == 1 then
+    local help = vim.fn.system({ 'tree-sitter', 'generate', '--help' })
+    local args = { 'generate' }
+    if type(help) == 'string' and help:find('--abi', 1, true) and vim.treesitter.language_version then
+      vim.list_extend(args, { '--abi', tostring(vim.treesitter.language_version) })
+    end
+    ts_install.ts_generate_args = args
+  end
+
   require('nvim-treesitter.configs').setup({
     -- make linter happy
     modules = {},
