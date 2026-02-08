@@ -4,9 +4,9 @@ if [[ ! -d ~/.tmux/plugins/tpm ]]; then
     git clone --depth=1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-# set up zgen to manage zsh plugins
-if [[ ! -d "${HOME}/.zgen" ]]; then
-    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+# set up zgenom to manage zsh plugins
+if [[ ! -d "${HOME}/.zgenom" ]]; then
+    git clone https://github.com/jandamm/zgenom.git "${HOME}/.zgenom"
 fi
 
 stow --target ~ git zsh tmux
