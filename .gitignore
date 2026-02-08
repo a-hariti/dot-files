@@ -1,2 +1,7 @@
 .DS_Store
 zsh/completions
+
+node_modules
+
+**/*.env
+package-lock.json

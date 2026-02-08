@@ -1,0 +1,11 @@
+{
+  "name": "tools",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
