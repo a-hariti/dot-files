@@ -99,6 +99,16 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd X edit-command-line
 
+copy-current-shell-command() {
+	print -rn -- "$BUFFER" | pbcopy
+	zle -R "Command copied to clipboard"
+	sleep 0.5
+	# hide the previous message
+	zle -R
+}
+zle -N copy-current-shell-command
+bindkey -M vicmd 'Y' copy-current-shell-command
+
 alias al="alias | fzf"
 alias v=nvim
 alias mv='mv -i'
