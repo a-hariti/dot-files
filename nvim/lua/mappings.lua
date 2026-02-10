@@ -17,6 +17,11 @@ local function toggle_diagnostics()
 end
 map('n', '<leader>dd', toggle_diagnostics, { desc = 'Toggle diagnostics display' })
 
+local function toggle_conceal()
+  vim.o.conceallevel = vim.o.conceallevel == 0 and 2 or 0
+end
+map('n', '<leader>cc', toggle_conceal, { desc = 'Toggle conceal' })
+
 map('n', 'Q', '<nop>')
 
 map('n', '<leader>w', ':update<CR>')
