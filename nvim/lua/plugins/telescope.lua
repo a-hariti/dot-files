@@ -67,7 +67,10 @@ return {
           e.display = function(entry)
             return displayer({
               symbol_name,
-              { '[' .. entry.symbol_type:lower() .. ']', type_highlight[entry.symbol_type] or 'TelescopeResultsVariable' },
+              {
+                '[' .. entry.symbol_type:lower() .. ']',
+                type_highlight[entry.symbol_type] or 'TelescopeResultsVariable',
+              },
             })
           end
         end
@@ -119,9 +122,11 @@ return {
     local builtins = require('telescope.builtin')
 
     -- Primary shortcuts
-    map('n', '<D-p>', function()
+    local find_files = function()
       builtins.find_files({ find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } })
-    end)
+    end
+    map('n', '<D-p>', find_files)
+    map('n', '<leader>ff', find_files)
     map('n', 'g/', builtins.live_grep)
     map('n', 'gs', builtins.lsp_document_symbols, { noremap = true })
     map('n', 'gS', builtins.lsp_workspace_symbols, { noremap = true })
