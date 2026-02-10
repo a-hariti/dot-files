@@ -2,6 +2,7 @@ require('options')
 require('autocmds')
 require('plugin_manager')
 require('mappings')
+require('folds')
 
 -- Global UI overrides
 local border = 'rounded'
