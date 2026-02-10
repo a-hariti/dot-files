@@ -9,9 +9,6 @@ vim.cmd([[
     au FileType go setlocal noexpandtab
     au FileType elm setlocal foldmethod=syntax
 
-    " auto reload vimrc on save
-    au! BufWritePost init.vim so % | redraw
-
     " highlight yanked range
     autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 50})
 
