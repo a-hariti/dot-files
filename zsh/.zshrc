@@ -94,6 +94,11 @@ bindkey -v
 # fix backspace not working after going to normal mode and back
 bindkey "^?" backward-delete-char
 
+# X to edit command buffer in $EDITOR
+autoload edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd X edit-command-line
+
 alias al="alias | fzf"
 alias v=nvim
 alias mv='mv -i'
