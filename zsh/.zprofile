@@ -39,5 +39,5 @@ _path_prepend "$BUN_INSTALL/bin"
 _path_prepend "/opt/homebrew/opt/ruby/bin"
 _path_prepend "/opt/homebrew/opt/libpq/bin"
 
-# Tooling
-_path_prepend "$HOME/.local/share/solana/install/active_release/bin"
+
+

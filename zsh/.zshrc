@@ -11,7 +11,10 @@ zstyle :compinstall filename "$HOME/.zshrc"
 export ZSH_DISABLE_COMPFIX=true
 export ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${HOST}-${ZSH_VERSION}"
 
-fpath=("$HOME/.zsh/completions" "$HOME/.bun" $fpath)
+# Create a local completions folder that isn't tracked by git
+COMPLETIONS_DIR="$HOME/.local/share/zsh/completions"
+mkdir -p "$COMPLETIONS_DIR"
+fpath=("$COMPLETIONS_DIR" "$HOME/.bun" $fpath)
 
 export PATH="$(brew --prefix)/opt/python/libexec/bin:$PATH"
 export XDG_CONFIG_HOME=/Users/abdellah/.config
