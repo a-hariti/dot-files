@@ -8,7 +8,7 @@ local function config()
 		local map = vim.keymap.set
 		map('n', '<C-]>', vim.lsp.buf.definition, opts)
 		map('n', '<leader>gi', vim.lsp.buf.implementation, opts)
-		map('n', '<leader>gr', telescope.lsp_references, opts)
+		map('n', 'gr', telescope.lsp_references, opts)
 		map('n', '<leader>n', vim.lsp.buf.rename, opts)
 		map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 		map('n', ']d', vim.diagnostic.goto_next, opts)

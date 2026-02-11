@@ -27,7 +27,7 @@ local function toggle_inlay_hints()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
   end
 end
-map('n', '<leader>hh', toggle_inlay_hints, { desc = 'Toggle inlay hints' })
+map('n', '<leader>h', toggle_inlay_hints, { desc = 'Toggle inlay hints' })
 
 map('n', 'Q', '<nop>')
 
