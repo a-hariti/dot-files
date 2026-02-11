@@ -22,6 +22,13 @@ local function toggle_conceal()
 end
 map('n', '<leader>cc', toggle_conceal, { desc = 'Toggle conceal' })
 
+local function toggle_inlay_hints()
+  if vim.lsp.inlay_hint then
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+  end
+end
+map('n', '<leader>hh', toggle_inlay_hints, { desc = 'Toggle inlay hints' })
+
 map('n', 'Q', '<nop>')
 
 map('n', '<leader>w', ':update<CR>')
