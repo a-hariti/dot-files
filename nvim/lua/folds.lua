@@ -26,3 +26,6 @@ vim.keymap.set('n', 'zm', function()
 
   vim.wo.foldlevel = current_fold_level - 1
 end, { desc = 'Fold more' })
+
+-- toggle fold
+vim.keymap.set('n', '<leader>z', 'za')
