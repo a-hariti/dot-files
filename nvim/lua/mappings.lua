@@ -45,8 +45,6 @@ map('n', '<M-down>', ':resize -1<CR>', { silent = true })
 map('n', '<M-left>', ':vertical resize -1<CR>', { silent = true })
 map('n', '<M-right>', ':vertical resize +1<CR>', { silent = true })
 
-map('n', '<leader>y', '"+y')
-map('v', '<leader>y', '"+y')
 map({ 'n', 'v' }, '<leader>p', '"+p')
 
 -- escape terminal mode
