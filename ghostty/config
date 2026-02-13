@@ -3,8 +3,11 @@ theme=Tokyonight
 keybind=shift+enter=text:\x1b\r
 font-size=16
 font-family=IBM Plex Mono
+
 keybind=cmd+bracket_right=next_tab
 keybind=cmd+bracket_left=previous_tab
+keybind=cmd+shift+bracket_left=move_tab:-1
+keybind=cmd+shift+bracket_right=move_tab:1
 
 window-width=100
 window-height=30
