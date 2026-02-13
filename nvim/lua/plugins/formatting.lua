@@ -1,43 +1,26 @@
 return {
-  'stevearc/conform.nvim',
+  'nvimtools/none-ls.nvim',
   event = { 'BufReadPre', 'BufNewFile' },
+  dependencies = { 'nvim-lua/plenary.nvim' },
   config = function()
-    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-    local conform = require('conform')
-    conform.setup({
-      -- format after save let's you save immediately then do the formatting
-      format_after_save = {
-        -- These options will be passed to conform.format()
-        -- timeout_ms = 500,
-        async = true,
-        lsp_fallback = false,
-      },
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        python = { 'isort', 'black' },
-        javascript = { 'prettierd' },
-        typescript = { 'prettierd' },
-        typescriptreact = { 'prettierd' },
-        javascriptreact = { 'prettierd' },
-        html = { 'prettierd' },
-        svg = { 'prettierd' },
-        css = { 'prettierd' },
-        scss = { 'prettierd' },
-        json = { 'fixjson', 'prettierd' },
-        svelte = { 'prettierd' },
-        yaml = { 'prettierd' },
-        tex = { 'latexindent' },
-        bib = { 'latexindent' },
-        -- markdown = { 'prettierd' },
-        graphql = { 'prettierd' },
-        sh = { 'shfmt' },
-        go = { 'gofmt', 'goimports' },
+    local null_ls = require('null-ls')
+    local formatting = null_ls.builtins.formatting
+
+    local function is_none_ls(client) return client.name == 'null-ls' or client.name == 'none-ls' end
+
+    null_ls.setup({
+      sources = {
+        formatting.prettierd,
+        formatting.shfmt,
+        formatting.stylua,
       },
     })
+
     vim.keymap.set(
       { 'n', 'v' },
       '<leader>s',
-      function() conform.format({ lsp_fallback = false, async = true, timeout_ms = 500 }) end
+      function() vim.lsp.buf.format({ timeout_ms = 500, filter = is_none_ls }) end,
+      { desc = 'Format buffer/selection with none-ls' }
     )
   end,
 }
