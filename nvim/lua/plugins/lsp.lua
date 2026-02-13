@@ -45,7 +45,7 @@ local function config()
 
   local mason_lspconfig = require('mason-lspconfig')
   mason_lspconfig.setup({
-    ensure_installed = { 'ts_ls', 'lua_ls' },
+    ensure_installed = { 'ts_ls', 'lua_ls', 'ty' },
     automatic_enable = false,
   })
 
@@ -61,6 +61,8 @@ local function config()
 
   vim.lsp.enable('sourcekit')
   vim.lsp.enable('clangd')
+  vim.lsp.enable('ruff')
+  vim.lsp.enable('ty')
 end
 return {
   'neovim/nvim-lspconfig',
