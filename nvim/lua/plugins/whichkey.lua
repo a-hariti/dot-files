@@ -3,7 +3,7 @@ return {
   event = 'UIEnter',
   config = function()
     require('which-key').setup({
-      delay = 500,
+      delay = 1500,
     })
   end,
 }
