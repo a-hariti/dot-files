@@ -4,10 +4,15 @@ local function config()
   -- load vsocdoe like snippets (makes friendly-snippets work)
   require('luasnip/loaders/from_vscode').lazy_load()
 
+  local window_ops = {
+    winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None',
+    scrollbar = true,
+    side_padding = 1,
+  }
   cmp.setup({
     window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
+      completion = cmp.config.window.bordered(window_ops),
+      documentation = cmp.config.window.bordered(vim.tbl_extend('force', window_ops, { col_offset = 1 })),
     },
     sorting = {
       priority_weight = 2,

@@ -34,3 +34,21 @@ vim.g.mapleader = ' '
 vim.cmd([[
   autocmd BufNewFile,BufRead *.mdx set filetype=markdown
 ]])
+
+-- Global UI overrides
+local border = 'solid'
+vim.o.winborder = border
+-- popup menus
+vim.o.pumblend = 8
+-- flaoting windows
+vim.o.winblend = 10
+
+vim.diagnostic.config({
+  virtual_text = true,
+  float = {
+    border = border,
+    source = 'if_many',
+    header = '',
+    prefix = '',
+  },
+})

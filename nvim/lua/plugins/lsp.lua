@@ -5,6 +5,11 @@ local function config()
     local ERROR = vim.diagnostic.severity.ERROR
     local map = vim.keymap.set
     map('n', '<C-]>', vim.lsp.buf.definition, opts)
+
+    local popup_opts = { border = vim.o.winborder, winblend = vim.o.winblend, max_width = 90, max_height = 25 }
+    map('n', 'K', function() vim.lsp.buf.hover(popup_opts) end, opts)
+    map('n', '<C-k>', function() vim.lsp.buf.signature_help(popup_opts) end, opts)
+
     map('n', '<leader>gi', vim.lsp.buf.implementation, opts)
     map('n', 'gr', telescope.lsp_references, opts)
     map('n', '<leader>n', vim.lsp.buf.rename, opts)
