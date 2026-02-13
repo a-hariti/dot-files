@@ -29,10 +29,6 @@ local function config()
   local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
   vim.lsp.config('*', { capabilities = cmp_capabilities })
 
-  -- sourcekit-lsp is typically provided by the local Swift/Xcode toolchain, not mason.
-  local sourcekit_cmd = vim.fn.executable('xcrun') == 1 and { 'xcrun', 'sourcekit-lsp' } or { 'sourcekit-lsp' }
-  vim.lsp.config('sourcekit', { cmd = sourcekit_cmd })
-
   vim.lsp.config(
     'texlab',
     { settings = { texlab = { latexFormatter = 'latexindent', latexindent = { modifyLineBreaks = true } } } }
@@ -57,8 +53,14 @@ local function config()
     vim.lsp.enable(server_name)
   end
 
-  vim.lsp.enable('sourcekit')
   vim.lsp.enable('tailwindcss')
+
+  -- sourcekit-lsp is typically provided by the local Swift/Xcode toolchain, not mason.
+  local sourcekit_cmd = vim.fn.executable('xcrun') == 1 and { 'xcrun', 'sourcekit-lsp' } or { 'sourcekit-lsp' }
+  vim.lsp.config('sourcekit', { cmd = sourcekit_cmd, filetypes = { 'swift' } })
+
+  vim.lsp.enable('sourcekit')
+  vim.lsp.enable('clangd')
 end
 return {
   'neovim/nvim-lspconfig',
