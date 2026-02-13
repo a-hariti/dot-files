@@ -59,6 +59,7 @@ local function config()
   local sourcekit_cmd = vim.fn.executable('xcrun') == 1 and { 'xcrun', 'sourcekit-lsp' } or { 'sourcekit-lsp' }
   vim.lsp.config('sourcekit', { cmd = sourcekit_cmd, filetypes = { 'swift' } })
 
+  vim.lsp.enable('bashls')
   vim.lsp.enable('sourcekit')
   vim.lsp.enable('clangd')
   vim.lsp.enable('ruff')
