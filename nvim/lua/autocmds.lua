@@ -6,7 +6,7 @@ vim.cmd([[
     au FileType elm setlocal foldmethod=syntax
 
     " highlight yanked range
-    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 50})
+    autocmd TextYankPost * silent! lua require'vim.hl'.on_yank({timeout = 50})
 
   augroup END
 ]])
@@ -17,6 +17,7 @@ vim.cmd([[
     "relative numbers for normal mode only
     au InsertEnter * set norelativenumber
     au InsertLeave * set relativenumber
+  augroup END
 ]])
 
 local function looks_like_jsonc(bufnr)

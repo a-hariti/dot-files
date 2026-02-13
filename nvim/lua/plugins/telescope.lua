@@ -5,7 +5,7 @@ return {
     'nvim-telescope/telescope-fzy-native.nvim',
     'onsails/lspkind.nvim',
   },
-  event = { 'BufWinEnter' },
+  event = 'VeryLazy',
   config = function()
     local telescope = require('telescope')
     local action_set = require('telescope.actions.set')

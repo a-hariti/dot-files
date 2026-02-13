@@ -1,6 +1,6 @@
 return {
   'WhoIsSethDaniel/mason-tool-installer.nvim',
-  event = { 'BufWinEnter' },
+  event = 'VeryLazy',
   dependencies = {
     'williamboman/mason.nvim',
   },
