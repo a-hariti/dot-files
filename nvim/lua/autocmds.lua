@@ -1,24 +1,33 @@
-vim.cmd([[
-  augroup vimrc
-    au!
+local vimrc_group = vim.api.nvim_create_augroup('vimrc', { clear = true })
 
-    au FileType go setlocal noexpandtab
-    au FileType elm setlocal foldmethod=syntax
+-- disable expandtab for go
+vim.api.nvim_create_autocmd(
+  'FileType',
+  { group = vimrc_group, pattern = 'go', callback = function() vim.opt_local.expandtab = false end }
+)
 
-    " highlight yanked range
-    autocmd TextYankPost * silent! lua require'vim.hl'.on_yank({timeout = 50})
+vim.api.nvim_create_autocmd(
+  'FileType',
+  { group = vimrc_group, pattern = 'elm', callback = function() vim.opt_local.foldmethod = 'syntax' end }
+)
 
-  augroup END
-]])
+-- highlight yanked text
+vim.api.nvim_create_autocmd(
+  'TextYankPost',
+  { group = vimrc_group, callback = function() vim.hl.on_yank({ timeout = 50 }) end }
+)
 
-vim.cmd([[
-  augroup InsertRelativeNumber
-    au!
-    "relative numbers for normal mode only
-    au InsertEnter * set norelativenumber
-    au InsertLeave * set relativenumber
-  augroup END
-]])
+-- relative line numbers in insert mode only
+local insert_relative_nr_group = vim.api.nvim_create_augroup('InsertRelativeNumber', { clear = true })
+local function toggle_relative_number() vim.wo.relativenumber = not vim.wo.relativenumber end
+vim.api.nvim_create_autocmd('InsertEnter', { group = insert_relative_nr_group, callback = toggle_relative_number })
+vim.api.nvim_create_autocmd('InsertLeave', { group = insert_relative_nr_group, callback = toggle_relative_number })
+
+-- highlight mdx files as markdown
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+  pattern = '*.mdx',
+  callback = function(args) vim.bo[args.buf].filetype = 'markdown' end,
+})
 
 local function looks_like_jsonc(bufnr)
   local max_lines = math.min(vim.api.nvim_buf_line_count(bufnr), 200)

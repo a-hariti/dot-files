@@ -30,11 +30,6 @@ vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.termguicolors = true
 vim.g.mapleader = ' '
 
--- highlight mdx files as markdown
-vim.cmd([[
-  autocmd BufNewFile,BufRead *.mdx set filetype=markdown
-]])
-
 -- Global UI overrides
 local border = 'solid'
 vim.o.winborder = border
