@@ -15,6 +15,9 @@ map('n', '<leader>gg', ':Git<CR>')
 local function toggle_diagnostics() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end
 map('n', '<leader>dd', toggle_diagnostics, { desc = 'Toggle diagnostics display' })
 
+local function open_line_diagnostics() vim.diagnostic.open_float(nil, { scope = 'line' }) end
+map('n', '<leader>ds', open_line_diagnostics, { desc = 'Show line diagnostics' })
+
 local function toggle_conceal() vim.o.conceallevel = vim.o.conceallevel == 0 and 2 or 0 end
 map('n', '<leader>cc', toggle_conceal, { desc = 'Toggle conceal' })
 
