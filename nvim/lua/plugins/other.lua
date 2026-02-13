@@ -5,6 +5,10 @@ return {
     vim.keymap.set('n', '<leader>o', ':Other<CR>')
     require('other-nvim').setup({
       mappings = {
+        -- C source <-> header
+        { pattern = '(.*)%.c$', target = '%1.h', context = 'source' },
+        { pattern = '(.*)%.h$', target = '%1.c', context = 'header' },
+
         -- navigate from page|layout.svelte to page|layout.server.ts
         {
           pattern = '/src/routes/(.*)/(.*).svelte$',
