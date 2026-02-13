@@ -11,9 +11,7 @@ local function is_minified_file(bufnr)
   -- is likely minified if one of the first 5 lines is longer than 1000 characters
   local first_5_lines = vim.api.nvim_buf_get_lines(bufnr, 0, 5, false)
   for _, line in ipairs(first_5_lines) do
-    if #line > 1000 then
-      return true
-    end
+    if #line > 1000 then return true end
   end
   return false
 end
@@ -57,9 +55,7 @@ local function config()
       -- `false` will disable the whole extension
       enable = true,
       -- list of language that will be disabled
-      disable = function(lang, bufnr)
-        return is_file_too_large(bufnr) or is_minified_file(bufnr)
-      end,
+      disable = function(lang, bufnr) return is_file_too_large(bufnr) or is_minified_file(bufnr) end,
     },
     indent = {
       enable = false,
@@ -175,9 +171,7 @@ return {
     'nvim-treesitter/nvim-treesitter-refactor',
     'windwp/nvim-ts-autotag',
   },
-  build = function()
-    require('nvim-treesitter.install').update({ with_sync = true })()
-  end,
+  build = function() require('nvim-treesitter.install').update({ with_sync = true })() end,
   config = config,
   event = { 'BufRead', 'BufNewFile' },
 }

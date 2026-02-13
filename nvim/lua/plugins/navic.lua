@@ -9,7 +9,5 @@ return {
     safe_output = true,
     click = true,
   },
-  config = function(_, opts)
-    require('nvim-navic').setup(opts)
-  end,
+  config = function(_, opts) require('nvim-navic').setup(opts) end,
 }

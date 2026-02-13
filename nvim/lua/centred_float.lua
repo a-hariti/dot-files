@@ -39,9 +39,7 @@ local function open(opts)
 
   -- Enforce perfectly symmetric horizontal outer padding.
   local cols = vim.o.columns
-  if (cols - w) % 2 ~= 0 then
-    w = w - 1
-  end
+  if (cols - w) % 2 ~= 0 then w = w - 1 end
   local c = (cols - w) / 2
 
   local win = vim.api.nvim_open_win(fileb, true, {

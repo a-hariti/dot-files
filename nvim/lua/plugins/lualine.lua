@@ -21,12 +21,8 @@ return {
         lualine_c = {
           { 'filename', path = 1 },
           {
-            function()
-              return require('nvim-navic').get_location()
-            end,
-            cond = function()
-              return require('nvim-navic').is_available()
-            end,
+            function() return require('nvim-navic').get_location() end,
+            cond = function() return require('nvim-navic').is_available() end,
           },
         },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },

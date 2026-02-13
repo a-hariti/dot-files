@@ -8,9 +8,7 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
   callback = function()
     -- using schedule ensures the buffer is fully attached
     -- and Treesitter is active before we poke the folds.
-    vim.schedule(function()
-      vim.opt.foldmethod = 'expr'
-    end)
+    vim.schedule(function() vim.opt.foldmethod = 'expr' end)
   end,
 })
 
@@ -20,9 +18,7 @@ vim.keymap.set('n', 'zm', function()
   local current_fold_level = vim.fn.foldlevel(cursor_line)
 
   -- If we aren't inside a fold (level 0), do nothing
-  if current_fold_level == 0 then
-    return
-  end
+  if current_fold_level == 0 then return end
 
   vim.wo.foldlevel = current_fold_level - 1
 end, { desc = 'Fold more' })

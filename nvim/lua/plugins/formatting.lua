@@ -34,8 +34,10 @@ return {
         go = { 'gofmt', 'goimports' },
       },
     })
-    vim.keymap.set({ 'n', 'v' }, '<leader>s', function()
-      conform.format({ lsp_fallback = false, async = true, timeout_ms = 500 })
-    end)
+    vim.keymap.set(
+      { 'n', 'v' },
+      '<leader>s',
+      function() conform.format({ lsp_fallback = false, async = true, timeout_ms = 500 }) end
+    )
   end,
 }
