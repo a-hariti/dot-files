@@ -60,11 +60,6 @@ local function config()
     indent = {
       enable = false,
     },
-    rainbow = {
-      enable = false,
-      -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-      extended_mode = false,
-    },
     refactor = {
       navigation = {
         enable = true,
@@ -98,9 +93,9 @@ local function config()
       },
     },
     textobjects = {
-      enable = false,
+      enable = true,
       select = {
-        enable = false,
+        enable = true,
 
         -- Automatically jump forward to textobj, similar to targets.vim
         lookahead = true,
@@ -167,7 +162,6 @@ return {
   version = 'v0.10.0',
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    -- 'p00f/nvim-ts-rainbow',
     'nvim-treesitter/nvim-treesitter-refactor',
     'windwp/nvim-ts-autotag',
   },
