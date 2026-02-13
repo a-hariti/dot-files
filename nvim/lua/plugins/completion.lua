@@ -20,12 +20,8 @@ local function config()
           local kind1 = entry1:get_kind()
           local kind2 = entry2:get_kind()
           if kind1 ~= kind2 then
-            if kind1 == 15 then
-              return false
-            end
-            if kind2 == 15 then
-              return true
-            end
+            if kind1 == 15 then return false end
+            if kind2 == 15 then return true end
           end
         end,
         cmp.config.compare.kind,
@@ -99,17 +95,12 @@ local function config()
       { name = 'cmd-line' },
     }),
     snippet = {
-      expand = function(args)
-        require('luasnip').lsp_expand(args.body)
-      end,
+      expand = function(args) require('luasnip').lsp_expand(args.body) end,
     },
-    cmp.setup.cmdline(':', {
-      sources = cmp.config.sources({
-        { name = 'path' },
-      }, { { name = 'cmdline' } }),
-    }),
-    cmp.setup.cmdline({ '/', '?' }, { sources = { { name = 'buffer' } } }),
   })
+
+  cmp.setup.cmdline(':', { sources = cmp.config.sources({ { name = 'path' } }, { { name = 'cmdline' } }) })
+  cmp.setup.cmdline({ '/', '?' }, { sources = { { name = 'buffer' } } })
 end
 return {
   'hrsh7th/nvim-cmp',

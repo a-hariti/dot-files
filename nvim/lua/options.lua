@@ -10,14 +10,11 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.shiftround = true
 vim.o.autoindent = true
-vim.o.hidden = true
 vim.o.incsearch = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
-vim.o.smartcase = true
 vim.o.hlsearch = true
 vim.o.lazyredraw = true
-vim.opt.shortmess:append('c')
 vim.o.splitbelow = true
 vim.o.splitright = true
 -- very useful for resizing splits
@@ -32,11 +29,6 @@ vim.o.spelllang = 'en,fr'
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.termguicolors = true
 vim.g.mapleader = ' '
-
--- Fix telescope preview colors
-vim.api.nvim_set_hl(0, 'TelescopePreviewNormal', { link = 'Normal' })
-vim.api.nvim_set_hl(0, 'TelescopePreviewBorder', { link = 'Normal' })
-vim.api.nvim_set_hl(0, 'FloatBorder', { link = 'Normal' })
 
 -- highlight mdx files as markdown
 vim.cmd([[

@@ -12,21 +12,13 @@ map('v', '<C-k>', ":m '<-2<CR>gv=gv")
 
 map('n', '<leader>gg', ':Git<CR>')
 
-local function toggle_diagnostics()
-  vim.diagnostic.enable(vim.diagnostic.is_enabled())
-end
+local function toggle_diagnostics() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end
 map('n', '<leader>dd', toggle_diagnostics, { desc = 'Toggle diagnostics display' })
 
-local function toggle_conceal()
-  vim.o.conceallevel = vim.o.conceallevel == 0 and 2 or 0
-end
+local function toggle_conceal() vim.o.conceallevel = vim.o.conceallevel == 0 and 2 or 0 end
 map('n', '<leader>cc', toggle_conceal, { desc = 'Toggle conceal' })
 
-local function toggle_inlay_hints()
-  if vim.lsp.inlay_hint then
-    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-  end
-end
+local function toggle_inlay_hints() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end
 map('n', '<leader>h', toggle_inlay_hints, { desc = 'Toggle inlay hints' })
 
 map('n', 'Q', '<nop>')

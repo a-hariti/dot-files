@@ -1,7 +1,6 @@
 return {
   'nvim-telescope/telescope.nvim',
   dependencies = {
-    'nvim-lua/popup.nvim',
     'nvim-lua/plenary.nvim',
     'nvim-telescope/telescope-fzy-native.nvim',
     'onsails/lspkind.nvim',
@@ -32,9 +31,7 @@ return {
 
       return function(entry)
         local e = original_maker(entry)
-        if not e then
-          return e
-        end
+        if not e then return e end
 
         local icon = lspkind.symbolic(e.symbol_type, { mode = 'symbol' })
         local symbol_name = (icon or '') .. ' ' .. e.symbol_name
@@ -107,9 +104,7 @@ return {
         find_files = {
           attach_mappings = function()
             action_set.select:enhance({
-              post = function()
-                vim.cmd(':normal! zx')
-              end,
+              post = function() vim.cmd(':normal! zx') end,
             })
             return true
           end,
@@ -122,9 +117,7 @@ return {
     local builtins = require('telescope.builtin')
 
     -- Primary shortcuts
-    local find_files = function()
-      builtins.find_files({ find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } })
-    end
+    local find_files = function() builtins.find_files({ find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } }) end
     map('n', '<D-p>', find_files)
     map('n', '<leader>ff', find_files)
     map('n', 'g/', builtins.live_grep)
@@ -140,9 +133,7 @@ return {
       str = vim.fn.escape(str, '\\^$.*+?()[]{}|')
       builtins.live_grep({ default_text = str })
     end)
-    map('n', '<leader>fw', function()
-      builtins.live_grep({ default_text = vim.fn.expand('<cword>') })
-    end)
+    map('n', '<leader>fw', function() builtins.live_grep({ default_text = vim.fn.expand('<cword>') }) end)
     map('n', '<leader>b', builtins.buffers)
     map('n', '<leader>tt', builtins.builtin)
   end,
