@@ -6,6 +6,7 @@ local TERMINAL_BUNDLE_IDS = {
   'org.alacritty',
   'com.apple.Terminal',
 }
+local TMUX_TITLE_MARKER = utf8.char(0x2800) -- U+2800 Braille Pattern Blank
 
 local KEYMAPS = {
   { combo = 'cmd+t', tmux = 'c' },
@@ -53,7 +54,7 @@ local function in_terminal_tmux()
 
   -- Window title conventions vary by terminal (Ghostty in particular), so just look for the marker anywhere.
   local title = window_title_for_app(app)
-  return title:find('[tmux]', 1, true) ~= nil
+  return title:find(TMUX_TITLE_MARKER, 1, true) ~= nil
 end
 
 local function tmux_prefix_then(mods, key)
