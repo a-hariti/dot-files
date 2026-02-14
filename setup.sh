@@ -47,6 +47,10 @@ stow --target ~/.config/zed zed
 ensure_dir ~/.config/presenterm
 stow --target ~/.config/presenterm presenterm
 
+# Hammerspoon (stow into ~/.hammerspoon)
+ensure_dir ~/.hammerspoon
+stow --restow --target ~/.hammerspoon hammerspoon
+
 # macOS specific setup
 if [[ "$(uname -s)" = "Darwin" ]]; then
     # remap keyboard keys
