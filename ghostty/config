@@ -10,40 +10,6 @@ window-height=30
 # denser tab bar layout
 macos-titlebar-style=tabs
 
-# Tmux keybinds to make it macOS like
-#		this maps cmd+<key> to my Tmux keybinds
-#		prefix here means prefix 2 from tmux conf
-#		tip: use xxd -psd to get the codex for keybinds
-# <perfix>+c (new window)
-keybind=cmd+t=text:\x02\x63
-keybind=cmd+shift+t=new_tab
-# <perfix>+x (close window)
-keybind=cmd+x=text:\x02\x78
-# cmd+j for a horizontal split (prefix -)
-keybind=cmd+j=text:\x02\x2d
-# cmd+l for a vertical split (prefix |)
-keybind=cmd+l=text:\x02\x7c
-# send secondary prefix n (next window)
-keybind=cmd+bracket_right=text:\x02\x6e
-# send secondary prefix p (previous window)
-keybind=cmd+bracket_left=text:\x02\x70
-# send secondary prefix H (move window left)
-keybind=cmd+shift+bracket_left=text:\x02\x48
-# send secondary prefix L (move window right)
-keybind=cmd+shift+bracket_right=text:\x02\x4c
-# cmd z to zoom pane
-keybind=cmd+z=text:\x02\x7a
-
-# cmd + p to send Meta+p to tmux -> nvim
-keybind=cmd+p=text:\x1b\x70
-
-# cmd + N to send prefix n (1-9) for tmux window navigation
-keybind=cmd+physical:one=text:\x02\x31
-keybind=cmd+physical:two=text:\x02\x32
-keybind=cmd+physical:three=text:\x02\x33
-keybind=cmd+physical:four=text:\x02\x34
-keybind=cmd+physical:five=text:\x02\x35
-keybind=cmd+physical:six=text:\x02\x36
-keybind=cmd+physical:seven=text:\x02\x37
-keybind=cmd+physical:eight=text:\x02\x38
-keybind=cmd+physical:nine=text:\x02\x39
+# Tmux keybinds are handled dynamically in Hammerspoon.
+# cmd+t is taken by hammerspoon for new tmux window
+keybind=cmd+shift+n=new_tab
