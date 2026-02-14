@@ -2,8 +2,8 @@
 local TERMINAL_BUNDLE_IDS = {
   'com.mitchellh.ghostty',
   'com.github.wez.wezterm',
-  'org.alacritty',
   'com.googlecode.iterm2',
+  'org.alacritty',
   'com.apple.Terminal',
 }
 
@@ -25,11 +25,23 @@ for n = 1, 9 do
   table.insert(KEYMAPS, { combo = 'cmd+' .. tostring(n), tmux = tostring(n) })
 end
 
+-- Customize if your tmux prefix differs from the default Ctrl-b.
+local TMUX_PREFIX = { mods = { 'ctrl' }, key = 'b' }
+
 local function contains(list, value)
   for _, item in ipairs(list) do
     if item == value then return true end
   end
   return false
+end
+
+local function window_title_for_app(app)
+  local win = app:focusedWindow() or hs.window.focusedWindow()
+  if not win then return '' end
+  local wapp = win:application()
+  if not wapp then return '' end
+  if (wapp:bundleID() or '') ~= (app:bundleID() or '') then return '' end
+  return win:title() or ''
 end
 
 local function in_terminal_tmux()
@@ -39,24 +51,26 @@ local function in_terminal_tmux()
   local bundle_id = app:bundleID() or ''
   if not contains(TERMINAL_BUNDLE_IDS, bundle_id) then return false end
 
-  -- get the title of the focused window check for [tmux] marker in the title
-  local ax_app = hs.axuielement.applicationElement(app)
-  if not ax_app then return false end
-  local ax_win = ax_app:attributeValue('AXFocusedWindow') or ax_app:attributeValue('AXMainWindow')
-  if not ax_win then return false end
-  local title = ax_win:attributeValue('AXTitle') or ''
-  return title:match('^%[tmux%] ') ~= nil
+  -- Window title conventions vary by terminal (Ghostty in particular), so just look for the marker anywhere.
+  local title = window_title_for_app(app)
+  return title:find('[tmux]', 1, true) ~= nil
 end
 
 local function tmux_prefix_then(mods, key)
-  hs.eventtap.keyStroke({ 'ctrl' }, 'b', 0)
+  hs.eventtap.keyStroke(TMUX_PREFIX.mods, TMUX_PREFIX.key, 0)
   hs.eventtap.keyStroke(mods, key, 0)
 end
 
 local function flags_match(actual, required)
+  -- Match required modifiers exactly, and reject "extra" modifiers to avoid unexpected captures.
   if (actual.cmd or false) ~= (required.cmd or false) then return false end
   if (actual.shift or false) ~= (required.shift or false) then return false end
-  if actual.ctrl or actual.alt then return false end
+  if actual.ctrl or actual.alt or actual.fn then return false end
+
+  for name, pressed in pairs(actual) do
+    if pressed and name ~= 'cmd' and name ~= 'shift' and name ~= 'capslock' then return false end
+  end
+
   return true
 end
 
