@@ -14,7 +14,11 @@ return {
       '<cmd>NvimTreeFindFile<CR>',
       { desc = 'Toggle file explorer and focus current file' }
     )
-    keymap.set({ 'n', 'v' }, '<D-b>', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle file explorer' })
+		-- Meta is sent from the terminal to make it this valid insde Tmux as well
+		-- D comes from unconfigured terminals
+    for _, k in ipairs({ '<D-B>', '<M-b>' }) do
+      keymap.set({ 'n', 'v' }, k, '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle file explorer' })
+    end
     keymap.set('n', '<leader>r', '<cmd>NvimTreeRefresh<CR>')
   end,
 }

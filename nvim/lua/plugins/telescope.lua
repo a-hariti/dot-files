@@ -118,7 +118,11 @@ return {
 
     -- Primary shortcuts
     local find_files = function() builtins.find_files({ find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } }) end
-    map('n', '<D-p>', find_files)
+    -- Meta is sent from the terminal to make it this valid insde Tmux as well
+    -- D comes from unconfigured terminals
+    for _, k in ipairs({ '<D-p>', '<M-p>' }) do
+      map('n', k, find_files)
+    end
     map('n', '<leader>ff', find_files)
     map('n', 'g/', builtins.live_grep)
     map('n', 'gs', builtins.lsp_document_symbols, { noremap = true })
