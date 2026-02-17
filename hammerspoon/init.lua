@@ -117,24 +117,31 @@ for _, entry in ipairs(KEYMAPS) do
   end
 end
 
-local tap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
-  local keycode = event:getKeyCode()
-  local flags = event:getFlags()
-  local candidates = bindings_by_keycode[keycode]
+_G.keytaps = _G.keytaps or {}
+-- Stop any existing main keytap
+if _G.keytaps.main then
+  _G.keytaps.main:stop()
+  _G.keytaps.main = nil
+end
 
-  if not candidates then return false end
+_G.keytaps.main = hs.eventtap
+  .new({ hs.eventtap.event.types.keyDown }, function(event)
+    local keycode = event:getKeyCode()
+    local flags = event:getFlags()
+    local candidates = bindings_by_keycode[keycode]
 
-  for _, b in ipairs(candidates) do
-    if flags_match(flags, b.flags) then
-      if in_terminal_tmux() then
-        b.action()
-        return true
+    if not candidates then return false end
+
+    for _, b in ipairs(candidates) do
+      if flags_match(flags, b.flags) then
+        if in_terminal_tmux() then
+          b.action()
+          return true
+        end
+        return false
       end
-      return false
     end
-  end
 
-  return false
-end)
-
-tap:start()
+    return false
+  end)
+  :start()
