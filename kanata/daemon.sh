@@ -1,0 +1,371 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# VirtualHID daemon (system domain)
+VHID_LABEL="com.local.karabiner-vhid-daemon"
+VHID_PLIST_PATH="/Library/LaunchDaemons/${VHID_LABEL}.plist"
+VHID_BIN_DEFAULT="/Library/Application Support/org.pqrs/Karabiner-DriverKit-VirtualHIDDevice/Applications/Karabiner-VirtualHIDDevice-Daemon.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Daemon"
+
+# Kanata daemon (user GUI domain; started via sudo -n)
+KANATA_LABEL="com.local.kanata"
+KANATA_PLIST_PATH="${HOME}/Library/LaunchAgents/${KANATA_LABEL}.plist"
+KANATA_BIN_DEFAULT="$(command -v kanata || true)"
+KANATA_LOG_DEFAULT="/tmp/${KANATA_LABEL}.log"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KANATA_CFG_DEFAULT_REPO="${SCRIPT_DIR}/kanata.kbd"
+KANATA_CFG_DEFAULT_HOME="${HOME}/.config/kanata/kanata.kbd"
+KANATA_SUDOERS_PATH="/private/etc/sudoers.d/kanata"
+
+usage() {
+  cat <<'EOF'
+Usage: ./kanata/daemon.sh <command>
+
+Commands:
+  install           Install/start VirtualHID (system) + Kanata (login agent)
+  start             Start both jobs
+  stop              Stop both jobs
+  restart           Restart both jobs
+  status            Show status for both jobs
+  logs              Follow merged kanata log
+  uninstall         Stop/remove both jobs
+
+  install-sudoers   Install hash-pinned sudoers rule for kanata binary
+  uninstall-sudoers Remove sudoers rule
+  show-sudoers      Print expected sudoers line
+
+Environment overrides:
+  KANATA_BIN        Path to kanata binary
+  KANATA_CFG        Path to kanata.kbd
+  KANATA_LOG        kanata merged stdout/stderr log path
+  VHID_BIN          Path to VirtualHID daemon binary
+EOF
+}
+
+gui_uid() {
+  if [[ -n "${SUDO_USER:-}" ]]; then
+    id -u "${SUDO_USER}"
+  else
+    id -u
+  fi
+}
+
+detect_cfg() {
+  if [[ -n "${KANATA_CFG:-}" ]]; then
+    printf '%s\n' "$KANATA_CFG"
+    return
+  fi
+  if [[ -f "$KANATA_CFG_DEFAULT_REPO" ]]; then
+    printf '%s\n' "$KANATA_CFG_DEFAULT_REPO"
+    return
+  fi
+  if [[ -f "$KANATA_CFG_DEFAULT_HOME" ]]; then
+    printf '%s\n' "$KANATA_CFG_DEFAULT_HOME"
+    return
+  fi
+  printf '%s\n' "$KANATA_CFG_DEFAULT_REPO"
+}
+
+render_vhid_plist() {
+  local vhid_bin="$1"
+
+  cat <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>${VHID_LABEL}</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>${vhid_bin}</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+
+  <key>Umask</key>
+  <integer>18</integer>
+</dict>
+</plist>
+EOF
+}
+
+render_kanata_plist() {
+  local kanata_bin="$1"
+  local kanata_cfg="$2"
+  local log_file="$3"
+
+  cat <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>${KANATA_LABEL}</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/sudo</string>
+    <string>-n</string>
+    <string>${kanata_bin}</string>
+    <string>--no-wait</string>
+    <string>--nodelay</string>
+    <string>--cfg</string>
+    <string>${kanata_cfg}</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>LimitLoadToSessionType</key>
+  <string>Aqua</string>
+
+  <key>ProcessType</key>
+  <string>Interactive</string>
+
+  <key>ThrottleInterval</key>
+  <integer>10</integer>
+
+  <key>Umask</key>
+  <integer>18</integer>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>${log_file}</string>
+  <key>StandardErrorPath</key>
+  <string>${log_file}</string>
+</dict>
+</plist>
+EOF
+}
+
+bootout_vhid() {
+  sudo launchctl bootout system/"${VHID_LABEL}" >/dev/null 2>&1 || true
+}
+
+bootout_kanata() {
+  local uid
+  uid="$(gui_uid)"
+  launchctl bootout "gui/${uid}/${KANATA_LABEL}" >/dev/null 2>&1 || true
+}
+
+start_vhid() {
+  sudo launchctl enable system/"${VHID_LABEL}" >/dev/null 2>&1 || true
+  sudo launchctl bootstrap system "${VHID_PLIST_PATH}" >/dev/null 2>&1 || true
+  sudo launchctl kickstart -k system/"${VHID_LABEL}"
+}
+
+start_kanata() {
+  local uid
+  uid="$(gui_uid)"
+  launchctl enable "gui/${uid}/${KANATA_LABEL}" >/dev/null 2>&1 || true
+  launchctl bootstrap "gui/${uid}" "${KANATA_PLIST_PATH}" >/dev/null 2>&1 || true
+  launchctl kickstart -k "gui/${uid}/${KANATA_LABEL}"
+}
+
+install_daemon() {
+  local kanata_bin="${KANATA_BIN:-$KANATA_BIN_DEFAULT}"
+  local kanata_cfg kanata_log
+  kanata_cfg="$(detect_cfg)"
+  kanata_log="${KANATA_LOG:-$KANATA_LOG_DEFAULT}"
+  local vhid_bin="${VHID_BIN:-$VHID_BIN_DEFAULT}"
+
+  if [[ -z "$kanata_bin" || ! -x "$kanata_bin" ]]; then
+    echo "kanata binary not executable: ${kanata_bin}" >&2
+    exit 1
+  fi
+  if [[ ! -f "$kanata_cfg" ]]; then
+    echo "kanata config not found: ${kanata_cfg}" >&2
+    exit 1
+  fi
+  if [[ ! -x "$vhid_bin" ]]; then
+    echo "VirtualHID daemon binary not executable: ${vhid_bin}" >&2
+    exit 1
+  fi
+
+  mkdir -p "${HOME}/Library/LaunchAgents"
+
+  local tmp_vhid tmp_kanata
+  tmp_vhid="$(mktemp /tmp/${VHID_LABEL}.XXXXXX)"
+  tmp_kanata="$(mktemp /tmp/${KANATA_LABEL}.XXXXXX)"
+  trap '[[ -n "${tmp_vhid:-}" ]] && rm -f "$tmp_vhid"; [[ -n "${tmp_kanata:-}" ]] && rm -f "$tmp_kanata"' EXIT
+
+  render_vhid_plist "$vhid_bin" >"$tmp_vhid"
+  render_kanata_plist "$kanata_bin" "$kanata_cfg" "$kanata_log" >"$tmp_kanata"
+
+  sudo install -o root -g wheel -m 644 "$tmp_vhid" "$VHID_PLIST_PATH"
+  install -m 644 "$tmp_kanata" "$KANATA_PLIST_PATH"
+  sudo rm -f "/tmp/${VHID_LABEL}.out.log" "/tmp/${VHID_LABEL}.err.log" >/dev/null 2>&1 || true
+
+  # Clean up old system-domain kanata job from previous setup, if present.
+  sudo launchctl bootout system/"${KANATA_LABEL}" >/dev/null 2>&1 || true
+  sudo rm -f "/Library/LaunchDaemons/${KANATA_LABEL}.plist" >/dev/null 2>&1 || true
+
+  bootout_kanata
+  bootout_vhid
+  start_vhid
+  start_kanata
+
+  echo "Installed and started:"
+  echo "  system/${VHID_LABEL}"
+  echo "  gui/$(gui_uid)/${KANATA_LABEL}"
+  echo "Config: $kanata_cfg"
+  echo "Log: $kanata_log"
+  echo
+  echo "If kanata fails with 'sudo: a password is required', run:"
+  echo "  ./kanata/daemon.sh install-sudoers"
+
+  rm -f "$tmp_vhid" "$tmp_kanata"
+  trap - EXIT
+}
+
+start_daemon() {
+  if [[ ! -f "$VHID_PLIST_PATH" || ! -f "$KANATA_PLIST_PATH" ]]; then
+    echo "Missing plist(s). Run install first." >&2
+    exit 1
+  fi
+  echo "Starting VirtualHID + Kanata (this may take a few seconds)..."
+  start_vhid
+  start_kanata
+  echo "Started:"
+  echo "  system/${VHID_LABEL}"
+  echo "  gui/$(gui_uid)/${KANATA_LABEL}"
+}
+
+stop_daemon() {
+  bootout_kanata
+  bootout_vhid
+  echo "Stopped VirtualHID + Kanata."
+}
+
+restart_daemon() {
+  if [[ ! -f "$VHID_PLIST_PATH" || ! -f "$KANATA_PLIST_PATH" ]]; then
+    echo "Missing plist(s). Run install first." >&2
+    exit 1
+  fi
+  echo "Restarting VirtualHID + Kanata (this may take a few seconds)..."
+  bootout_kanata
+  bootout_vhid
+  start_vhid
+  start_kanata
+  echo "Restarted:"
+  echo "  system/${VHID_LABEL}"
+  echo "  gui/$(gui_uid)/${KANATA_LABEL}"
+}
+
+status_daemon() {
+  local uid
+  uid="$(gui_uid)"
+  echo "== system/${VHID_LABEL} =="
+  if sudo -n true >/dev/null 2>&1; then
+    sudo launchctl print system/"${VHID_LABEL}" 2>&1 || true
+  else
+    echo "(sudo required for system-domain status)"
+  fi
+  echo
+  echo "== gui/${uid}/${KANATA_LABEL} =="
+  launchctl print "gui/${uid}/${KANATA_LABEL}" 2>&1 || true
+}
+
+logs_daemon() {
+  local kanata_log="${KANATA_LOG:-$KANATA_LOG_DEFAULT}"
+  touch "$kanata_log"
+  echo "Following ${kanata_log} (Ctrl+C to stop)"
+  tail -n 120 -f "$kanata_log"
+}
+
+uninstall_daemon() {
+  stop_daemon
+  sudo launchctl disable system/"${VHID_LABEL}" >/dev/null 2>&1 || true
+  local uid
+  uid="$(gui_uid)"
+  launchctl disable "gui/${uid}/${KANATA_LABEL}" >/dev/null 2>&1 || true
+  sudo rm -f "$VHID_PLIST_PATH"
+  rm -f "$KANATA_PLIST_PATH"
+  echo "Removed:"
+  echo "  $VHID_PLIST_PATH"
+  echo "  $KANATA_PLIST_PATH"
+}
+
+sudoers_line() {
+  local kanata_bin="${KANATA_BIN:-$KANATA_BIN_DEFAULT}"
+  if [[ -z "$kanata_bin" || ! -x "$kanata_bin" ]]; then
+    echo "kanata binary not executable: ${kanata_bin}" >&2
+    exit 1
+  fi
+  local hash
+  hash="$(shasum -a 256 "$kanata_bin" | awk '{print $1}')"
+  printf '%s ALL=(root) NOPASSWD:SETENV: sha256:%s %s\n' "$(id -un)" "$hash" "$kanata_bin"
+}
+
+install_sudoers() {
+  local tmp
+  tmp="$(mktemp /tmp/kanata.sudoers.XXXXXX)"
+  trap '[[ -n "${tmp:-}" ]] && rm -f "$tmp"' EXIT
+  sudoers_line >"$tmp"
+  sudo install -o root -g wheel -m 440 "$tmp" "$KANATA_SUDOERS_PATH"
+  sudo visudo -cf "$KANATA_SUDOERS_PATH"
+  echo "Installed $KANATA_SUDOERS_PATH"
+  echo "Re-run after kanata upgrades (hash changes)."
+  rm -f "$tmp"
+  trap - EXIT
+}
+
+uninstall_sudoers() {
+  sudo rm -f "$KANATA_SUDOERS_PATH"
+  echo "Removed $KANATA_SUDOERS_PATH"
+}
+
+cmd="${1:-}"
+case "$cmd" in
+install)
+  install_daemon
+  ;;
+start)
+  start_daemon
+  ;;
+stop)
+  stop_daemon
+  ;;
+restart)
+  restart_daemon
+  ;;
+status)
+  status_daemon
+  ;;
+logs)
+  logs_daemon
+  ;;
+uninstall)
+  uninstall_daemon
+  ;;
+install-sudoers)
+  install_sudoers
+  ;;
+uninstall-sudoers)
+  uninstall_sudoers
+  ;;
+show-sudoers)
+  sudoers_line
+  ;;
+*)
+  usage
+  exit 1
+  ;;
+esac

@@ -27,6 +27,11 @@ ensure_dir ~/.config
 ensure_dir ~/.config/alacritty
 stow --target ~/.config/alacritty alacritty
 
+# kanata
+ensure_dir ~/.config/kanata
+stow --target ~/.config/kanata kanata
+
+
 # Ghostty (stow into .config/ghostty)
 ensure_dir ~/.config/ghostty
 stow --target ~/.config/ghostty ghostty
@@ -38,6 +43,8 @@ stow --target ~/.config/nvim nvim
 # local tools (symlink into ~/.local/bin)
 ensure_dir ~/.local/bin
 stow --target ~/.local/bin tools
+ln -sf "$HOME/.config/kanata/daemon.sh" "$HOME/.local/bin/kbd"
+ln -sf "$HOME/.config/kanata/daemon.sh" "$HOME/.local/bin/kanata-manager"
 
 # Zed (stow into .config/zed)
 ensure_dir ~/.config/zed
