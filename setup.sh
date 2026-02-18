@@ -53,9 +53,6 @@ stow --restow --target ~/.hammerspoon hammerspoon
 
 # macOS specific setup
 if [[ "$(uname -s)" = "Darwin" ]]; then
-    # remap keyboard keys
-    stow mac-mappings --target ~/Library/LaunchAgents
-
     # Rectangle configuration
     if [[ -d "/Applications/Rectangle.app" ]]; then
         RECTANGLE_DIR="$HOME/Library/Application Support/Rectangle"
