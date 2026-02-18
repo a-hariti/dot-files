@@ -1,43 +1,84 @@
-;; vim: ft=lisp
+;; config guide: https://jtroo.github.io/config.html
+;; every key name is defined here: https://github.com/jtroo/kanata/blob/main/parser/src/keys/mod.rs#L172
+
 ;; defsrc is still necessary
 (defcfg
   process-unmapped-keys yes
 )
 
-(defsrc
-  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10   f11   f12
-  caps a s d f j k l ;
-  left down up rght
-  fn
-)
 (defvar
-  tap-time 100
-  hold-time 150
+	;; time used for mod repeats as normal keys (eg. tap then immediatelly hold a for aaaaaa)
+  tap-time 150
+	;; time for a key to be considered held
+  hold-time 180
 )
 
 (defalias
-  escctrl (tap-hold 100 100 esc lctl)
   a (tap-hold $tap-time $hold-time a lsft)
-  s (tap-hold $tap-time $hold-time s lctl)
-  d (tap-hold $tap-time $hold-time d lalt)
+  s (tap-hold $tap-time $hold-time s lalt)
+  d (tap-hold $tap-time $hold-time d lctl)
   f (tap-hold $tap-time $hold-time f lmet)
   j (tap-hold $tap-time $hold-time j rmet)
   k (tap-hold $tap-time $hold-time k rctl)
   l (tap-hold $tap-time $hold-time l ralt)
   ; (tap-hold $tap-time $hold-time ; rsft)
-  fnl (tap-hold 200 200 fn (layer-toggle fn))
+	nav (tap-hold $tap-time $hold-time g (layer-while-held gui-nav))
+  fnl (tap-hold 200 200 fn (layer-while-held fn))
 )
+
+;; every layer will map to this (in this order)
+(defsrc
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10   f11   f12
+  `    1    2    3    4    5    6    7    8    9    0     -     =     ⌫
+  tab  q    w    e    r    t    y    u    i    o    p     [     ]     \
+  caps a    s    d    f    g    h    j    k    l    ;     '           enter
+  lsft z    x    c    v    b    n    m    ,    .    /                 rsft
+  fn   lctl lalt lmet      spc  		 rmet ralt rctl
+																										←   ↓   ↑   →
+)
+
+;; base layer is "normal" mac keyboard with:
+;;   - swap esc/caps
+;;   - home row mods
+;;   - trigger for gui navigation layer
+;;   - trigger for fn layer,
+;;	 - normal modifiers are no op to force myself to learn new keys
 
 (deflayer base
-  brdn  brup  mctl sls  dtn  dnd prev  pp  next  mute  vold  volu
-  @escctrl @a @s @d @f @j @k @l @;
-  left down up rght
-  @fnl
+  caps  brdn  brup  mctl  sls  dtn  dnd  prev  pp  next  mute  vold  volu
+  `     1     2     3     4    5    6    7     8   9     0     -     =      ⌫
+  tab   q     w     e     r    t    y    u     i   o     p     [     ]      \
+  esc   @a    @s    @d    @f   @nav h    @j    @k  @l    @;    '     enter
+  lsft  z     x     c     v    b    n    m     ,   .     /     rsft
+  @fnl  XX    XX    XX         spc  		 XX    XX  XX
+  ;; @fnl  lctl  lalt  lmet       spc  		 rmet  ralt  rctl
+																										←   ↓   ↑   →
 )
 
+;; make fn key work as expected on mac keyboard
 (deflayer fn
-  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10   f11   f12
-  @escctrl _ _ _ _ _ _ _ _
-  home pgdn pgup end
-  fn
+	_    f1  f2  f3  f4  f5  f6  f7  f8  f9  f10  f11  f12
+	_    _   _   _   _   _   _   _   _   _   _    _    _    _
+	_    _   _   _   _   _   _   _   _   _   _    _    _    _
+	_    _   _   _   _   _   _   _   _   _   _    _    _
+	_    _   _   _   _   _   _   _   _   _   _    _
+	fn   _   _   _   _   _   _   _
+                                        home pgdn pgup end
 )
+
+;; navigate anywhere with hjkl + home/end/pgup/pgdn by holding g
+;; hold g + ; live reload of katana config: https://jtroo.github.io/config.html#live-reload
+(deflayermap (gui-nav)
+  h left
+  j down
+  k up
+  l right
+  n pgdn
+  m pgup
+  , home
+  . end
+  ; lrld
+  )
+
+;; (not really scheme, but gives us syntax highlighting)
+;; vim: ft=scheme
