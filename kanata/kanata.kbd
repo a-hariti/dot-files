@@ -29,7 +29,7 @@
   ; (tap-hold $tap-time $hold-time ; rsft)
 
 	nav  (tap-hold $tap-time $hold-time g (layer-while-held gui-nav))
-	alts (tap-hold $tap-time $hold-time s (layer-while-held alts-layer))
+  alts (tap-hold $tap-time $hold-time s (multi lalt (layer-while-held alts-layer)))
   fnl  (tap-hold 200 200 fn (layer-while-held fn))
 )
 
@@ -89,9 +89,9 @@
 
 ;; custom backspace + replacement / redundancy for ` and ~
 (deflayermap (alts-layer)
-	; bspc
+	;; ; behaves like simple bspc, and like alt + bspc when shifted
+	; (fork (unmod (lalt ralt) bspc) (unmod (lsft rsft) bspc) (lsft rsft))' `
 	;; ' becomes grave (` and ~ with shift)
-	' `
 )
 
 ;; (not really scheme, but gives us syntax highlighting)
