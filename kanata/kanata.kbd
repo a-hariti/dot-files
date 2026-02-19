@@ -79,13 +79,13 @@
 ;; navigate anywhere with hjkl + home/end/pgup/pgdn by holding g
 ;; hold g + u ("update") to live reload katana config: https://jtroo.github.io/config.html#live-reload
 (deflayermap (gui-nav)
-  u lrld ; bspc
+                           u lrld ; bspc
 
-       k ↑
-  h ←      l →
-       j ↓
+                               k ↑
+  a @a s @s d @d f @f     h ←       l →
+                               j ↓
 
-  n pgdn  m pgup  , home  . end
+                          n pgdn  m pgup  , home  . end
 )
 
 ;; custom backspace + replacement / redundancy for ` and ~
