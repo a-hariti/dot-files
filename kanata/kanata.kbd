@@ -4,7 +4,7 @@
 ;; defsrc is still necessary
 (defcfg
   process-unmapped-keys yes
-  concurrent-tap-hold yes
+  concurrent-tap-hold no
   macos-dev-names-include (
     "Apple Internal Keyboard / Trackpad"
     "61Keyboard"
@@ -19,18 +19,12 @@
 )
 
 (defalias
-  a (tap-hold-release-keys $tap-time $hold-time a lalt (spc))
-  s (tap-hold $tap-time $hold-time s lsft)
   d (tap-hold-release-keys $tap-time $hold-time d lctl (spc))
   f (tap-hold-release-keys $tap-time $hold-time f lmet (spc))
-
   j (tap-hold-release-keys $tap-time $hold-time j rmet (spc))
   k (tap-hold-release-keys $tap-time $hold-time k rctl (spc))
-  l (tap-hold-release-keys $tap-time $hold-time l rsft  (spc))
-  ; (tap-hold-release-keys $tap-time $hold-time ; ralt (spc))
 
 	nav  (tap-hold $tap-time $hold-time g (layer-while-held gui-nav))
-  alts (tap-hold-release-keys $tap-time $hold-time a (multi lalt (layer-while-held alts-layer)) (spc))
   fnl  (tap-hold 200 200 fn (layer-while-held fn))
 )
 
@@ -39,8 +33,8 @@
   esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10   f11   f12
   `    1    2    3    4    5    6    7    8    9    0     -     =     ⌫
   tab  q    w    e    r    t    y    u    i    o    p     [     ]     \
-  caps a    s    d    f    g    h    j    k    l    ;     '           enter
-  lsft z    x    c    v    b    n    m    ,    .    /                 rsft
+  caps a    s    d    f    g    h    j    k    l    ;     '       enter
+  lsft z    x    c    v    b    n    m    ,    .    /              rsft
   fn   lctl lalt lmet      spc  		 rmet ralt rctl
 																										←   ↓   ↑   →
 )
@@ -56,13 +50,11 @@
   caps  brdn  brup  mctl  sls  dtn  dnd  prev  pp  next  mute  vold  volu
   `     1     2     3     4    5    6    7     8   9     0     -     =      ⌫
   tab   q     w     e     r    t    y    u     i   o     p     [     ]      \
-  esc   @alts @s    @d    @f   @nav h    @j    @k  @l    @;    '     enter
-  lsft  z     x     c     v    b    n    m     ,   .     /     rsft
-  @fnl  XX    XX    XX         spc  		 XX    XX  XX
-  ;; @fnl  lctl  lalt  lmet       spc  		 rmet  ralt  rctl
+  esc   a     s     @d    @f   @nav h    @j    @k  l     ;     '        enter
+  lsft  z     x     c     v    b    n    m     ,   .     /               rsft
+  @fnl  lctl  lalt  lmet       spc  		 rmet  ralt  rctl
 																										←   ↓   ↑   →
 )
-
 
 ;; make fn key work as expected on mac keyboard
 (deflayer fn
@@ -78,23 +70,13 @@
 ;; navigate anywhere with hjkl + home/end/pgup/pgdn by holding g
 ;; hold g + u ("update") to live reload katana config: https://jtroo.github.io/config.html#live-reload
 (deflayermap (gui-nav)
-                           u lrld ; bspc
+                               u lrld
 
-                               k ↑
-  a @a s @s d @d f @f     h ←       l →
-                               j ↓
+                                 k ↑
+ a lsft s lalt d @d f @f    h ←       l →  ; bspc ' grave
+                                 j ↓
 
                           n pgdn  m pgup  , home  . end
-)
-
-;; custom backspace + replacement / redundancy for ` and ~
-(deflayermap (alts-layer)
-	;; here ; behaves like simple bspc, and like alt + bspc when shifted
-	; (fork (unmod (lalt ralt) bspc) (unmod (lsft rsft) bspc) (lsft rsft))
-
-	;; ' becomes grave (` and ~ with shift)
-	;; unmode removes the alt from the key so that it can trigger ~
-	' (unmod (lalt ralt) grave)
 )
 
 ;; (not really scheme, but gives us syntax highlighting)
