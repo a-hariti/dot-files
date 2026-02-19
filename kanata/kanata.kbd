@@ -19,18 +19,18 @@
 )
 
 (defalias
-  a (tap-hold-release-keys $tap-time $hold-time a lsft (spc))
-  s (tap-hold $tap-time $hold-time s lalt)
+  a (tap-hold-release-keys $tap-time $hold-time a lalt (spc))
+  s (tap-hold $tap-time $hold-time s lsft)
   d (tap-hold-release-keys $tap-time $hold-time d lctl (spc))
   f (tap-hold-release-keys $tap-time $hold-time f lmet (spc))
 
   j (tap-hold-release-keys $tap-time $hold-time j rmet (spc))
   k (tap-hold-release-keys $tap-time $hold-time k rctl (spc))
-  l (tap-hold-release-keys $tap-time $hold-time l ralt (spc))
-  ; (tap-hold-release-keys $tap-time $hold-time ; rsft (spc))
+  l (tap-hold-release-keys $tap-time $hold-time l rsft  (spc))
+  ; (tap-hold-release-keys $tap-time $hold-time ; ralt (spc))
 
 	nav  (tap-hold $tap-time $hold-time g (layer-while-held gui-nav))
-  alts (tap-hold-release-keys $tap-time $hold-time s (multi lalt (layer-while-held alts-layer)) (spc))
+  alts (tap-hold-release-keys $tap-time $hold-time a (multi lalt (layer-while-held alts-layer)) (spc))
   fnl  (tap-hold 200 200 fn (layer-while-held fn))
 )
 
@@ -52,12 +52,11 @@
 ;;   - trigger for fn layer,
 ;;	 - trigger for alted layer
 ;;	 - normal modifiers are no op to force myself to learn new keys
-
 (deflayer base
   caps  brdn  brup  mctl  sls  dtn  dnd  prev  pp  next  mute  vold  volu
   `     1     2     3     4    5    6    7     8   9     0     -     =      ⌫
   tab   q     w     e     r    t    y    u     i   o     p     [     ]      \
-  esc   @a    @alts @d    @f   @nav h    @j    @k  @l    @;    '     enter
+  esc   @alts @s    @d    @f   @nav h    @j    @k  @l    @;    '     enter
   lsft  z     x     c     v    b    n    m     ,   .     /     rsft
   @fnl  XX    XX    XX         spc  		 XX    XX  XX
   ;; @fnl  lctl  lalt  lmet       spc  		 rmet  ralt  rctl
