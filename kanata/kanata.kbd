@@ -90,9 +90,12 @@
 
 ;; custom backspace + replacement / redundancy for ` and ~
 (deflayermap (alts-layer)
-	;; ; behaves like simple bspc, and like alt + bspc when shifted
-	; (fork (unmod (lalt ralt) bspc) (unmod (lsft rsft) bspc) (lsft rsft))' `
+	;; here ; behaves like simple bspc, and like alt + bspc when shifted
+	; (fork (unmod (lalt ralt) bspc) (unmod (lsft rsft) bspc) (lsft rsft))
+
 	;; ' becomes grave (` and ~ with shift)
+	;; unmode removes the alt from the key so that it can trigger ~
+	' (unmod (lalt ralt) grave)
 )
 
 ;; (not really scheme, but gives us syntax highlighting)
