@@ -27,8 +27,7 @@
   l (tap-hold $tap-time $hold-time l ralt)
   ; (tap-hold $tap-time $hold-time ; rsft)
 	nav (tap-hold $tap-time $hold-time g (layer-while-held gui-nav))
-	;; hold s + ; for bsp (see lalt-bspc lyer below)
-	bs (tap-hold $tap-time $hold-time  s (layer-while-held lalt-bspc))
+	alts (tap-hold $tap-time $hold-time  s (layer-while-held alted-layer))
   fnl (tap-hold 200 200 fn (layer-while-held fn))
 )
 
@@ -54,15 +53,18 @@
   caps  brdn  brup  mctl  sls  dtn  dnd  prev  pp  next  mute  vold  volu
   `     1     2     3     4    5    6    7     8   9     0     -     =      ⌫
   tab   q     w     e     r    t    y    u     i   o     p     [     ]      \
-  esc   @a    @bs   @d    @f   @nav h    @j    @k  @l    @;    '     enter
+  esc   @a    @alts @d    @f   @nav h    @j    @k  @l    @;    '     enter
   lsft  z     x     c     v    b    n    m     ,   .     /     rsft
   @fnl  XX    XX    XX         spc  		 XX    XX  XX
   ;; @fnl  lctl  lalt  lmet       spc  		 rmet  ralt  rctl
 																										←   ↓   ↑   →
 )
 
-(deflayermap (lalt-bspc)
+;; custom backspace + replacement / redundancy for ` and ~
+(deflayermap (alted-layer)
 	; bspc
+	;; ' becomes grave (` and ~ with shift)
+	' ~
 )
 
 ;; make fn key work as expected on mac keyboard
