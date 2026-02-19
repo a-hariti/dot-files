@@ -22,13 +22,15 @@
   s (tap-hold $tap-time $hold-time s lalt)
   d (tap-hold $tap-time $hold-time d lctl)
   f (tap-hold $tap-time $hold-time f lmet)
+
   j (tap-hold $tap-time $hold-time j rmet)
   k (tap-hold $tap-time $hold-time k rctl)
   l (tap-hold $tap-time $hold-time l ralt)
   ; (tap-hold $tap-time $hold-time ; rsft)
-	nav (tap-hold $tap-time $hold-time g (layer-while-held gui-nav))
-	alts (tap-hold $tap-time $hold-time  s (layer-while-held alted-layer))
-  fnl (tap-hold 200 200 fn (layer-while-held fn))
+
+	nav  (tap-hold $tap-time $hold-time g (layer-while-held gui-nav))
+	alts (tap-hold $tap-time $hold-time s (layer-while-held alts-layer))
+  fnl  (tap-hold 200 200 fn (layer-while-held fn))
 )
 
 ;; every layer will map to this (in this order)
@@ -47,6 +49,7 @@
 ;;   - home row mods
 ;;   - trigger for gui navigation layer
 ;;   - trigger for fn layer,
+;;	 - trigger for alted layer
 ;;	 - normal modifiers are no op to force myself to learn new keys
 
 (deflayer base
@@ -60,12 +63,6 @@
 																										←   ↓   ↑   →
 )
 
-;; custom backspace + replacement / redundancy for ` and ~
-(deflayermap (alted-layer)
-	; bspc
-	;; ' becomes grave (` and ~ with shift)
-	' ~
-)
 
 ;; make fn key work as expected on mac keyboard
 (deflayer fn
@@ -81,16 +78,20 @@
 ;; navigate anywhere with hjkl + home/end/pgup/pgdn by holding g
 ;; hold g + u ("update") to live reload katana config: https://jtroo.github.io/config.html#live-reload
 (deflayermap (gui-nav)
-  h left
-  j down
-  k up
-  l right
-  n pgdn
-  m pgup
-  , home
-  . end
-  u lrld
+  u lrld ; bspc
+
+       k ↑
+  h ←      l →
+       j ↓
+
+  n pgdn  m pgup  , home  . end
+)
+
+;; custom backspace + replacement / redundancy for ` and ~
+(deflayermap (alts-layer)
 	; bspc
+	;; ' becomes grave (` and ~ with shift)
+	' `
 )
 
 ;; (not really scheme, but gives us syntax highlighting)
