@@ -4,6 +4,7 @@
 ;; defsrc is still necessary
 (defcfg
   process-unmapped-keys yes
+  concurrent-tap-hold yes
   macos-dev-names-include (
     "Apple Internal Keyboard / Trackpad"
     "61Keyboard"
@@ -18,18 +19,18 @@
 )
 
 (defalias
-  a (tap-hold $tap-time $hold-time a lsft)
+  a (tap-hold-release-keys $tap-time $hold-time a lsft (spc))
   s (tap-hold $tap-time $hold-time s lalt)
-  d (tap-hold $tap-time $hold-time d lctl)
-  f (tap-hold $tap-time $hold-time f lmet)
+  d (tap-hold-release-keys $tap-time $hold-time d lctl (spc))
+  f (tap-hold-release-keys $tap-time $hold-time f lmet (spc))
 
-  j (tap-hold $tap-time $hold-time j rmet)
-  k (tap-hold $tap-time $hold-time k rctl)
-  l (tap-hold $tap-time $hold-time l ralt)
-  ; (tap-hold $tap-time $hold-time ; rsft)
+  j (tap-hold-release-keys $tap-time $hold-time j rmet (spc))
+  k (tap-hold-release-keys $tap-time $hold-time k rctl (spc))
+  l (tap-hold-release-keys $tap-time $hold-time l ralt (spc))
+  ; (tap-hold-release-keys $tap-time $hold-time ; rsft (spc))
 
 	nav  (tap-hold $tap-time $hold-time g (layer-while-held gui-nav))
-  alts (tap-hold $tap-time $hold-time s (multi lalt (layer-while-held alts-layer)))
+  alts (tap-hold-release-keys $tap-time $hold-time s (multi lalt (layer-while-held alts-layer)) (spc))
   fnl  (tap-hold 200 200 fn (layer-while-held fn))
 )
 
