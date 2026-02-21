@@ -50,6 +50,14 @@ gui_uid() {
   fi
 }
 
+require_sudo_session() {
+  if sudo -n true >/dev/null 2>&1; then
+    return
+  fi
+  echo "Administrator password is required for VirtualHID operations."
+  sudo -v
+}
+
 detect_cfg() {
   if [[ -n "${KANATA_CFG:-}" ]]; then
     printf '%s\n' "$KANATA_CFG"
@@ -199,6 +207,8 @@ install_daemon() {
     exit 1
   fi
 
+  require_sudo_session
+
   mkdir -p "${HOME}/Library/LaunchAgents"
 
   local tmp_vhid tmp_kanata
@@ -240,7 +250,8 @@ start_daemon() {
     echo "Missing plist(s). Run install first." >&2
     exit 1
   fi
-  echo "Starting VirtualHID + Kanata (this may take a few seconds)..."
+  require_sudo_session
+  echo "Starting VirtualHID + Kanata (this may take a while)..."
   start_vhid
   start_kanata
   echo "Started:"
@@ -249,6 +260,7 @@ start_daemon() {
 }
 
 stop_daemon() {
+  require_sudo_session
   bootout_kanata
   bootout_vhid
   echo "Stopped VirtualHID + Kanata."
@@ -259,7 +271,8 @@ restart_daemon() {
     echo "Missing plist(s). Run install first." >&2
     exit 1
   fi
-  echo "Restarting VirtualHID + Kanata (this may take a few seconds)..."
+  require_sudo_session
+  echo "Restarting VirtualHID + Kanata (this may take a while)..."
   bootout_kanata
   bootout_vhid
   start_vhid
@@ -291,6 +304,7 @@ logs_daemon() {
 }
 
 uninstall_daemon() {
+  require_sudo_session
   stop_daemon
   sudo launchctl disable system/"${VHID_LABEL}" >/dev/null 2>&1 || true
   local uid
