@@ -19,9 +19,11 @@ vim.api.nvim_create_autocmd(
 
 -- relative line numbers in insert mode only
 local insert_relative_nr_group = vim.api.nvim_create_augroup('InsertRelativeNumber', { clear = true })
-local function toggle_relative_number() vim.wo.relativenumber = not vim.wo.relativenumber end
-vim.api.nvim_create_autocmd('InsertEnter', { group = insert_relative_nr_group, callback = toggle_relative_number })
-vim.api.nvim_create_autocmd('InsertLeave', { group = insert_relative_nr_group, callback = toggle_relative_number })
+local function set_relative_number(relativenumber)
+  return function() vim.wo.relativenumber = relativenumber end
+end
+vim.api.nvim_create_autocmd('InsertEnter', { group = insert_relative_nr_group, callback = set_relative_number(false) })
+vim.api.nvim_create_autocmd('InsertLeave', { group = insert_relative_nr_group, callback = set_relative_number(true) })
 
 -- highlight mdx files as markdown
 vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
