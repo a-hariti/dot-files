@@ -12,17 +12,19 @@ KANATA_LABEL="com.local.kanata"
 KANATA_PLIST_PATH="${HOME}/Library/LaunchAgents/${KANATA_LABEL}.plist"
 KANATA_BIN_DEFAULT="$(command -v kanata || true)"
 KANATA_LOG_DEFAULT="/tmp/${KANATA_LABEL}.log"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-KANATA_CFG_DEFAULT_REPO="${SCRIPT_DIR}/kanata.kbd"
 KANATA_CFG_DEFAULT_HOME="${HOME}/.config/kanata/kanata.kbd"
 KANATA_SUDOERS_PATH="/private/etc/sudoers.d/kanata"
+KANATA_BIN_VALUE=""
+KANATA_CFG_VALUE=""
+KANATA_LOG_VALUE="$KANATA_LOG_DEFAULT"
+VHID_BIN_VALUE="$VHID_BIN_DEFAULT"
 
 usage() {
   cat <<EOF
-Usage: ./kanata/daemon.sh <command>
+Usage: ./kanata/daemon.sh [options] <command>
 
 Commands:
-  install           Install + start services (also installs/updates sudoers rule)
+  setup             Set up + start services (also installs/updates sudoers rule)
   start             Start both jobs
   stop              Stop both jobs
   restart           Restart both jobs
@@ -33,22 +35,20 @@ Commands:
 EOF
 
   local default_kanata_bin default_cfg
-  default_kanata_bin="${KANATA_BIN_DEFAULT:-}"
-  if [[ -z "$default_kanata_bin" ]]; then
-    default_kanata_bin="(auto-detect failed: set KANATA_BIN)"
-  fi
-  default_cfg="$(detect_cfg)"
+  default_kanata_bin='$(command -v kanata)'
+  default_cfg='$HOME/.config/kanata/kanata.kbd'
 
   cat <<EOF
-Environment overrides (with defaults):
-  KANATA_BIN        Path to kanata binary
+Options (with defaults):
+  --kanata-bin PATH Path to kanata binary
                     default: $default_kanata_bin
-  KANATA_CFG        Path to kanata.kbd
+  --kanata-cfg PATH Path to kanata.kbd
                     default: $default_cfg
-  KANATA_LOG        kanata merged stdout/stderr log path
+  --kanata-log PATH kanata merged stdout/stderr log path
                     default: $KANATA_LOG_DEFAULT
-  VHID_BIN          Path to VirtualHID daemon binary
+  --vhid-bin PATH   Path to VirtualHID daemon binary
                     default: $VHID_BIN_DEFAULT
+  -h, --help        Show this help
 EOF
 }
 
@@ -69,19 +69,11 @@ require_sudo_session() {
 }
 
 detect_cfg() {
-  if [[ -n "${KANATA_CFG:-}" ]]; then
-    printf '%s\n' "$KANATA_CFG"
+  if [[ -n "${KANATA_CFG_VALUE:-}" ]]; then
+    printf '%s\n' "$KANATA_CFG_VALUE"
     return
   fi
-  if [[ -f "$KANATA_CFG_DEFAULT_REPO" ]]; then
-    printf '%s\n' "$KANATA_CFG_DEFAULT_REPO"
-    return
-  fi
-  if [[ -f "$KANATA_CFG_DEFAULT_HOME" ]]; then
-    printf '%s\n' "$KANATA_CFG_DEFAULT_HOME"
-    return
-  fi
-  printf '%s\n' "$KANATA_CFG_DEFAULT_REPO"
+  printf '%s\n' "$KANATA_CFG_DEFAULT_HOME"
 }
 
 render_vhid_plist() {
@@ -200,11 +192,11 @@ start_kanata() {
 }
 
 install_daemon() {
-  local kanata_bin="${KANATA_BIN:-$KANATA_BIN_DEFAULT}"
+  local kanata_bin="${KANATA_BIN_VALUE:-$KANATA_BIN_DEFAULT}"
   local kanata_cfg kanata_log
   kanata_cfg="$(detect_cfg)"
-  kanata_log="${KANATA_LOG:-$KANATA_LOG_DEFAULT}"
-  local vhid_bin="${VHID_BIN:-$VHID_BIN_DEFAULT}"
+  kanata_log="${KANATA_LOG_VALUE}"
+  local vhid_bin="${VHID_BIN_VALUE}"
 
   if [[ -z "$kanata_bin" || ! -x "$kanata_bin" ]]; then
     echo "kanata binary not executable: ${kanata_bin}" >&2
@@ -220,7 +212,7 @@ install_daemon() {
   fi
 
   require_sudo_session
-  KANATA_BIN="$kanata_bin" ensure_sudoers_installed
+  ensure_sudoers_installed "$kanata_bin"
 
   mkdir -p "${HOME}/Library/LaunchAgents"
 
@@ -307,7 +299,7 @@ status_daemon() {
 }
 
 logs_daemon() {
-  local kanata_log="${KANATA_LOG:-$KANATA_LOG_DEFAULT}"
+  local kanata_log="${KANATA_LOG_VALUE}"
   touch "$kanata_log"
   echo "Following ${kanata_log} (Ctrl+C to stop)"
   tail -n 120 -f "$kanata_log"
@@ -329,7 +321,7 @@ uninstall_daemon() {
 }
 
 sudoers_line() {
-  local kanata_bin="${KANATA_BIN:-$KANATA_BIN_DEFAULT}"
+  local kanata_bin="${1:-${KANATA_BIN_VALUE:-$KANATA_BIN_DEFAULT}}"
   if [[ -z "$kanata_bin" || ! -x "$kanata_bin" ]]; then
     echo "kanata binary not executable: ${kanata_bin}" >&2
     exit 1
@@ -340,10 +332,11 @@ sudoers_line() {
 }
 
 install_sudoers() {
+  local kanata_bin="${1:-${KANATA_BIN_VALUE:-$KANATA_BIN_DEFAULT}}"
   local tmp
   tmp="$(mktemp /tmp/kanata.sudoers.XXXXXX)"
   trap '[[ -n "${tmp:-}" ]] && rm -f "$tmp"' EXIT
-  sudoers_line >"$tmp"
+  sudoers_line "$kanata_bin" >"$tmp"
   sudo install -o root -g wheel -m 440 "$tmp" "$KANATA_SUDOERS_PATH"
   sudo visudo -cf "$KANATA_SUDOERS_PATH"
   echo "Installed $KANATA_SUDOERS_PATH"
@@ -358,8 +351,9 @@ uninstall_sudoers() {
 }
 
 ensure_sudoers_installed() {
+  local kanata_bin="$1"
   local expected current
-  expected="$(sudoers_line)"
+  expected="$(sudoers_line "$kanata_bin")"
   if sudo test -f "$KANATA_SUDOERS_PATH"; then
     current="$(sudo cat "$KANATA_SUDOERS_PATH" 2>/dev/null || true)"
     if [[ "$current" == "$expected" ]]; then
@@ -367,7 +361,7 @@ ensure_sudoers_installed() {
       return
     fi
   fi
-  install_sudoers
+  install_sudoers "$kanata_bin"
 }
 
 remove_sudoers_if_present() {
@@ -378,9 +372,61 @@ remove_sudoers_if_present() {
   fi
 }
 
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  --kanata-bin)
+    [[ $# -ge 2 ]] || { echo "missing value for --kanata-bin" >&2; exit 1; }
+    KANATA_BIN_VALUE="$2"
+    shift 2
+    ;;
+  --kanata-cfg)
+    [[ $# -ge 2 ]] || { echo "missing value for --kanata-cfg" >&2; exit 1; }
+    KANATA_CFG_VALUE="$2"
+    shift 2
+    ;;
+  --kanata-log)
+    [[ $# -ge 2 ]] || { echo "missing value for --kanata-log" >&2; exit 1; }
+    KANATA_LOG_VALUE="$2"
+    shift 2
+    ;;
+  --vhid-bin)
+    [[ $# -ge 2 ]] || { echo "missing value for --vhid-bin" >&2; exit 1; }
+    VHID_BIN_VALUE="$2"
+    shift 2
+    ;;
+  -h | --help)
+    usage
+    exit 0
+    ;;
+  --)
+    shift
+    break
+    ;;
+  -*)
+    echo "unknown option: $1" >&2
+    usage
+    exit 1
+    ;;
+  *)
+    break
+    ;;
+  esac
+done
+
 cmd="${1:-}"
+if [[ -z "$cmd" ]]; then
+  usage
+  exit 1
+fi
+shift
+if [[ $# -gt 0 ]]; then
+  echo "unexpected arguments: $*" >&2
+  usage
+  exit 1
+fi
+
 case "$cmd" in
-install)
+setup)
   install_daemon
   ;;
 start)
