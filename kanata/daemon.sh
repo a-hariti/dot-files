@@ -12,11 +12,13 @@ KANATA_LABEL="com.local.kanata"
 KANATA_PLIST_PATH="${HOME}/Library/LaunchAgents/${KANATA_LABEL}.plist"
 KANATA_BIN_DEFAULT="$(command -v kanata || true)"
 KANATA_LOG_DEFAULT="/tmp/${KANATA_LABEL}.log"
+KANATA_PORT_DEFAULT="5371"
 KANATA_CFG_DEFAULT_HOME="${HOME}/.config/kanata/kanata.kbd"
 KANATA_SUDOERS_PATH="/private/etc/sudoers.d/kanata"
 KANATA_BIN_VALUE=""
 KANATA_CFG_VALUE=""
 KANATA_LOG_VALUE="$KANATA_LOG_DEFAULT"
+KANATA_PORT_VALUE="$KANATA_PORT_DEFAULT"
 VHID_BIN_VALUE="$VHID_BIN_DEFAULT"
 
 usage() {
@@ -46,6 +48,8 @@ Options (with defaults):
                     default: $default_cfg
   --kanata-log PATH kanata merged stdout/stderr log path
                     default: $KANATA_LOG_DEFAULT
+  --port N          Kanata TCP port (1-65535)
+                    default: $KANATA_PORT_DEFAULT
   --vhid-bin PATH   Path to VirtualHID daemon binary
                     default: $VHID_BIN_DEFAULT
   -h, --help        Show this help
@@ -112,6 +116,7 @@ render_kanata_plist() {
   local kanata_bin="$1"
   local kanata_cfg="$2"
   local log_file="$3"
+  local port="$4"
 
   cat <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -131,7 +136,7 @@ render_kanata_plist() {
     <string>--cfg</string>
     <string>${kanata_cfg}</string>
     <string>--port</string>
-    <string>5371</string>
+    <string>${port}</string>
   </array>
 
   <key>RunAtLoad</key>
@@ -194,15 +199,17 @@ start_kanata() {
 install_daemon() {
   local kanata_bin
   kanata_bin="$(resolve_kanata_bin)"
-  local kanata_cfg kanata_log
+  local kanata_cfg kanata_log kanata_port
   kanata_cfg="$(detect_cfg)"
   kanata_log="$(resolve_kanata_log)"
+  kanata_port="$(resolve_kanata_port)"
   local vhid_bin
   vhid_bin="$(resolve_vhid_bin)"
 
   validate_kanata_bin "$kanata_bin"
   validate_kanata_cfg "$kanata_cfg"
   validate_kanata_log "$kanata_log"
+  validate_kanata_port "$kanata_port"
   validate_vhid_bin "$vhid_bin"
 
   require_sudo_session
@@ -216,7 +223,7 @@ install_daemon() {
   trap '[[ -n "${tmp_vhid:-}" ]] && rm -f "$tmp_vhid"; [[ -n "${tmp_kanata:-}" ]] && rm -f "$tmp_kanata"' EXIT
 
   render_vhid_plist "$vhid_bin" >"$tmp_vhid"
-  render_kanata_plist "$kanata_bin" "$kanata_cfg" "$kanata_log" >"$tmp_kanata"
+  render_kanata_plist "$kanata_bin" "$kanata_cfg" "$kanata_log" "$kanata_port" >"$tmp_kanata"
 
   sudo install -o root -g wheel -m 644 "$tmp_vhid" "$VHID_PLIST_PATH"
   install -m 644 "$tmp_kanata" "$KANATA_PLIST_PATH"
@@ -383,6 +390,10 @@ resolve_kanata_log() {
   printf '%s\n' "${KANATA_LOG_VALUE}"
 }
 
+resolve_kanata_port() {
+  printf '%s\n' "${KANATA_PORT_VALUE}"
+}
+
 validate_kanata_bin() {
   local kanata_bin="$1"
   [[ -n "$kanata_bin" ]] || die "kanata binary not found. Install kanata or pass --kanata-bin PATH."
@@ -406,6 +417,12 @@ validate_kanata_log() {
   [[ -n "$kanata_log" ]] || die "kanata log path is empty. Pass --kanata-log PATH."
 }
 
+validate_kanata_port() {
+  local kanata_port="$1"
+  [[ "$kanata_port" =~ ^[0-9]+$ ]] || die "kanata port must be numeric: ${kanata_port}"
+  (( kanata_port >= 1 && kanata_port <= 65535 )) || die "kanata port out of range (1-65535): ${kanata_port}"
+}
+
 cmd=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -425,6 +442,12 @@ while [[ $# -gt 0 ]]; do
     [[ $# -ge 2 ]] || { echo "missing value for --kanata-log" >&2; exit 1; }
     [[ -n "$2" ]] || die "--kanata-log cannot be empty"
     KANATA_LOG_VALUE="$2"
+    shift 2
+    ;;
+  --port)
+    [[ $# -ge 2 ]] || { echo "missing value for --port" >&2; exit 1; }
+    [[ -n "$2" ]] || die "--port cannot be empty"
+    KANATA_PORT_VALUE="$2"
     shift 2
     ;;
   --vhid-bin)
