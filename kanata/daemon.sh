@@ -192,24 +192,18 @@ start_kanata() {
 }
 
 install_daemon() {
-  local kanata_bin="${KANATA_BIN_VALUE:-$KANATA_BIN_DEFAULT}"
+  local kanata_bin
+  kanata_bin="$(resolve_kanata_bin)"
   local kanata_cfg kanata_log
   kanata_cfg="$(detect_cfg)"
-  kanata_log="${KANATA_LOG_VALUE}"
-  local vhid_bin="${VHID_BIN_VALUE}"
+  kanata_log="$(resolve_kanata_log)"
+  local vhid_bin
+  vhid_bin="$(resolve_vhid_bin)"
 
-  if [[ -z "$kanata_bin" || ! -x "$kanata_bin" ]]; then
-    echo "kanata binary not executable: ${kanata_bin}" >&2
-    exit 1
-  fi
-  if [[ ! -f "$kanata_cfg" ]]; then
-    echo "kanata config not found: ${kanata_cfg}" >&2
-    exit 1
-  fi
-  if [[ ! -x "$vhid_bin" ]]; then
-    echo "VirtualHID daemon binary not executable: ${vhid_bin}" >&2
-    exit 1
-  fi
+  validate_kanata_bin "$kanata_bin"
+  validate_kanata_cfg "$kanata_cfg"
+  validate_kanata_log "$kanata_log"
+  validate_vhid_bin "$vhid_bin"
 
   require_sudo_session
   ensure_sudoers_installed "$kanata_bin"
@@ -299,7 +293,10 @@ status_daemon() {
 }
 
 logs_daemon() {
-  local kanata_log="${KANATA_LOG_VALUE}"
+  local kanata_log
+  kanata_log="$(resolve_kanata_log)"
+  validate_kanata_log "$kanata_log"
+  mkdir -p "$(dirname "$kanata_log")"
   touch "$kanata_log"
   echo "Following ${kanata_log} (Ctrl+C to stop)"
   tail -n 120 -f "$kanata_log"
@@ -321,11 +318,8 @@ uninstall_daemon() {
 }
 
 sudoers_line() {
-  local kanata_bin="${1:-${KANATA_BIN_VALUE:-$KANATA_BIN_DEFAULT}}"
-  if [[ -z "$kanata_bin" || ! -x "$kanata_bin" ]]; then
-    echo "kanata binary not executable: ${kanata_bin}" >&2
-    exit 1
-  fi
+  local kanata_bin="${1:-$(resolve_kanata_bin)}"
+  validate_kanata_bin "$kanata_bin"
   local hash
   hash="$(shasum -a 256 "$kanata_bin" | awk '{print $1}')"
   printf '%s ALL=(root) NOPASSWD:SETENV: sha256:%s %s\n' "$(id -un)" "$hash" "$kanata_bin"
@@ -372,25 +366,70 @@ remove_sudoers_if_present() {
   fi
 }
 
+die() {
+  echo "error: $*" >&2
+  exit 1
+}
+
+resolve_kanata_bin() {
+  printf '%s\n' "${KANATA_BIN_VALUE:-$KANATA_BIN_DEFAULT}"
+}
+
+resolve_vhid_bin() {
+  printf '%s\n' "${VHID_BIN_VALUE}"
+}
+
+resolve_kanata_log() {
+  printf '%s\n' "${KANATA_LOG_VALUE}"
+}
+
+validate_kanata_bin() {
+  local kanata_bin="$1"
+  [[ -n "$kanata_bin" ]] || die "kanata binary not found. Install kanata or pass --kanata-bin PATH."
+  [[ -x "$kanata_bin" ]] || die "kanata binary not executable: ${kanata_bin}"
+}
+
+validate_vhid_bin() {
+  local vhid_bin="$1"
+  [[ -n "$vhid_bin" ]] || die "VirtualHID daemon binary path is empty. Pass --vhid-bin PATH."
+  [[ -x "$vhid_bin" ]] || die "VirtualHID daemon binary not executable: ${vhid_bin}"
+}
+
+validate_kanata_cfg() {
+  local kanata_cfg="$1"
+  [[ -n "$kanata_cfg" ]] || die "kanata config path is empty. Pass --kanata-cfg PATH."
+  [[ -f "$kanata_cfg" ]] || die "kanata config not found: ${kanata_cfg}"
+}
+
+validate_kanata_log() {
+  local kanata_log="$1"
+  [[ -n "$kanata_log" ]] || die "kanata log path is empty. Pass --kanata-log PATH."
+}
+
+cmd=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
   --kanata-bin)
     [[ $# -ge 2 ]] || { echo "missing value for --kanata-bin" >&2; exit 1; }
+    [[ -n "$2" ]] || die "--kanata-bin cannot be empty"
     KANATA_BIN_VALUE="$2"
     shift 2
     ;;
   --kanata-cfg)
     [[ $# -ge 2 ]] || { echo "missing value for --kanata-cfg" >&2; exit 1; }
+    [[ -n "$2" ]] || die "--kanata-cfg cannot be empty"
     KANATA_CFG_VALUE="$2"
     shift 2
     ;;
   --kanata-log)
     [[ $# -ge 2 ]] || { echo "missing value for --kanata-log" >&2; exit 1; }
+    [[ -n "$2" ]] || die "--kanata-log cannot be empty"
     KANATA_LOG_VALUE="$2"
     shift 2
     ;;
   --vhid-bin)
     [[ $# -ge 2 ]] || { echo "missing value for --vhid-bin" >&2; exit 1; }
+    [[ -n "$2" ]] || die "--vhid-bin cannot be empty"
     VHID_BIN_VALUE="$2"
     shift 2
     ;;
@@ -400,6 +439,16 @@ while [[ $# -gt 0 ]]; do
     ;;
   --)
     shift
+    while [[ $# -gt 0 ]]; do
+      if [[ -z "$cmd" ]]; then
+        cmd="$1"
+        shift
+        continue
+      fi
+      echo "unexpected arguments: $*" >&2
+      usage
+      exit 1
+    done
     break
     ;;
   -*)
@@ -408,19 +457,19 @@ while [[ $# -gt 0 ]]; do
     exit 1
     ;;
   *)
-    break
+    if [[ -z "$cmd" ]]; then
+      cmd="$1"
+      shift
+      continue
+    fi
+    echo "unexpected arguments: $*" >&2
+    usage
+    exit 1
     ;;
   esac
 done
 
-cmd="${1:-}"
 if [[ -z "$cmd" ]]; then
-  usage
-  exit 1
-fi
-shift
-if [[ $# -gt 0 ]]; then
-  echo "unexpected arguments: $*" >&2
   usage
   exit 1
 fi
