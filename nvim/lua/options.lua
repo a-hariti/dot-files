@@ -29,6 +29,8 @@ vim.o.spelllang = 'en,fr'
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.termguicolors = true
 vim.g.mapleader = ' '
+vim.o.exrc = true
+vim.o.secure = true
 
 -- Global UI overrides
 local border = 'solid'
