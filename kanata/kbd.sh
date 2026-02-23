@@ -23,7 +23,7 @@ VHID_BIN_VALUE="$VHID_BIN_DEFAULT"
 
 usage() {
   cat <<EOF
-Usage: ./kanata/daemon.sh [options] <command>
+Usage: ./kanata/kbd.sh [options] <command>
 
 Commands:
   setup             Set up + start services (also installs/updates sudoers rule)

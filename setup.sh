@@ -43,8 +43,8 @@ stow --target ~/.config/nvim nvim
 # local tools (symlink into ~/.local/bin)
 ensure_dir ~/.local/bin
 stow --target ~/.local/bin tools
-ln -sf "$HOME/.config/kanata/daemon.sh" "$HOME/.local/bin/kbd"
-ln -sf "$HOME/.config/kanata/daemon.sh" "$HOME/.local/bin/kanata-manager"
+ln -sf "$HOME/.config/kanata/kbd.sh" "$HOME/.local/bin/kbd"
+ln -sf "$HOME/.config/kanata/kbd.sh" "$HOME/.local/bin/kanata-manager"
 
 # Zed (stow into .config/zed)
 ensure_dir ~/.config/zed
