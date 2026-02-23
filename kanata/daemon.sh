@@ -18,27 +18,37 @@ KANATA_CFG_DEFAULT_HOME="${HOME}/.config/kanata/kanata.kbd"
 KANATA_SUDOERS_PATH="/private/etc/sudoers.d/kanata"
 
 usage() {
-  cat <<'EOF'
+  cat <<EOF
 Usage: ./kanata/daemon.sh <command>
 
 Commands:
-  install           Install/start VirtualHID (system) + Kanata (login agent)
+  install           Install + start services (also installs/updates sudoers rule)
   start             Start both jobs
   stop              Stop both jobs
   restart           Restart both jobs
   status            Show status for both jobs
   logs              Follow merged kanata log
-  uninstall         Stop/remove both jobs
+  uninstall         Stop + remove services (also removes sudoers rule if present)
 
-  install-sudoers   Install hash-pinned sudoers rule for kanata binary
-  uninstall-sudoers Remove sudoers rule
-  show-sudoers      Print expected sudoers line
+EOF
 
-Environment overrides:
+  local default_kanata_bin default_cfg
+  default_kanata_bin="${KANATA_BIN_DEFAULT:-}"
+  if [[ -z "$default_kanata_bin" ]]; then
+    default_kanata_bin="(auto-detect failed: set KANATA_BIN)"
+  fi
+  default_cfg="$(detect_cfg)"
+
+  cat <<EOF
+Environment overrides (with defaults):
   KANATA_BIN        Path to kanata binary
+                    default: $default_kanata_bin
   KANATA_CFG        Path to kanata.kbd
+                    default: $default_cfg
   KANATA_LOG        kanata merged stdout/stderr log path
+                    default: $KANATA_LOG_DEFAULT
   VHID_BIN          Path to VirtualHID daemon binary
+                    default: $VHID_BIN_DEFAULT
 EOF
 }
 
@@ -128,6 +138,8 @@ render_kanata_plist() {
     <string>--nodelay</string>
     <string>--cfg</string>
     <string>${kanata_cfg}</string>
+    <string>--port</string>
+    <string>5371</string>
   </array>
 
   <key>RunAtLoad</key>
@@ -208,6 +220,7 @@ install_daemon() {
   fi
 
   require_sudo_session
+  KANATA_BIN="$kanata_bin" ensure_sudoers_installed
 
   mkdir -p "${HOME}/Library/LaunchAgents"
 
@@ -237,9 +250,6 @@ install_daemon() {
   echo "  gui/$(gui_uid)/${KANATA_LABEL}"
   echo "Config: $kanata_cfg"
   echo "Log: $kanata_log"
-  echo
-  echo "If kanata fails with 'sudo: a password is required', run:"
-  echo "  ./kanata/daemon.sh install-sudoers"
 
   rm -f "$tmp_vhid" "$tmp_kanata"
   trap - EXIT
@@ -312,6 +322,7 @@ uninstall_daemon() {
   launchctl disable "gui/${uid}/${KANATA_LABEL}" >/dev/null 2>&1 || true
   sudo rm -f "$VHID_PLIST_PATH"
   rm -f "$KANATA_PLIST_PATH"
+  remove_sudoers_if_present
   echo "Removed:"
   echo "  $VHID_PLIST_PATH"
   echo "  $KANATA_PLIST_PATH"
@@ -344,6 +355,27 @@ install_sudoers() {
 uninstall_sudoers() {
   sudo rm -f "$KANATA_SUDOERS_PATH"
   echo "Removed $KANATA_SUDOERS_PATH"
+}
+
+ensure_sudoers_installed() {
+  local expected current
+  expected="$(sudoers_line)"
+  if sudo test -f "$KANATA_SUDOERS_PATH"; then
+    current="$(sudo cat "$KANATA_SUDOERS_PATH" 2>/dev/null || true)"
+    if [[ "$current" == "$expected" ]]; then
+      echo "Sudoers rule is already up to date: $KANATA_SUDOERS_PATH"
+      return
+    fi
+  fi
+  install_sudoers
+}
+
+remove_sudoers_if_present() {
+  if sudo test -f "$KANATA_SUDOERS_PATH"; then
+    uninstall_sudoers
+  else
+    echo "Sudoers rule already absent: $KANATA_SUDOERS_PATH"
+  fi
 }
 
 cmd="${1:-}"
