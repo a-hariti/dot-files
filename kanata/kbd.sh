@@ -12,6 +12,7 @@ KANATA_LABEL="com.local.kanata"
 KANATA_PLIST_PATH="${HOME}/Library/LaunchAgents/${KANATA_LABEL}.plist"
 KANATA_BIN_DEFAULT="$(command -v kanata || true)"
 KANATA_LOG_DEFAULT="/tmp/${KANATA_LABEL}.log"
+KANATA_HOST_DEFAULT="127.0.0.1"
 KANATA_PORT_DEFAULT="5371"
 KANATA_CFG_DEFAULT_HOME="${HOME}/.config/kanata/kanata.kbd"
 KANATA_SUDOERS_PATH="/private/etc/sudoers.d/kanata"
@@ -33,6 +34,9 @@ Commands:
   status            Show status for both jobs
   logs              Follow merged kanata log
   uninstall         Stop + remove services (also removes sudoers rule if present)
+
+  connection        Print kanata TCP endpoint as host:port
+  config            Print resolved kanata config path
 
 EOF
 
@@ -394,6 +398,20 @@ resolve_kanata_port() {
   printf '%s\n' "${KANATA_PORT_VALUE}"
 }
 
+print_connection() {
+  local kanata_port
+  kanata_port="$(resolve_kanata_port)"
+  validate_kanata_port "$kanata_port"
+  printf '%s:%s\n' "$KANATA_HOST_DEFAULT" "$kanata_port"
+}
+
+print_config() {
+  local kanata_cfg
+  kanata_cfg="$(detect_cfg)"
+  validate_kanata_cfg "$kanata_cfg"
+  printf '%s\n' "$kanata_cfg"
+}
+
 validate_kanata_bin() {
   local kanata_bin="$1"
   [[ -n "$kanata_bin" ]] || die "kanata binary not found. Install kanata or pass --kanata-bin PATH."
@@ -515,6 +533,12 @@ status)
   ;;
 logs)
   logs_daemon
+  ;;
+connection)
+  print_connection
+  ;;
+config)
+  print_config
   ;;
 uninstall)
   uninstall_daemon

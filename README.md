@@ -10,23 +10,23 @@ Run VirtualHID + Kanata via `launchd` (VirtualHID in `system`, Kanata in your lo
 session) so you do not need a terminal/tray app.
 
 ```bash
-./kanata/daemon.sh install-sudoers
-./kanata/daemon.sh install
+./kanata/kbd.sh setup
 ```
 
-The `install-sudoers` step is required so login-started Kanata can run `sudo -n`
-without a password prompt. Re-run it after `kanata` upgrades.
+`setup` manages the sudoers rule automatically so login-started Kanata can run
+`sudo -n` without interactive prompts.
 
 Useful commands:
 
 ```bash
-./kanata/daemon.sh start
-./kanata/daemon.sh stop
-./kanata/daemon.sh status
-./kanata/daemon.sh logs
-./kanata/daemon.sh restart
-./kanata/daemon.sh uninstall
-./kanata/daemon.sh uninstall-sudoers
+./kanata/kbd.sh start
+./kanata/kbd.sh stop
+./kanata/kbd.sh status
+./kanata/kbd.sh logs
+./kanata/kbd.sh restart
+./kanata/kbd.sh connection
+./kanata/kbd.sh config
+./kanata/kbd.sh uninstall
 ```
 
 This script is aliased as `kbd` and `kanata-manager` into `~/local/bin` by `./setup.sh`.

@@ -1,3 +1,5 @@
+require('kanata-menubar').start()
+
 -- mdls -name kMDItemCFBundleIdentifier -raw /Applications/SomeApp.app
 local TERMINAL_BUNDLE_IDS = {
   'com.mitchellh.ghostty',
