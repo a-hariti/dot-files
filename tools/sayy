@@ -15,6 +15,7 @@ Usage: sayy [options] [text]
 Options:
 
   -v, --voice <voice>    Specify the voice (nova, shimmer, echo, onyx, fable, alloy, ash, sage or coral)
+  -l, --language <lang>  Language to send to the API (default: en)
   -r, --rate <rate>      Speed of the speech (0.25 to 4.0, default: 1.0)
   -f, --file <path>      Read text from the specified file
   -o, --output <path>    Save audio to a file instead of playing it
@@ -39,6 +40,7 @@ const { values, positionals } = parseArgs({
   args: process.argv.slice(2),
   options: {
     voice: { type: "string", short: "v", default: "shimmer" },
+    language: { type: "string", short: "l", default: "en" },
     rate: { type: "string", short: "r", default: "1.0" },
     file: { type: "string", short: "f" },
     output: { type: "string", short: "o" },
@@ -93,6 +95,7 @@ async function main() {
         model: MODEL,
         input: text,
         voice: values.voice,
+        language: values.language,
         speed: parseFloat(values.rate),
         response_format: "mp3",
       }),
